@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jeesite.modules.isopc.dao.IsCarCountDao">
+<mapper namespace="com.jeesite.modules.is3dmcps.dao.IsLocationDao">
 	
 	<!-- 查询数据
-	<select id="findList" resultType="IsCarCount">
+	<select id="findList" resultType="IsLocation">
 		SELECT ${sqlMap.column.toSql()}
 		FROM ${sqlMap.table.toSql()}
 		<where>
@@ -11,7 +11,5 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	<select id="getAllByDeviceId" resultType="IsCarCount" parameterType="String">
-		select * from is_car_count where device_id = #{deviceId}
-	</select>
+	
 </mapper>

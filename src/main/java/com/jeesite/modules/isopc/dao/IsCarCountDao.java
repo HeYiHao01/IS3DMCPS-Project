@@ -3,6 +3,8 @@
  */
 package com.jeesite.modules.isopc.dao;
 
+import java.util.List;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.isopc.entity.IsCarCount;
@@ -14,5 +16,5 @@ import com.jeesite.modules.isopc.entity.IsCarCount;
  */
 @MyBatisDao
 public interface IsCarCountDao extends CrudDao<IsCarCount> {
-	
+	public List<IsCarCount> getAllByDeviceId(String deviceId);
 }

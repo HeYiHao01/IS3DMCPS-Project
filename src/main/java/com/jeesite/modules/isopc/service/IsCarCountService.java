@@ -73,4 +73,10 @@ public class IsCarCountService extends CrudService<IsCarCountDao, IsCarCount> {
 		super.delete(isCarCount);
 	}
 	
+	/**
+	 *根据device_id获取小车运行统计
+	 */
+	public List<IsCarCount> getAllByDeviceId(String deviceId) {
+		return this.dao.getAllByDeviceId(deviceId);
+	}
 }

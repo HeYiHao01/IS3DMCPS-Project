@@ -250,7 +250,31 @@ public class PageProductManController extends BaseController{
     /*@RequestMapping(value = {"boxStatics", ""})
     public List<Map<String, Object>> boxStatics(){
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	
+    	int line = 1;
+    	int lie = 13;
+    	int layer = 1;
+    	double location_X = -1.2400000095367432;
+    	double location_Y = -0.41100001335144043;
+    	double location_Z = -59.194000244140625;
+    	String VPLTNUM = "64310";
+    	String PLTNUM = "200084";
+    	String CURRLOC = "OME01_00110401600100";
+    	String ITEMDESC = "兰州(细支珍品)烟丝";
+    	String LOTNUM = "YXZZP1801001";
+    	String ENTERDATE = "2018-1-13 18:59:39";
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	map.put("line", line);
+    	map.put("lie", lie);
+    	map.put("layer", layer);
+    	map.put("location_X", location_X);
+    	map.put("location_X", location_Y);
+    	map.put("location_X", location_Z);
+    	map.put("VPLTNUM", VPLTNUM);
+    	map.put("PLTNUM", PLTNUM);
+    	map.put("CURRLOC", CURRLOC);
+    	map.put("ITEMDESC", ITEMDESC);
+    	map.put("LOTNUM", LOTNUM);
+    	map.put("ENTERDATE", ENTERDATE);
     	return mapList;
     }*/
     
@@ -265,7 +289,21 @@ public class PageProductManController extends BaseController{
     /*@RequestMapping(value = {"packingBox", ""})
     public List<Map<String, Object>> packingBox(){
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	
+		int locNum = 1;
+		int row = 1;
+		int col = 13;
+		int layer = 1;
+		Double location_X = -1.2400000095367432;
+		Double location_Y = -0.41100001335144043;
+		Double location_Z = -59.194000244140625;
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	map.put("locNum", locNum);
+    	map.put("row", row);
+    	map.put("col", col);
+    	map.put("layer", layer);
+    	map.put("location_X", location_X);
+    	map.put("location_Y", location_Y);
+    	map.put("location_Z", location_Z);
     	return mapList;
     }*/
     

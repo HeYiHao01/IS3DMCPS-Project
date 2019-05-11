@@ -3,13 +3,19 @@ package com.jeesite.modules.is3dmcps.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.jeesite.common.collect.MapUtils;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.isopc.entity.IsCarCount;
+import com.jeesite.modules.isopc.service.IsCarCountService;
 
 /**
  * 
@@ -20,7 +26,9 @@ import com.jeesite.common.web.BaseController;
 @RestController
 @RequestMapping(value = "static")
 public class PageBigDataController extends BaseController{
-
+	@Autowired
+	private IsCarCountService isCarCountService;
+	
     /**
      * 生产信息分析界面
      * Post:
@@ -153,8 +161,9 @@ public class PageBigDataController extends BaseController{
      * @return
      */
     @RequestMapping(value = {"carRunStatics", ""})
-    public List<Map<String, Object>> carRunStatics() {
+    public List<Map<String, Object>> carRunStatics(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
+        
         Map<String, Object> map = MapUtils.newHashMap();
         int timeVariable;
         int taskTimeCountThis;
@@ -190,55 +199,33 @@ public class PageBigDataController extends BaseController{
      * {“runDistance”:11114582,”liftCount”: 255456,”veerCount”:3646863,”runFaultsCount”:2648,”liftFaultsCount”:687,”veerFaultsCount”:54,”allFaultsCount”:3389}
      */
     @RequestMapping(value = {"carRunStatus", ""})
-    public List<Map<String, Object>> carRunStatus() {
-        List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        Map<String, Object> map = MapUtils.newHashMap();
-        int runDistance;
+    public List<Map<String, Object>> carRunStatus(HttpServletRequest request) {
+        List<Map<String, Object>> mapList = ListUtils.newArrayList();        
+        Double runDistance;
         int liftCount;
         int veerCount;
         int runFaultsCount;
         int liftFaultsCount;
         int veerFaultsCount;
         int allFaultsCount;
-        runDistance=11114582;
-        liftCount=122018;
-        veerCount=2018;
-        runFaultsCount=18;
-        liftFaultsCount=25;
-        veerFaultsCount=3;
-        allFaultsCount=40;
-        map.put("runDistance",runDistance);
-        map.put("liftCount",liftCount);
-        map.put("veerCount",veerCount);
-        map.put("runFaultsCount",runFaultsCount);
-        map.put("liftFaultsCount",liftFaultsCount);
-        map.put("veerFaultsCount",veerFaultsCount);
-        map.put("allFaultsCount",allFaultsCount);
-        mapList.add(map);
-        
-        Map<String, Object> map1 = MapUtils.newHashMap();
-		float runDistance1;
-		int liftCount1;
-		int veerCount1;
-		int runFaultsCount1;
-		int liftFaultsCount1;
-		int veerFaultsCount1;
-		int allFaultsCount1;
-		runDistance1 = 11115428;
-		liftCount1=256546;
-		veerCount1=3676363;
-		runFaultsCount1 = 2598;
-		liftFaultsCount1 = 477;
-		veerFaultsCount1 = 63;
-		allFaultsCount1 = 3138;
-		map1.put("runDistance",runDistance1);
-		map1.put("liftCount",liftCount1);
-		map1.put("veerCount", veerCount1);
-		map1.put("runFaultsCount",runFaultsCount1);
-		map1.put("liftFaultsCount", liftFaultsCount1);
-		map1.put("veerFaultsCount", veerFaultsCount1);
-		map1.put("allFaultsCount", allFaultsCount1);
-		mapList.add(map1);
+        for(IsCarCount isCarCount:isCarCountService.getAllByDeviceId(request.getParameter("deviceID"))){
+        	Map<String, Object> map = MapUtils.newHashMap();
+        	runDistance=isCarCount.getMoveMileage();
+            liftCount=isCarCount.getUpdownCount();
+            veerCount=isCarCount.getTurnCount();
+            runFaultsCount=isCarCount.getMoveerrCount();
+            liftFaultsCount=isCarCount.getUpdownerrCount();
+            veerFaultsCount=isCarCount.getTurnerrCount();
+            allFaultsCount=isCarCount.getErrCount();
+            map.put("runDistance",runDistance);
+            map.put("liftCount",liftCount);
+            map.put("veerCount",veerCount);
+            map.put("runFaultsCount",runFaultsCount);
+            map.put("liftFaultsCount",liftFaultsCount);
+            map.put("veerFaultsCount",veerFaultsCount);
+            map.put("allFaultsCount",allFaultsCount);
+            mapList.add(map);
+        }                
         return mapList;
     }
 

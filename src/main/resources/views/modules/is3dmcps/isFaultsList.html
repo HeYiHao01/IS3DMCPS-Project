@@ -1,0 +1,104 @@
+<% layout('/layouts/default.html', {title: '设备故障管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('设备故障管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('is3dmcps:isFaults:edit')){ %>
+					<a href="${ctx}/is3dmcps/isFaults/form" class="btn btn-default btnTool" title="${text('新增设备故障')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${isFaults}" action="${ctx}/is3dmcps/isFaults/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('故障名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="name" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('设备名称')}：</label>
+					<div class="control-inline">
+<#form:treeselect id="device" title="${text('设备选择')}"
+	path="deviceId" labelPath="deviceName" 
+	url="${ctx}/is3dmcps/isDevice/treeData" allowClear="true" 
+canSelectRoot="false"  canSelectParent="false" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('故障代码')}：</label>
+					<div class="control-inline">
+						<#form:input path="faultsCode" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('报修人')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="operator" title="${text('用户选择')}"
+							path="" labelPath="operator" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('故障时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="faultsTime_gte" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false,onpicked:function(){faultsTime_lte.click()}});"/>
+						&nbsp;--&nbsp;
+						<#form:input path="faultsTime_lte" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="is_faults_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('故障名称')}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/is3dmcps/isFaults/form?id='+row.id+'" class="btnList" data-title="${text('编辑设备故障')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('设备名称')}', name:'deviceName', index:'a.device_name', width:150, align:"left"},
+		{header:'${text('设备编号')}', name:'deviceNo', index:'a.device_no', width:150, align:"left"},
+		{header:'${text('故障代码')}', name:'faultsCode', index:'a.faults_code', width:150, align:"left"},
+		{header:'${text('故障时间')}', name:'faultsTime', index:'a.faults_time', width:150, align:"center"},
+		{header:'${text('报修人')}', name:'operator', index:'a.operator', width:150, align:"center"},
+		{header:'${text('状态')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('is_faults_status')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('is3dmcps:isFaults:edit')){ %>
+				actions.push('<a href="${ctx}/is3dmcps/isFaults/form?id='+row.id+'" class="btnList" title="${text('编辑设备故障')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/is3dmcps/isFaults/delete?id='+row.id+'" class="btnList" title="${text('删除设备故障')}" data-confirm="${text('确认要删除该设备故障吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

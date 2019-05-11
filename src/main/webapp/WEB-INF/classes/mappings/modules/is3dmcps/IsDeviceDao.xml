@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.is3dmcps.dao.IsDeviceDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="IsDevice">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="getAll" resultType="java.lang.Integer">
+		select count(*) from is_device
+	</select>
+	<select id="getDeviceDetails" resultType="IsDevice">
+		select * from is_device
+	</select>
+	<select id="getDeviceById" resultType="IsDevice" parameterType="String">
+		select * from is_device where ID = #{deviceId}
+	</select>
+	<select id="getDeviceByCodeId" resultType="IsDevice" parameterType="String">
+		select *  from is_device where device_code_id = #{deviceCodeId}
+	</select>
+	<select id="getPartCountByCodeId" resultType="java.lang.Integer" parameterType="String">
+		select count(device_code_id) from is_device where device_code_id = #{deviceCodeId}
+	</select>
+</mapper>

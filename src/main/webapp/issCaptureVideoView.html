@@ -1,0 +1,24 @@
+ <% layout('/layouts/default.html', {title: '实时视频查看', libs:['layout']}){ %>
+<div class="row-height">
+    <div class="col-md-12 size-full">
+        <div class="box box-widget height-full">
+            <div class="box-header with-border">
+                <h3 class="box-title">实时监控视频</h3>
+            </div>
+            <div class="box-body height-90">
+                  <div class="col-md-12 size-full">
+                      <object type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" id="vlc" events="false" width="100%" height="100%">
+	                      	<param name="mrl" value='${rtsp}' />
+	                      	<param name="volume" value="50" />
+	                      	<param name="autoplay" value="true" />
+	                      	<param name="loop" value="false" />
+	                      	<param name="fullscreen" value="false" />
+	                      	<param name="controls" value="false">
+                      </object>
+                   </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input id="lastTime" hidden value="100">
+<% } %>

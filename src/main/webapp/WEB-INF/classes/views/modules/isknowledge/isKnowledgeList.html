@@ -1,0 +1,75 @@
+<% layout('/layouts/default.html', {title: '知识库管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('知识库管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('isknowledge:isKnowledge:edit')){ %>
+					<a href="${ctx}/isknowledge/isKnowledge/form" class="btn btn-default btnTool" title="${text('新增知识库')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${isKnowledge}" action="${ctx}/isknowledge/isKnowledge/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('设备代码ID')}：</label>
+					<div class="control-inline">
+						<#form:input path="deviceCodeId" maxlength="64" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('知识类型')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="knowledgeType" dictType="is_knowledge_type" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('多媒体类型')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="mediaType" dictType="is_media_type" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('设备代码ID')}', name:'deviceCodeId', index:'a.device_code_id', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/isknowledge/isKnowledge/form?id='+row.id+'" class="btnList" data-title="${text('编辑知识库')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('知识类型')}', name:'knowledgeType', index:'a.knowledge_type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('is_knowledge_type')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('多媒体类型')}', name:'mediaType', index:'a.media_type', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('is_media_type')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('isknowledge:isKnowledge:edit')){ %>
+				actions.push('<a href="${ctx}/isknowledge/isKnowledge/form?id='+row.id+'" class="btnList" title="${text('编辑知识库')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/isknowledge/isKnowledge/delete?id='+row.id+'" class="btnList" title="${text('删除知识库')}" data-confirm="${text('确认要删除该知识库吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

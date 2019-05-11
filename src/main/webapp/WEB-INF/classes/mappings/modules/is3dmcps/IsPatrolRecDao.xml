@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.is3dmcps.dao.IsPatrolRecDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="IsPatrolRec">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="getLastTime" resultType="java.util.Date" parameterType="String">
+		select patrol_time from is_patrol_rec where patrol_id=#{id} and rownum = 1 order by patrol_time desc
+	</select>
+	<select id="getPatrolCount" resultType="java.lang.Integer" parameterType="String">
+		select count(patrol_time) from is_patrol_rec where to_char(patrol_time,'yyyy.mm.dd') = #{patrolTime}
+	</select>
+</mapper>

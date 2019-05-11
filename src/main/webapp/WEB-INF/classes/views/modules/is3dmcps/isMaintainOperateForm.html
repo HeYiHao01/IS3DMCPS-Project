@@ -1,0 +1,106 @@
+<% layout('/layouts/default.html', {title: '保养管理', libs: ['validate']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header with-border">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text(isMaintainRec.isNewRecord ? '新增保养记录' : '编辑保养记录')}
+			</div>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			</div>
+		</div>
+		<#form:form id="inputForm" model="${isMaintainRec}" action="${ctx}/is3dmcps/isMaintainRec/save" method="post" class="form-horizontal">
+			<div class="box-body">
+				<div class="form-unit">${text('基本信息')}</div>
+				<#form:hidden path="id" />
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+							<label class="control-label col-sm-2" title="">
+								<span class="required hide">*</span> ${text('保养记录')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-10">
+								<#form:textarea path="record" rows="4" maxlength="200" class="form-control"/>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('保养人员')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:treeselect id="maintainPerson" title="${text('用户选择')}"
+									path="" labelPath="maintainPerson"
+									url="${ctx}/sys/office/treeData?isLoadUser=true"
+									class="" allowClear="true"/>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="form-group">
+							<label class="control-label col-sm-4" title="">
+								<span class="required hide">*</span> ${text('保养时间')}：<i class="fa icon-question hide"></i></label>
+							<div class="col-sm-8">
+								<#form:input path="maintainTime" readonly="true" maxlength="20" class="form-control Wdate"
+									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="box-footer">
+				<div class="row">
+					<div class="col-sm-offset-2 col-sm-10">
+						<% if (hasPermi('is3dmcps:isMaintainRec:edit')){ %>
+							<button type="submit" class="btn btn-sm btn-primary" id="btnSubmit"><i class="fa fa-check"></i> ${text('保 存')}</button>&nbsp;
+						<% } %>
+						<button type="button" class="btn btn-sm btn-default" id="btnCancel" onclick="js.closeCurrentTabPage()"><i class="fa fa-reply-all"></i> ${text('关 闭')}</button>
+					</div>
+				</div>
+			</div>
+		</#form:form>
+	</div>
+</div>
+<% } %>
+<script>
+$("#inputForm").validate({
+	submitHandler: function(form){
+		js.ajaxSubmitForm($(form), function(data){
+			js.showMessage(data.message);
+			if(data.result == Global.TRUE){
+				js.closeCurrentTabPage(function(contentWindow){
+					contentWindow.page();
+				});
+			}
+		}, "json");
+    }
+});
+function maintainIdChanged(){
+	var v=$("#maintainId").value;
+	 $.ajax({ 
+		 type : "post", 
+		 async : false, 
+		 url : "${ctx}/is3dmcps/issMaintainRec/getDeviceNo", 
+		 data : { 'maintainId' : v }, 
+		 dataType : "json", 
+		 success : function(msg) { 
+			 $("#deviceNo").empty(); 
+			 //$("#template").select2(); 
+			 if (msg.length > 0) { 
+				 for (var i = 0; i < msg.length; i++) { 
+					 var partId = msg[i]; 
+					 var partName = msg[i]; 
+					 var $option = $("<option>").attr({ "value" : partId }).text(partName); 
+					 $("#deviceNo").append($option); 
+					 } 
+				 //$("#template option:first").prop("selected", 'selected'); 
+				 $("#deviceNo").change(); 
+				 } 
+			 }, 
+			 error : function(json) { 
+				 $.jBox.alert("网络异常！"); 
+			 } 
+		}); 
+}
+</script>

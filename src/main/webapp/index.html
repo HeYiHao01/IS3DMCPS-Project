@@ -1,0 +1,184 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta content="webkit" name="renderer"/><meta http-equiv="X-UA-Compatible"
+content="IE=edge"><meta name="keywords" content="PoweredByJeeSiteV4.0"/><meta http-equiv="Cache-Control"
+content="no-cache, no-store, must-revalidate"/><meta name="description" content="PoweredByJeeSiteV4.0"/><meta
+content="no-cache" http-equiv="Pragma"/><meta http-equiv="Expires" content="0"/><meta
+content="width=device-width, initial-scale=1, user-scalable=1" name="viewport"/>
+<title>智慧安防系统</title>
+<script src="/iss/global.min.js?ctx=/iss/a"></script>
+<script src="/iss/static/jquery/jquery-1.12.4.min.js"></script>
+<script src="/iss/static/jquery/jquery-migrate-1.4.1.min.js"></script>
+<!--[if lt IE 9]><script src="/iss/static/common/h5fix.min.js"></script><![endif]-->
+<link rel="stylesheet" href="/iss/static/fonts/font-icons.min.css">
+<link rel="stylesheet" href="/iss/static/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="/iss/static/select2/4.0/select2.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/icheck/1.0/minimal/grey.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/wdScrollTab/css/TabPanel.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/adminlte/css/AdminLTE.min.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/common/jeesite.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/common/common.css?V1.0-10041725">
+</head><body class="hold-transition fixed noscroll2 sidebar-mini ">
+<div class="wrapper"><!--[if lte IE 9]><a style="position:absolute;top:0;left:0;z-index:100000;display:block;width:100%;font-size:14px;color:#F00;text-decoration:none;background-color:#faffb3;text-align:center;"
+href="/iss/static/upbw/index.html" target="_blank">您的浏览器版本过低或在兼容模式下，导致打开速度过慢，提升速度您可以切换到极速模式或升级为最新版，点击此处查看详情。</a><![endif]-->
+<!--[if lte IE 8]><script>window.location.href='/iss/static/upbw/index.html?url='+location.href;</script><![endif]-->
+<link rel="stylesheet" href="/iss/static/jquery-toastr/2.0/toastr.min.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/adminlte/css/skins/skin-blue-light.css?V1.0-10041725">
+<link rel="stylesheet" href="/iss/static/modules/sys/sysIndex.css?V1.0-10041725">
+<header class="main-header">    
+<nav class="navbar navbar-static-top">
+	<div class="logo" data-toggle="push-menu">
+		<b>智慧安防系统</b>
+		<small>&nbsp; &nbsp;<i class="fa fa-bars"></i></small>
+	</div>
+	<div class="navbar-custom-menu">
+		<ul class="nav navbar-nav">
+			<li><a href="http://jeesite.com" target="_blank"><i class="fa fa-diamond"></i> 官方网站</a></li>
+			<li><a href="javascript:" id="fullScreen" title="全屏"><i class="fa fa-arrows-alt"></i></a></li>
+			<li><a href="javascript:" id="switchSkin" title="切换主题" style="margin-top:-1px;"><i class="fa fa-dashboard"></i></a></li>
+<li>
+	<a href="javascript:" data-href="/iss/a/sys/online/list" data-title="在线人员" title="在线人员"
+		class="">
+		<i class="icon-people"></i><span id="onlineCount" class="label label-success">0</span>
+	</a>
+	<script>
+		function refreshOnlineCount(){
+			$.get('/iss/a/sys/online/count?__notUpdateSession=true&__t='
+					+ new Date().getTime(), function(data){
+				try{$('#onlineCount').html(Number(data))}catch(e){}
+			})
+		}
+		refreshOnlineCount(); // 先执行一次
+		setInterval(refreshOnlineCount, 180000); // 3分钟执行一次
+	</script>
+</li><li class="dropdown messages-menu">
+	<a href="javascript:" class="dropdown-toggle" data-hover="dropdown">
+		<i class="fa fa-envelope-o"></i>
+		<span class="label label-success" id="msgNum">0</span>
+	</a>
+	<ul class="dropdown-menu">
+		<li class="header">你有 <span id="msgNum2">0</span> 条消息</li>
+		<li>
+			<ul class="menu" id="msgList"
+				data-mergeMsgLimit="5"
+				data-mergeMsgTitle="系统消息"
+				data-mergeMsgContent="您有 {0} 条新消息，由于消息太多，这里为您合并，请点击查看按钮看详情。"></ul>
+		</li>
+		<li class="footer"><a href="javascript:" data-href="/iss/a/msg/list"
+			data-title="查看全部消息" class="addTabPage">查看全部消息</a></li>
+	</ul>
+	<script src="/iss/static/jquery-timeago/jquery.timeago.js"></script>
+	<script src="/iss/static/jquery-timeago/i18n/jquery.timeago.zh_CN.js"></script>
+	<script src="/iss/static/modules/msg/topMenuMsg.js"></script>
+	<script type="text/template" id="msgListTpl">
+		<li id="msg{{d.id}}"><a href="javascript:"
+				data-href="/iss/a/msg/readMsg?id={{d.id}}"
+				onclick="readMsg(this, '查看消息', '{{d.id}}')" >
+			<div class="pull-left"><i class="img-circle bg-aqua icon-bubble"></i></div>
+			<h4>{{d.msgContentEntity.title}} <small><i class="fa fa-clock-o"></i>
+				<abbr class="timeago" title="{{d.sendDate}}">{{d.sendDate}}</abbr></small></h4>
+			<p>{{=d.msgContentEntity.content}}</p>
+		</a></li>
+	</script>
+	<script type="text/template" id="msgTipTpl">
+		<abbr class="timeago" title="{{d.sendDate}}">{{d.sendDate}}</abbr>
+			{{d.sendUserName}} <br/> {{=d.msgContentEntity.content}} 
+		<div style="margin:8px 0 0;float:right;">
+			{{# $.each(d.msgContentEntity.buttons, function(idx, item){ }}
+				<button class="btn btn-default btn-sm" type="button"
+					data-href="/iss{{item.href}}"
+					onclick="readMsg(this, '查看消息', '{{item.id}}');">{{item.name}}</button>&nbsp;
+			{{# }); }}
+			<button type="button" class="btn btn-default btn-sm"
+				data-href="/iss/a/msg/readMsg?id={{d.id}}"
+				onclick="readMsg(this, '消息详情', '{{d.id}}')">查看</button>&nbsp;
+		</div>
+	</script>
+</li><li class="dropdown user-menu mr5">
+	<a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+		<img src="/iss/userfiles/avatar/0/employee/ysdadmin_6nxx.jpg" class="user-image">
+		<span class="hidden-xs">云师大管理员</span>
+	</a>
+	<ul class="dropdown-menu">
+		<li class="mt5">
+			<a id="userInfo" href="javascript:" data-href="/iss/a/sys/user/info" class="addTabPage">
+			<i class="fa fa-user"></i> 个人中心</a>
+		</li>
+		<li>
+			<a id="modifyPassword" href="javascript:" data-href="/iss/a/sys/user/info?op=pwd" class="addTabPage">
+			<i class="fa fa-key"></i> 修改密码</a>
+		</li>
+		<li class="divider"></li>
+		<li>
+			<a href="/iss/a/logout">
+			<i class="fa fa-sign-out"></i> 退出登录</a>
+		</li>
+		<li class="mt10"></li>
+	</ul>
+</li>		</ul>
+	</div>
+</nav></header>
+<aside class="main-sidebar">
+<section class="sidebar">
+	<div class="user-panel">
+		<div class="pull-left image">
+			<img data-href="/iss/a/sys/user/info" data-title="个人中心" class="addTabPage img-circle"
+				src="/iss/userfiles/avatar/0/employee/ysdadmin_6nxx.jpg">
+		</div>
+		<div class="pull-left info">
+			<p>云师大管理员</p>
+			<a href="javascript:"><i class="fa fa-circle text-success"></i> 在线</a>
+			<a href="/iss/a/logout"><i class="fa fa-sign-out text-danger"></i> 注销</a>
+		</div>
+	</div>
+	<ul class="sidebar-menu" data-widget="tree">
+<li class="treeview"><a title="实时视频" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-social-youtube"></i> <span>实时视频</span></a></li>
+<li class="treeview"><a title="人脸识别" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-emotsmile"></i> <span>人脸识别</span></a></li>
+<li class="treeview"><a title="报警信息" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-bell"></i> <span>报警信息</span></a></li>
+<li class="treeview"><a title="访客登记" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-note"></i> <span>访客登记</span></a></li>
+<li class="treeview"><a title="人员定位" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-location-pin"></i> <span>人员定位</span></a></li>
+<li class="treeview"><a title="人员跟踪" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-graph"></i> <span>人员跟踪</span></a></li>
+<li class="treeview"><a title="统计分析" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-chart"></i> <span>统计分析</span>
+	<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">
+<li class="treeview"><a title="抓拍数据统计" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-camera"></i> <span>抓拍数据统计</span></a></li>
+<li class="treeview"><a title="报警数据统计" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-bell"></i> <span>报警数据统计</span></a></li>
+</ul></li>
+<li class="treeview"><a title="名单管理" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-people"></i> <span>名单管理</span>
+	<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">
+<li class="treeview"><a title="白名单管理" href="javascript:" data-href="iss/issEmployee/index" class="addTabPage"><i class="fa fa-fw icon-user-following"></i> <span>白名单管理</span></a></li>
+<li class="treeview"><a title="黑名单管理" href="javascript:" data-href="iss/issBlacklist/list" class="addTabPage"><i class="fa fa-fw icon-user-unfollow"></i> <span>黑名单管理</span></a></li>
+<li class="treeview"><a title="访客管理" href="javascript:" data-href="iss/issVisitor/list" class="addTabPage"><i class="fa fa-fw icon-user-female"></i> <span>访客管理</span></a></li>
+</ul></li>
+<li class="treeview"><a title="系统管理" href="javascript:" data-href="blank" class="addTabPage"><i class="fa fa-fw icon-settings"></i> <span>系统管理</span>
+	<span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a><ul class="treeview-menu">
+<li class="treeview"><a title="布控区域" href="javascript:" data-href="iss/issArea/list" class="addTabPage"><i class="fa fa-fw icon-puzzle"></i> <span>布控区域</span></a></li>
+<li class="treeview"><a title="监控点" href="javascript:" data-href="iss/issCamera/index" class="addTabPage"><i class="fa fa-fw icon-camrecorder"></i> <span>监控点</span></a></li>
+<li class="treeview"><a title="管理点" href="javascript:" data-href="iss/issManage/list" class="addTabPage"><i class="fa fa-fw icon-screen-desktop"></i> <span>管理点</span></a></li>
+<li class="treeview"><a title="报警设置" href="javascript:" data-href="iss/issWarningSetup/list" class="addTabPage"><i class="fa fa-fw icon-bell"></i> <span>报警设置</span></a></li>
+<li class="treeview"><a title="部门" href="javascript:" data-href="/iss/a/sys/office/list" class="addTabPage"><i class="fa fa-fw icon-grid"></i> <span>部门</span></a></li>
+<li class="treeview"><a title="用户管理" href="javascript:" data-href="/iss/a/sys/empUser/index" class="addTabPage"><i class="fa fa-fw icon-user"></i> <span>用户管理</span></a></li>
+<li class="treeview"><a title="角色管理" href="javascript:" data-href="/iss/a/sys/role/list" class="addTabPage"><i class="fa fa-fw icon-people"></i> <span>角色管理</span></a></li>
+<li class="treeview"><a title="数据字典" href="javascript:" data-href="/iss/a/sys/dictType/list?isSys=0" class="addTabPage"><i class="fa fa-fw icon-social-dropbox"></i> <span>数据字典</span></a></li>
+</ul></li>
+	</ul>
+</section></aside>
+<div class="content-wrapper">
+	<div id="tabpanel"></div>
+</div>
+</div>
+
+<a id="scroll-up" href="#" class="btn btn-sm"><i class="fa fa-angle-double-up"></i></a>
+<script src="/iss/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/iss/static/select2/4.0/select2.js?V1.0-10041725"></script>
+<script src="/iss/static/select2/4.0/i18n/zh_CN.js?V1.0-10041725"></script>
+<script src="/iss/static/layer/3.1/layer.js?V1.0-10041725"></script>
+<script src="/iss/static/my97/WdatePicker.js?V1.0-10041725"></script>
+<script src="/iss/static/wdScrollTab/js/TabPanel.js?V1.0-10041725"></script>
+<script src="/iss/static/wdScrollTab/js/TabPanel.extend.js?V1.0-10041725"></script>
+<script src="/iss/static/common/jeesite.js?V1.0-10041725"></script>
+<script src="/iss/static/common/i18n/jeesite_zh_CN.js?V1.0-10041725"></script>
+<script src="/iss/static/common/common.js?V1.0-10041725"></script>
+<div class="hide" id="desktopTabPage" data-title="首页"
+	data-url="/iss/a/desktop"></div>
+<div class="hide" id="modifyPasswordTip" data-message=""></div>
+<script src="/iss/static/jquery-toastr/2.0/toastr.min.js?V1.0-10041725"></script>
+<script src="/iss/static/jquery-plugins/jquery.slimscroll.js"></script>
+<script src="/iss/static/modules/sys/sysIndex.js?V1.0-10041725"></script>

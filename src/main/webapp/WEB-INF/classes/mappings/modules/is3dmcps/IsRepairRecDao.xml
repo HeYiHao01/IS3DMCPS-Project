@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.is3dmcps.dao.IsRepairRecDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="IsRepairRec">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="getRepairCount" resultType="java.lang.Integer" parameterType="String">
+		select count(results) from is_repair_rec where results='2' and to_char(repair_time,'yyyy.mm.dd') = #{repairTime}
+	</select>
+	<select id="getRepairResult" resultType="java.lang.String" parameterType="String">
+		select results from is_repair_rec where faults_id=#{faultsId} and rownum=1 order by repair_time
+	</select>
+</mapper>

@@ -1,0 +1,113 @@
+/*!
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * 项目自定义的公共CSS，可覆盖jeesite.css里的样式
+ */
+
+.img-zone{
+    height: 100%;
+    width: 98%;
+    white-space: nowrap;
+    overflow: auto;
+    overflow-y: auto;
+    padding: 0px 10px 0px 10px;
+}
+
+.face-image{
+    border-radius:5px 0;
+    /*width: 10%;*/
+    height: 100%;
+    margin: 0px 2px 0px 2px;
+}
+
+.index-margin{
+    margin: 0px 0px 0px 0px;
+    height: 100%;
+}
+
+.row-height{
+<<<<<<< .mine
+    height: 100%;
+    padding-bottom: 5px;
+    padding-left: -15px;
+    padding-right: -15px;
+||||||| .r27
+    height: 74%;
+    width: 100%;
+=======
+    height: 74%;
+    padding-bottom: 5px;
+    margin: 0px 0px 0px 0px;
+>>>>>>> .r29
+}
+
+.row-down{
+    height: 24%;
+    margin: 0px 0px 0px 0px;
+}
+
+.height-full{
+    height: 100%;
+}
+
+.size-full{
+    height: 100%;
+    width: 100%;
+}
+
+.height-90{
+    height: 90%;
+}
+
+.box-left{
+    float: left;
+    width: 74%;
+}
+
+.box-right{
+    float: right;
+    width: 25%;
+}
+
+.my-box{
+    display:block;
+    min-height:170px;
+    background:#fff;
+    width:100%;
+    box-shadow:0 1px 1px rgba(0,0,0,0.1);
+    border-radius:2px;
+    margin-bottom:20px
+}
+
+.my-box-image{
+    border-top-left-radius:2px;
+    border-top-right-radius:0;
+    border-bottom-right-radius:0;
+    border-bottom-left-radius:2px;
+    display:block;
+    float:left;
+    height:170px;
+    width:170px;
+    text-align:center;
+    font-size:45px;
+    line-height:90px;
+    background:rgba(0,0,0,0.2)
+}
+
+.my-box-content{
+    padding:5px 10px;
+    margin-left:190px
+}
+
+.my-box-text{
+    display:block;
+    font-size:20px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+}
+
+.my-box-mark{
+    display:block;
+    font-weight:bold;
+    font-size:22px
+}

@@ -1,0 +1,77 @@
+<% layout('/layouts/default.html', {title: '保养计划管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('保养计划管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('is3dmcps:isMaintainRec:edit')){ %>
+					<a href="${ctx}/is3dmcps/isMaintainPlan/form" class="btn btn-default btnTool" title="${text('新增保养计划')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${isMaintainRec}" action="${ctx}/is3dmcps/isMaintainPlan/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('保养点名称')}：</label>
+					<div class="control-inline">
+<#form:treeselect id="maintain" title="${text('保养点选择')}"
+	path="maintainId" labelPath="maintainName" 
+	url="${ctx}/is3dmcps/isMaintain/treeData" allowClear="true" 
+canSelectRoot="false"  canSelectParent="false" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('设备编号')}：</label>
+					<div class="control-inline">
+						<#form:input path="deviceNo" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('计划人员')}：</label>
+					<div class="control-inline width-120" >
+						<#form:treeselect id="planPerson" title="${text('用户选择')}"
+							path="" labelPath="planPerson" 
+							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('保养点名称')}', name:'maintainName', index:'a.maintain_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/is3dmcps/isMaintainPlan/operateForm?id='+row.id+'" class="btnList" data-title="${text('保养登记')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('设备编号')}', name:'deviceNo', index:'a.device_no', width:150, align:"left"},
+		{header:'${text('计划人员')}', name:'planPerson', index:'a.plan_person', width:150, align:"left"},
+		{header:'${text('计划保养日期')}', name:'planDate', index:'a.plan_date', width:150, align:"center"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('is3dmcps:isMaintainRec:edit')){ %>
+				actions.push('<a href="${ctx}/is3dmcps/isMaintainPlan/form?id='+row.id+'" class="btnList" title="${text('编辑保养计划')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/is3dmcps/isMaintainPlan/delete?id='+row.id+'" class="btnList" title="${text('删除保养计划')}" data-confirm="${text('确认要删除该保养计划吗？')}" data-deltreenode="'+row.id+'"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

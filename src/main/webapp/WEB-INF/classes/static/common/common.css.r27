@@ -1,0 +1,49 @@
+/*!
+ * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
+ * 项目自定义的公共CSS，可覆盖jeesite.css里的样式
+ */
+
+.nowrap{
+    white-space: nowrap;
+    overflow: auto;
+    overflow-y: auto
+}
+
+.face-image{
+    border-radius:5px 0;
+    width: 10%;
+    margin: 0px 2px 0px 2px;
+}
+
+.index-margin{
+    margin: 0px 5px 0px 5px;
+    height: 100%;
+}
+
+.row-height{
+    height: 74%;
+    width: 100%;
+}
+
+.height-full{
+    height: 100%;
+}
+
+.size-full{
+    height: 100%;
+    width: 100%;
+}
+
+.height-90{
+    height: 90%;
+}
+
+.box-left{
+    float: left;
+    width: 74%;
+}
+
+.box-right{
+    float: right;
+    width: 24%;
+}

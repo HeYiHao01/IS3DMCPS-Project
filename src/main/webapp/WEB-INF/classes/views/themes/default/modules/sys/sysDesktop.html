@@ -1,0 +1,406 @@
+<% layout('/layouts/default.html', {title: '', bodyClass: ''}){ %>
+<!-- <link rel="stylesheet" href="${ctxStatic}/modules/sys/sysDesktop.css?${_version}"> -->
+<div class="content pb0">
+	<!-- Info boxes -->
+	<div class="row">
+		<div class="col-md-2 col-sm-4 col-xs-6">
+		<a href="/iss/24542448.jpg"  data-ligthbox="image-1" data-title="ceshi"">点击</a>
+			<div class="info-box">
+				<span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
+				<div class="info-box-content">
+					<span class="info-box-text">白名单库</span>
+					<span class="info-box-number">90<small>条</small></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6">
+			<div class="info-box">
+				<span class="info-box-icon bg-black"><i class="fa fa-user"></i></span>
+				<div class="info-box-content">
+					<span class="info-box-text">黑名单库</span>
+					<span class="info-box-number">41,410<small>条</small></span>
+				</div>
+			</div>
+		</div>
+		<!-- fix for small devices only 
+		<div class="clearfix visible-sm-block"></div>-->
+		<div class="col-md-2 col-sm-4 col-xs-6">
+			<div class="info-box">
+				<span class="info-box-icon bg-green"><i class="fa fa-user-plus"></i></span>
+				<div class="info-box-content">
+					<span class="info-box-text">访客库</span>
+					<span class="info-box-number">760<small>条</small></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6">
+			<div class="info-box">
+				<span class="info-box-icon bg-yellow"><i class="fa fa-camera"></i></span>
+
+				<div class="info-box-content">
+					<span class="info-box-text">监控设备</span>
+					<span class="info-box-number">2,000<small>台</small></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6">
+			<div class="info-box">
+				<span class="info-box-icon bg-red"><i class="fa fa-camera-retro"></i></span>
+
+				<div class="info-box-content">
+					<span class="info-box-text">刷脸设备</span>
+					<span class="info-box-number">2,000<small>台</small></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-6">
+			<div class="info-box">
+				<span class="info-box-icon bg-green"><i class="fa fa-user-secret"></i></span>
+
+				<div class="info-box-content">
+					<span class="info-box-text">安保人员</span>
+					<span class="info-box-number">2,000<small>人</small></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Chart boxes -->
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-widget">
+				<div class="box-header with-border">
+					<h3 class="box-title">刷脸数据统计</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+						<div class="btn-group">
+							<button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-wrench"></i></button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">导出Excel</a></li>
+								<li><a href="#">导出Word</a></li>
+								<li class="divider"></li>
+								<li><a href="#">基本设置</a></li>
+							</ul>
+						</div>
+						<button type="button" class="btn btn-box-tool" data-widget="remove">
+							<i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="chart">
+								<div id="myChart" style="height:230px;width:99%"></div>
+								<script src="http://echarts.baidu.com/dist/echarts.common.min.js"></script>
+								<script>
+									var option = {
+									    title : {
+									        text: '2017-5'
+									    },
+									    tooltip : {
+									        trigger: 'axis'
+									    },
+									    legend: {
+									        data:['白名单','访客','黑名单','未识别']
+									    },
+									    toolbox: {
+									        show : true,
+									        feature : {
+									            mark : {show: true},
+									            dataView : {show: true, readOnly: false},
+									            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+									            restore : {show: true},
+									            saveAsImage : {show: true}
+									        }
+									    },
+									    calculable : true,
+									    grid : {
+									    	top: '49',
+									    	right: '20',
+									    	bottom: '30'
+									    },
+									    xAxis : [
+									        {
+									            type : 'category',
+									            boundaryGap : false,
+									            data : ['设备1','设备2','设备3','设备4','设备5','设备6','设备7']
+									        }
+									    ],
+									    yAxis : [
+									        {
+									            type : 'value'
+									        }
+									    ],
+									    series : [
+									        {
+									            name:'白名单',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[10, 12, 21, 54, 260, 830, 710]
+									        },
+									        {
+									            name:'访客',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[30, 182, 434, 791, 390, 30, 10]
+									        },
+									        {
+									            name:'黑名单',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[3, 4, 0, 0, 0, 1, 0]
+									        },
+									        {
+									            name:'未识别',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[1320, 1132, 601, 234, 120, 90, 20]
+									        }
+									     ]
+									};
+									// 基于准备好的dom，初始化echarts实例
+							        var myChart = echarts.init(document.getElementById('myChart'));
+							        myChart.setOption(option);
+								</script>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<p class="text-center">
+								<strong>完成目标</strong>
+							</p>
+							<div class="progress-group">
+								<span class="progress-text">将产品添加到购物车</span>
+								<span class="progress-number"><b>160</b>/200</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">完成购买率</span>
+								<span class="progress-number"><b>310</b>/400</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-red" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">产品访问量</span>
+								<span class="progress-number"><b>480</b>/800</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-green" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">查询访问量</span>
+								<span class="progress-number"><b>250</b>/500</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-widget">
+				<div class="box-header with-border">
+					<h3 class="box-title">报警数据统计</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+						<div class="btn-group">
+							<button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
+								<i class="fa fa-wrench"></i></button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">导出Excel</a></li>
+								<li><a href="#">导出Word</a></li>
+								<li class="divider"></li>
+								<li><a href="#">基本设置</a></li>
+							</ul>
+						</div>
+						<button type="button" class="btn btn-box-tool" data-widget="remove">
+							<i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="chart">
+								<div id="myChart" style="height:230px;width:99%"></div>
+								<script src="http://echarts.baidu.com/dist/echarts.common.min.js"></script>
+								<script>
+									var option = {
+									    title : {
+									        text: '2017-5'
+									    },
+									    tooltip : {
+									        trigger: 'axis'
+									    },
+									    legend: {
+									        data:['提醒','一级报警','二级报警','三级报警']
+									    },
+									    toolbox: {
+									        show : true,
+									        feature : {
+									            mark : {show: true},
+									            dataView : {show: true, readOnly: false},
+									            magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+									            restore : {show: true},
+									            saveAsImage : {show: true}
+									        }
+									    },
+									    calculable : true,
+									    grid : {
+									    	top: '49',
+									    	right: '20',
+									    	bottom: '30'
+									    },
+									    xAxis : [
+									        {
+									            type : '刷脸设备',
+									            boundaryGap : false,
+									            data : ['设备1','设备2','设备3','设备4','设备5','设备6','设备7']
+									        }
+									    ],
+									    yAxis : [
+									        {
+									            type : 'value'
+									        }
+									    ],
+									    series : [
+									        {
+									            name:'白名单',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[10, 12, 21, 54, 260, 830, 710]
+									        },
+									        {
+									            name:'访客',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[30, 182, 434, 791, 390, 30, 10]
+									        },
+									        {
+									            name:'黑名单',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[3, 4, 0, 0, 0, 1, 0]
+									        },
+									        {
+									            name:'未识别',
+									            type:'line',
+									            smooth:true,
+									            itemStyle: {normal: {areaStyle: {type: 'default'}}},
+									            data:[1320, 1132, 601, 234, 120, 90, 20]
+									        }
+									     ]
+									};
+									// 基于准备好的dom，初始化echarts实例
+							        var myChart = echarts.init(document.getElementById('myChart'));
+							        myChart.setOption(option);
+								</script>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<p class="text-center">
+								<strong>完成目标</strong>
+							</p>
+							<div class="progress-group">
+								<span class="progress-text">将产品添加到购物车</span>
+								<span class="progress-number"><b>160</b>/200</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">完成购买率</span>
+								<span class="progress-number"><b>310</b>/400</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-red" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">产品访问量</span>
+								<span class="progress-number"><b>480</b>/800</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-green" style="width: 80%"></div>
+								</div>
+							</div>
+							<div class="progress-group">
+								<span class="progress-text">查询访问量</span>
+								<span class="progress-number"><b>250</b>/500</span>
+								<div class="progress sm">
+									<div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-widget">
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-3 col-xs-6">
+							<div class="description-block border-right">
+								<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+								<h5 class="description-header">￥35,210.43</h5>
+								<span class="description-text">总营收</span>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="description-block border-right">
+								<span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+								<h5 class="description-header">￥10,390.90</h5>
+								<span class="description-text">总成本</span>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="description-block border-right">
+								<span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 20%</span>
+								<h5 class="description-header">￥24,813.53</h5>
+								<span class="description-text">总利润</span>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="description-block">
+								<span class="description-percentage text-red"><i class="fa fa-caret-down"></i> 18%</span>
+								<h5 class="description-header">1200</h5>
+								<span class="description-text">目标完成</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>
+<footer class="main-footer m0">
+	<div class="pull-right hidden-xs">当前版本： ${@Global.getConfig('productVersion')}</div>
+	&copy; ${@DateUtils.getYear()} ${@Global.getConfig('productName')} - Powered By ${@Global.getConfig('companyName')}
+</footer>
+<% } %>
+<script>
+$(window).resize(function(){
+	var footerHeight  = $('.main-footer').outerHeight() || 0;
+	var windowHeight  = $(window).height();
+	$('.content').css('min-height', windowHeight - footerHeight)
+}).resize();
+</script>

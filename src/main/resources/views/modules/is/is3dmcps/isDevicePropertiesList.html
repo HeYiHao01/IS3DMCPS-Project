@@ -1,0 +1,71 @@
+<% layout('/layouts/default.html', {title: 'is_device_properties管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('is_device_properties管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('is:is3dmcps:isDeviceProperties:edit')){ %>
+					<a href="${ctx}/is/is3dmcps/isDeviceProperties/form" class="btn btn-default btnTool" title="${text('新增is_device_properties')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${isDeviceProperties}" action="${ctx}/is/is3dmcps/isDeviceProperties/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('device_name')}：</label>
+					<div class="control-inline">
+						<#form:input path="deviceName" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('property')}：</label>
+					<div class="control-inline">
+						<#form:input path="property" maxlength="16" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('property_value')}：</label>
+					<div class="control-inline">
+						<#form:input path="propertyValue" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('device_name')}', name:'deviceName', index:'a.device_name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/is/is3dmcps/isDeviceProperties/form?deviceId='+row.deviceId+'" class="btnList" data-title="${text('编辑is_device_properties')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('property')}', name:'property', index:'a.property', width:150, align:"left"},
+		{header:'${text('property_value')}', name:'propertyValue', index:'a.property_value', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('is:is3dmcps:isDeviceProperties:edit')){ %>
+				actions.push('<a href="${ctx}/is/is3dmcps/isDeviceProperties/form?deviceId='+row.deviceId+'" class="btnList" title="${text('编辑is_device_properties')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/is/is3dmcps/isDeviceProperties/delete?deviceId='+row.deviceId+'" class="btnList" title="${text('删除is_device_properties')}" data-confirm="${text('确认要删除该is_device_properties吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

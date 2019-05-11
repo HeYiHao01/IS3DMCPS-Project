@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.is3dmcps.dao.IsMaintainRecDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="IsMaintainRec">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="need_maintain" resultType="java.lang.Integer">
+		select count(*) from is_maintain_rec where rec_status=0
+	</select>
+	<select id="need_maintain_details" resultType="IsMaintainRec">
+		select * from is_maintain_rec where rec_status=0
+	</select>
+	<select id="getMaintainPop" resultType="IsMaintainRec">
+		select maintain_id,maintain_name from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id
+	</select>
+	<select id="getMaintainPlanCount" resultType="java.lang.Integer" parameterType="String">
+		select count(rec_status) from is_maintain_rec where to_char(plan_date,'yyyy.mm.dd') = #{planDate}
+	</select>
+	<select id="getFinishCount" resultType="java.lang.Integer" parameterType="String">
+		select count(rec_status) from is_maintain_rec where rec_status=1 and to_char(maintain_time,'yyyy.mm.dd') = #{maintainTime}
+	</select>
+</mapper>

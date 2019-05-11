@@ -1,0 +1,319 @@
+<% layout('/layouts/default.html', {title: 'twms_pltitem管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('twms_pltitem管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('twms:twmsPltitem:edit')){ %>
+					<a href="${ctx}/twms/twmsPltitem/form" class="btn btn-default btnTool" title="${text('新增twms_pltitem')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${twmsPltitem}" action="${ctx}/twms/twmsPltitem/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('物料明细行号')}：</label>
+					<div class="control-inline">
+						<#form:input path="linenum" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('objecttype')}：</label>
+					<div class="control-inline">
+						<#form:input path="objecttype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('物料自动编号')}：</label>
+					<div class="control-inline">
+						<#form:input path="itemautonum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('物料号')}：</label>
+					<div class="control-inline">
+						<#form:input path="itemnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('itemtype')}：</label>
+					<div class="control-inline">
+						<#form:input path="itemtype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('批次号')}：</label>
+					<div class="control-inline">
+						<#form:input path="lotnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('wlotnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="wlotnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('当前用作烟箱清洁标志和退库标志')}：</label>
+					<div class="control-inline">
+						<#form:input path="snnum" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('master')}：</label>
+					<div class="control-inline">
+						<#form:input path="master" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('producer')}：</label>
+					<div class="control-inline">
+						<#form:input path="producer" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('当前用作区域标识')}：</label>
+					<div class="control-inline">
+						<#form:input path="vendor" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('hive_days')}：</label>
+					<div class="control-inline">
+						<#form:input path="hiveDays" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('shelflife')}：</label>
+					<div class="control-inline">
+						<#form:input path="shelflife" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('箱数')}：</label>
+					<div class="control-inline">
+						<#form:input path="itemqty" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('单位')}：</label>
+					<div class="control-inline">
+						<#form:input path="issueunit" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('statitemqty')}：</label>
+					<div class="control-inline">
+						<#form:input path="statitemqty" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('statunit')}：</label>
+					<div class="control-inline">
+						<#form:input path="statunit" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ponum')}：</label>
+					<div class="control-inline">
+						<#form:input path="ponum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('poline')}：</label>
+					<div class="control-inline">
+						<#form:input path="poline" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('spinv')}：</label>
+					<div class="control-inline">
+						<#form:input path="spinv" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('invtype')}：</label>
+					<div class="control-inline">
+						<#form:input path="invtype" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('qulityflg')}：</label>
+					<div class="control-inline">
+						<#form:input path="qulityflg" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('生产时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="producedate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('物料描述')}：</label>
+					<div class="control-inline">
+						<#form:input path="itemdesc" maxlength="240" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('boxnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="boxnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('入库时间')}：</label>
+					<div class="control-inline">
+						<#form:input path="enterdate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('enterby')}：</label>
+					<div class="control-inline">
+						<#form:input path="enterby" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('sourcesnnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="sourcesnnum" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('烟箱装丝量')}：</label>
+					<div class="control-inline">
+						<#form:input path="weight" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('weight2')}：</label>
+					<div class="control-inline">
+						<#form:input path="weight2" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('weightunit')}：</label>
+					<div class="control-inline">
+						<#form:input path="weightunit" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('扩展字段')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr1" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('extattr2')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr2" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('extattr3')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr3" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('extattr4')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr4" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('extattr5')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr5" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('extattr6')}：</label>
+					<div class="control-inline">
+						<#form:input path="extattr6" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('物料明细行号')}', name:'linenum', index:'a.linenum', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/twms/twmsPltitem/form?vpltnum='+row.vpltnum+'" class="btnList" data-title="${text('编辑twms_pltitem')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('objecttype')}', name:'objecttype', index:'a.objecttype', width:150, align:"left"},
+		{header:'${text('物料自动编号')}', name:'itemautonum', index:'a.itemautonum', width:150, align:"left"},
+		{header:'${text('物料号')}', name:'itemnum', index:'a.itemnum', width:150, align:"left"},
+		{header:'${text('itemtype')}', name:'itemtype', index:'a.itemtype', width:150, align:"left"},
+		{header:'${text('批次号')}', name:'lotnum', index:'a.lotnum', width:150, align:"left"},
+		{header:'${text('wlotnum')}', name:'wlotnum', index:'a.wlotnum', width:150, align:"left"},
+		{header:'${text('当前用作烟箱清洁标志和退库标志')}', name:'snnum', index:'a.snnum', width:150, align:"left"},
+		{header:'${text('master')}', name:'master', index:'a.master', width:150, align:"left"},
+		{header:'${text('producer')}', name:'producer', index:'a.producer', width:150, align:"left"},
+		{header:'${text('当前用作区域标识')}', name:'vendor', index:'a.vendor', width:150, align:"left"},
+		{header:'${text('hive_days')}', name:'hiveDays', index:'a.hive_days', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('shelflife')}', name:'shelflife', index:'a.shelflife', width:150, align:"left"},
+		{header:'${text('箱数')}', name:'itemqty', index:'a.itemqty', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('单位')}', name:'issueunit', index:'a.issueunit', width:150, align:"left"},
+		{header:'${text('statitemqty')}', name:'statitemqty', index:'a.statitemqty', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('statunit')}', name:'statunit', index:'a.statunit', width:150, align:"left"},
+		{header:'${text('ponum')}', name:'ponum', index:'a.ponum', width:150, align:"left"},
+		{header:'${text('poline')}', name:'poline', index:'a.poline', width:150, align:"left"},
+		{header:'${text('spinv')}', name:'spinv', index:'a.spinv', width:150, align:"left"},
+		{header:'${text('invtype')}', name:'invtype', index:'a.invtype', width:150, align:"left"},
+		{header:'${text('qulityflg')}', name:'qulityflg', index:'a.qulityflg', width:150, align:"left"},
+		{header:'${text('生产时间')}', name:'producedate', index:'a.producedate', width:150, align:"left"},
+		{header:'${text('物料描述')}', name:'itemdesc', index:'a.itemdesc', width:150, align:"left"},
+		{header:'${text('boxnum')}', name:'boxnum', index:'a.boxnum', width:150, align:"left"},
+		{header:'${text('入库时间')}', name:'enterdate', index:'a.enterdate', width:150, align:"left"},
+		{header:'${text('enterby')}', name:'enterby', index:'a.enterby', width:150, align:"left"},
+		{header:'${text('sourcesnnum')}', name:'sourcesnnum', index:'a.sourcesnnum', width:150, align:"left"},
+		{header:'${text('烟箱装丝量')}', name:'weight', index:'a.weight', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('weight2')}', name:'weight2', index:'a.weight2', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('weightunit')}', name:'weightunit', index:'a.weightunit', width:150, align:"left"},
+		{header:'${text('扩展字段')}', name:'extattr1', index:'a.extattr1', width:150, align:"left"},
+		{header:'${text('extattr2')}', name:'extattr2', index:'a.extattr2', width:150, align:"left"},
+		{header:'${text('extattr3')}', name:'extattr3', index:'a.extattr3', width:150, align:"left"},
+		{header:'${text('extattr4')}', name:'extattr4', index:'a.extattr4', width:150, align:"left"},
+		{header:'${text('extattr5')}', name:'extattr5', index:'a.extattr5', width:150, align:"left"},
+		{header:'${text('extattr6')}', name:'extattr6', index:'a.extattr6', width:150, align:"left"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('twms:twmsPltitem:edit')){ %>
+				actions.push('<a href="${ctx}/twms/twmsPltitem/form?vpltnum='+row.vpltnum+'" class="btnList" title="${text('编辑twms_pltitem')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/twms/twmsPltitem/delete?vpltnum='+row.vpltnum+'" class="btnList" title="${text('删除twms_pltitem')}" data-confirm="${text('确认要删除该twms_pltitem吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

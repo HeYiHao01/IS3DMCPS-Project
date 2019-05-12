@@ -26,4 +26,7 @@
 	<select id="getPartCountByCodeId" resultType="java.lang.Integer" parameterType="String">
 		select count(device_code_id) from is_device where device_code_id = #{deviceCodeId}
 	</select>
+	<select id="getDeviceByCodeName" resultType="IsDevice" parameterType="String">
+		select *  from is_device where device_code_name = #{deviceCodeName}
+	</select>
 </mapper>

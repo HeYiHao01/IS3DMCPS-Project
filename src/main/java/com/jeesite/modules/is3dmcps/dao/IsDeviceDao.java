@@ -21,4 +21,5 @@ public interface IsDeviceDao extends CrudDao<IsDevice> {
     public List<IsDevice> getDeviceById(String deviceId);
     public List<IsDevice> getDeviceByCodeId(String deviceCodeId);
     public Integer getPartCountByCodeId(String deviceCodeId);
+    public List<IsDevice> getDeviceByCodeName(String deviceCodeName);
 }

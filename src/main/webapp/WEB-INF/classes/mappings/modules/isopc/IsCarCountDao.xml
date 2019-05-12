@@ -14,4 +14,7 @@
 	<select id="getAllByDeviceId" resultType="IsCarCount" parameterType="String">
 		select * from is_car_count where device_id = #{deviceId}
 	</select>
+	<select id="getAllByDeviceName" resultType="IsCarCount" parameterType="String">
+		select * from is_car_count where device_name = #{deviceName}
+	</select>
 </mapper>

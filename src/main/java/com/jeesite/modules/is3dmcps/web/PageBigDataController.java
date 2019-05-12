@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.is3dmcps.entity.IsDevice;
+import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.isopc.entity.IsCarCount;
 import com.jeesite.modules.isopc.service.IsCarCountService;
 
@@ -28,6 +30,8 @@ import com.jeesite.modules.isopc.service.IsCarCountService;
 public class PageBigDataController extends BaseController{
 	@Autowired
 	private IsCarCountService isCarCountService;
+	@Autowired
+	private IsDeviceService isDeviceService;
 	
     /**
      * 生产信息分析界面
@@ -163,31 +167,35 @@ public class PageBigDataController extends BaseController{
     @RequestMapping(value = {"carRunStatics", ""})
     public List<Map<String, Object>> carRunStatics(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        
-        Map<String, Object> map = MapUtils.newHashMap();
-        int timeVariable;
-        int taskTimeCountThis;
-        int taskTimeCountLast;
-        timeVariable=11;
-        taskTimeCountThis=21;
-        taskTimeCountLast=23;
-        map.put("timeVariable",timeVariable);
-        map.put("taskTimeCountThis",taskTimeCountThis);
-        map.put("taskTimeCountLast", taskTimeCountLast);
-        mapList.add(map);
-        
-        Map<String, Object> map1 = MapUtils.newHashMap();
-        int timeVariable1;
-        int taskTimeCountThis1;
-        int taskTimeCountLast1;
-        timeVariable1=12;
-        taskTimeCountThis1=23;
-        taskTimeCountLast1=19;
-        map1.put("timeVariable",timeVariable1);
-        map1.put("taskTimeCountThis",taskTimeCountThis1);
-        map1.put("taskTimeCountLast", taskTimeCountLast1);
-        mapList.add(map1);
-        
+        String deviceID = request.getParameter("deviceID");
+        String timeCoordinate = request.getParameter("timeCoordinate");
+        String timeDomainYear = request.getParameter("timeDomainYear");
+        if (timeCoordinate.equals("Monthly")) {
+        	Map<String, Object> map = MapUtils.newHashMap();
+            int timeVariable;
+            int taskTimeCountThis;
+            int taskTimeCountLast;
+            timeVariable=11;
+            taskTimeCountThis=630;
+            taskTimeCountLast=690;
+            map.put("timeVariable",timeVariable);
+            map.put("taskTimeCountThis",taskTimeCountThis);
+            map.put("taskTimeCountLast", taskTimeCountLast);
+            mapList.add(map);
+		}else if (timeCoordinate.equals("Daily")) {
+			String timeDomainMonth = request.getParameter("timeDomainMonth");
+			Map<String, Object> map1 = MapUtils.newHashMap();
+	        int timeVariable1;
+	        int taskTimeCountThis1;
+	        int taskTimeCountLast1;
+	        timeVariable1=25;
+	        taskTimeCountThis1=23;
+	        taskTimeCountLast1=19;
+	        map1.put("timeVariable",timeVariable1);
+	        map1.put("taskTimeCountThis",taskTimeCountThis1);
+	        map1.put("taskTimeCountLast", taskTimeCountLast1);
+	        mapList.add(map1);
+		}
         return mapList;
     }
 
@@ -236,18 +244,22 @@ public class PageBigDataController extends BaseController{
      * [{“deviceName”:”CAR01”,” allFaultsCount”:76},{“deviceName”:”CAR02”,” allFaultsCount”:54}]
      */
     @RequestMapping(value = {"carHistoryFault", ""})
-    public List<Map<String, Object>> carHistoryFault() {
-    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-		Map<String, Object> map1 = MapUtils.newHashMap();
-		String deviceName1;
-		int allFaultsCount1;
-		deviceName1="CAR01";
-		allFaultsCount1=76;
-		map1.put("deviceName",deviceName1);
-		map1.put("allFaultsCount",allFaultsCount1);		
-		mapList.add(map1);
-		
-		Map<String, Object> map2 = MapUtils.newHashMap();
+    public List<Map<String, Object>> carHistoryFault(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();	
+    	String deviceName;
+		int allFaultsCount;
+		for(IsDevice isDevice:isDeviceService.getDeviceByCodeName(request.getParameter("deviceTypeName"))){
+			for(IsCarCount isCarCount:isCarCountService.getAllByDeviceName(isDevice.getDeviceNo())){
+				Map<String, Object> map = MapUtils.newHashMap();				
+				deviceName=isCarCount.getDeviceName();
+				allFaultsCount=isCarCount.getErrCount();
+				map.put("deviceName",deviceName);
+				map.put("allFaultsCount",allFaultsCount);		
+				mapList.add(map);
+			}			
+		}
+		return mapList;
+		/*Map<String, Object> map2 = MapUtils.newHashMap();
 		String deviceName2;
 		int allFaultsCount2;
 		deviceName2="CAR02";
@@ -281,9 +293,7 @@ public class PageBigDataController extends BaseController{
 		allFaultsCount6=75;
 		map6.put("deviceName",deviceName6);
 		map6.put("allFaultsCount",allFaultsCount6);		
-		mapList.add(map6);
-		
-		return mapList;
+		mapList.add(map6);*/				
     }
 
     /**

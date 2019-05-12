@@ -79,4 +79,11 @@ public class IsCarCountService extends CrudService<IsCarCountDao, IsCarCount> {
 	public List<IsCarCount> getAllByDeviceId(String deviceId) {
 		return this.dao.getAllByDeviceId(deviceId);
 	}
+	
+	/**
+	 *根据device_name获取小车运行统计
+	 */
+	public List<IsCarCount> getAllByDeviceName(String deviceName) {
+		return this.dao.getAllByDeviceId(deviceName);
+	}
 }

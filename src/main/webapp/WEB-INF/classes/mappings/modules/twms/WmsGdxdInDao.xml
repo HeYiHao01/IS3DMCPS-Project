@@ -12,6 +12,12 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getWorkInfo" resultType="WmsGdxdIn" parameterType="String">
-		select boxtotalnum/plan_amount as ID,wo_no,wo_start_time from wms_gdxd_in where to_char(wo_start_time,'mm.dd') = #{date}
+		select boxtotalnum/plan_amount as plan_amount,wo_no,wo_start_time from wms_gdxd_in where to_char(wo_start_time,'mm.dd') = #{date}
+	</select>
+	<select id="getAllIn" resultType="WmsGdxdIn" parameterType="String">
+		select * from wms_gdxd_in where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
+	<select id="getBatchAndTime" resultType="WmsGdxdIn" parameterType="String">
+		select batch_no,(wo_end_time-wo_start_time) as wo_start_time from wms_gdxd_in where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
 	</select>
 </mapper>

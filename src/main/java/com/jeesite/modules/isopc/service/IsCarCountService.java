@@ -5,12 +5,14 @@ package com.jeesite.modules.isopc.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.isopc.dao.IsCarCountDao;
+import com.jeesite.modules.isopc.entity.CarCount;
 import com.jeesite.modules.isopc.entity.IsCarCount;
 
 /**
@@ -85,5 +87,12 @@ public class IsCarCountService extends CrudService<IsCarCountDao, IsCarCount> {
 	 */
 	public List<IsCarCount> getAllByDeviceName(String deviceName) {
 		return this.dao.getAllByDeviceId(deviceName);
+	}
+	
+	/**
+	 * 根据日期获取小车运行时长
+	 */
+	public CarCount getByDaily(@Param("date")String date,@Param("deviceId")String deviceId){
+		return this.dao.getByDaily(date, deviceId);
 	}
 }

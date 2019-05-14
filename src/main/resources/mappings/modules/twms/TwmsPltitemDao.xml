@@ -14,4 +14,17 @@
 	<select id="getBrandCount" resultType="TwmsPltitem">
 		select itemdesc,sum(weight) as weight from twms_pltitem group by itemdesc
 	</select>
+	<select id="getBoxStatics" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x,location_y,location_z,twms_plt.vpltnum as vpltnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and twms_plt.vpltnum = #{vpltnum} 
+	</select>
 </mapper>

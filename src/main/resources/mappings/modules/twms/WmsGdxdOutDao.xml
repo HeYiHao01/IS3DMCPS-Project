@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.twms.dao.WmsGdxdOutDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="WmsGdxdOut">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="getAllOut" resultType="WmsGdxdOut" parameterType="String">
+		select * from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
+	<select id="getBatchAndTime" resultType="WmsGdxdOut" parameterType="String">
+		select batch_no,(wo_end_time-wo_start_time) as wo_start_time from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
+</mapper>

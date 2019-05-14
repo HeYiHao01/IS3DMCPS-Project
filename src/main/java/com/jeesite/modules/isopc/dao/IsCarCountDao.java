@@ -5,8 +5,11 @@ package com.jeesite.modules.isopc.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
+import com.jeesite.modules.isopc.entity.CarCount;
 import com.jeesite.modules.isopc.entity.IsCarCount;
 
 /**
@@ -18,4 +21,5 @@ import com.jeesite.modules.isopc.entity.IsCarCount;
 public interface IsCarCountDao extends CrudDao<IsCarCount> {
 	public List<IsCarCount> getAllByDeviceId(String deviceId);
 	public List<IsCarCount> getAllByDeviceName(String deviceName);
+	public CarCount getByDaily(@Param("date")String date,@Param("deviceId")String deviceId);
 }

@@ -1,0 +1,397 @@
+<% layout('/layouts/default.html', {title: 'twms_loc管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('twms_loc管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('twms:twmsLoc:edit')){ %>
+					<a href="${ctx}/twms/twmsLoc/form" class="btn btn-default btnTool" title="${text('新增twms_loc')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${twmsLoc}" action="${ctx}/twms/twmsLoc/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('类型')}：</label>
+					<div class="control-inline">
+						<#form:input path="objecttype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('prntnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="prntnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('sysnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="sysnode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('locdcsnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="locdcsnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('logicloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="logicloc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('relateloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="relateloc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('onwaytemploc')}：</label>
+					<div class="control-inline">
+						<#form:input path="onwaytemploc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifdummyloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifdummyloc" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位位置描述')}：</label>
+					<div class="control-inline">
+						<#form:input path="locdesc" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('address')}：</label>
+					<div class="control-inline">
+						<#form:input path="address" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('tel')}：</label>
+					<div class="control-inline">
+						<#form:input path="tel" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('principalby')}：</label>
+					<div class="control-inline">
+						<#form:input path="principalby" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('reptype')}：</label>
+					<div class="control-inline">
+						<#form:input path="reptype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('repbgndate')}：</label>
+					<div class="control-inline">
+						<#form:input path="repbgndate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('rependdate')}：</label>
+					<div class="control-inline">
+						<#form:input path="rependdate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('loccmbnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="loccmbnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('iflogin')}：</label>
+					<div class="control-inline">
+						<#form:input path="iflogin" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('if1vplt')}：</label>
+					<div class="control-inline">
+						<#form:input path="if1vplt" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifinvstat')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifinvstat" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifavailableitem')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifavailableitem" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifloclimititem')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifloclimititem" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位状态')}：</label>
+					<div class="control-inline">
+						<#form:input path="locstatus" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('i_priority')}：</label>
+					<div class="control-inline">
+						<#form:input path="ipriority" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('o_priority')}：</label>
+					<div class="control-inline">
+						<#form:input path="opriority" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('relatedistance')}：</label>
+					<div class="control-inline">
+						<#form:input path="relatedistance" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvinlimitlogg')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvinlimitlogg" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvoutlimitlogg')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvoutlimitlogg" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvinunit')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvinunit" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvoutunit')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvoutunit" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('binitemmaster')}：</label>
+					<div class="control-inline">
+						<#form:input path="binitemmaster" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('enterby')}：</label>
+					<div class="control-inline">
+						<#form:input path="enterby" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('enterdate')}：</label>
+					<div class="control-inline">
+						<#form:input path="enterdate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('remark')}：</label>
+					<div class="control-inline">
+						<#form:input path="remark" maxlength="300" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifhavesonnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifhavesonnode" maxlength="1" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvstock1')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvstock1" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('areanode')}：</label>
+					<div class="control-inline">
+						<#form:input path="areanode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifitemaverage')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifitemaverage" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('bylanenum')}：</label>
+					<div class="control-inline">
+						<#form:input path="bylanenum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('stntype')}：</label>
+					<div class="control-inline">
+						<#form:input path="stntype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位存放状态')}：</label>
+					<div class="control-inline">
+						<#form:input path="locstorestatus" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ifstoreplt')}：</label>
+					<div class="control-inline">
+						<#form:input path="ifstoreplt" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('doublestorefirsttype')}：</label>
+					<div class="control-inline">
+						<#form:input path="doublestorefirsttype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pltqty')}：</label>
+					<div class="control-inline">
+						<#form:input path="pltqty" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('totalbuffqty')}：</label>
+					<div class="control-inline">
+						<#form:input path="totalbuffqty" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('doublestoreflag')}：</label>
+					<div class="control-inline">
+						<#form:input path="doublestoreflag" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位【排】')}：</label>
+					<div class="control-inline">
+						<#form:input path="line" maxlength="5" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位【列】')}：</label>
+					<div class="control-inline">
+						<#form:input path="lie" maxlength="5" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('货位【层】')}：</label>
+					<div class="control-inline">
+						<#form:input path="layer" maxlength="5" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('areatype')}：</label>
+					<div class="control-inline">
+						<#form:input path="areatype" maxlength="5" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('类型')}', name:'objecttype', index:'a.objecttype', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/twms/twmsLoc/form?locnum='+row.locnum+'" class="btnList" data-title="${text('编辑twms_loc')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('prntnum')}', name:'prntnum', index:'a.prntnum', width:150, align:"left"},
+		{header:'${text('sysnode')}', name:'sysnode', index:'a.sysnode', width:150, align:"left"},
+		{header:'${text('locdcsnum')}', name:'locdcsnum', index:'a.locdcsnum', width:150, align:"left"},
+		{header:'${text('logicloc')}', name:'logicloc', index:'a.logicloc', width:150, align:"left"},
+		{header:'${text('relateloc')}', name:'relateloc', index:'a.relateloc', width:150, align:"left"},
+		{header:'${text('onwaytemploc')}', name:'onwaytemploc', index:'a.onwaytemploc', width:150, align:"left"},
+		{header:'${text('ifdummyloc')}', name:'ifdummyloc', index:'a.ifdummyloc', width:150, align:"left"},
+		{header:'${text('货位位置描述')}', name:'locdesc', index:'a.locdesc', width:150, align:"left"},
+		{header:'${text('address')}', name:'address', index:'a.address', width:150, align:"left"},
+		{header:'${text('tel')}', name:'tel', index:'a.tel', width:150, align:"left"},
+		{header:'${text('principalby')}', name:'principalby', index:'a.principalby', width:150, align:"left"},
+		{header:'${text('reptype')}', name:'reptype', index:'a.reptype', width:150, align:"left"},
+		{header:'${text('repbgndate')}', name:'repbgndate', index:'a.repbgndate', width:150, align:"left"},
+		{header:'${text('rependdate')}', name:'rependdate', index:'a.rependdate', width:150, align:"left"},
+		{header:'${text('loccmbnum')}', name:'loccmbnum', index:'a.loccmbnum', width:150, align:"left"},
+		{header:'${text('iflogin')}', name:'iflogin', index:'a.iflogin', width:150, align:"left"},
+		{header:'${text('if1vplt')}', name:'if1vplt', index:'a.if1vplt', width:150, align:"left"},
+		{header:'${text('ifinvstat')}', name:'ifinvstat', index:'a.ifinvstat', width:150, align:"left"},
+		{header:'${text('ifavailableitem')}', name:'ifavailableitem', index:'a.ifavailableitem', width:150, align:"left"},
+		{header:'${text('ifloclimititem')}', name:'ifloclimititem', index:'a.ifloclimititem', width:150, align:"left"},
+		{header:'${text('货位状态')}', name:'locstatus', index:'a.locstatus', width:150, align:"left"},
+		{header:'${text('i_priority')}', name:'ipriority', index:'a.i_priority', width:150, align:"center"},
+		{header:'${text('o_priority')}', name:'opriority', index:'a.o_priority', width:150, align:"center"},
+		{header:'${text('relatedistance')}', name:'relatedistance', index:'a.relatedistance', width:150, align:"center"},
+		{header:'${text('mvinlimitlogg')}', name:'mvinlimitlogg', index:'a.mvinlimitlogg', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('mvoutlimitlogg')}', name:'mvoutlimitlogg', index:'a.mvoutlimitlogg', width:150, align:"right", formatter: function(val, obj, row, act){
+			return js.formatNumber(val, 2, false, ''); // 数值类型格式化 (原始数值, 小数位数, 是否千分位, 默认值，金额情况下设置0.00);
+		}},
+		{header:'${text('mvinunit')}', name:'mvinunit', index:'a.mvinunit', width:150, align:"left"},
+		{header:'${text('mvoutunit')}', name:'mvoutunit', index:'a.mvoutunit', width:150, align:"left"},
+		{header:'${text('binitemmaster')}', name:'binitemmaster', index:'a.binitemmaster', width:150, align:"left"},
+		{header:'${text('enterby')}', name:'enterby', index:'a.enterby', width:150, align:"left"},
+		{header:'${text('enterdate')}', name:'enterdate', index:'a.enterdate', width:150, align:"left"},
+		{header:'${text('remark')}', name:'remark', index:'a.remark', width:150, align:"left"},
+		{header:'${text('ifhavesonnode')}', name:'ifhavesonnode', index:'a.ifhavesonnode', width:150, align:"left"},
+		{header:'${text('mvstock1')}', name:'mvstock1', index:'a.mvstock1', width:150, align:"left"},
+		{header:'${text('areanode')}', name:'areanode', index:'a.areanode', width:150, align:"left"},
+		{header:'${text('ifitemaverage')}', name:'ifitemaverage', index:'a.ifitemaverage', width:150, align:"left"},
+		{header:'${text('bylanenum')}', name:'bylanenum', index:'a.bylanenum', width:150, align:"left"},
+		{header:'${text('stntype')}', name:'stntype', index:'a.stntype', width:150, align:"left"},
+		{header:'${text('货位存放状态')}', name:'locstorestatus', index:'a.locstorestatus', width:150, align:"left"},
+		{header:'${text('ifstoreplt')}', name:'ifstoreplt', index:'a.ifstoreplt', width:150, align:"left"},
+		{header:'${text('doublestorefirsttype')}', name:'doublestorefirsttype', index:'a.doublestorefirsttype', width:150, align:"left"},
+		{header:'${text('pltqty')}', name:'pltqty', index:'a.pltqty', width:150, align:"center"},
+		{header:'${text('totalbuffqty')}', name:'totalbuffqty', index:'a.totalbuffqty', width:150, align:"center"},
+		{header:'${text('doublestoreflag')}', name:'doublestoreflag', index:'a.doublestoreflag', width:150, align:"left"},
+		{header:'${text('货位【排】')}', name:'line', index:'a.line', width:150, align:"center"},
+		{header:'${text('货位【列】')}', name:'lie', index:'a.lie', width:150, align:"center"},
+		{header:'${text('货位【层】')}', name:'layer', index:'a.layer', width:150, align:"center"},
+		{header:'${text('areatype')}', name:'areatype', index:'a.areatype', width:150, align:"center"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('twms:twmsLoc:edit')){ %>
+				actions.push('<a href="${ctx}/twms/twmsLoc/form?locnum='+row.locnum+'" class="btnList" title="${text('编辑twms_loc')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/twms/twmsLoc/delete?locnum='+row.locnum+'" class="btnList" title="${text('删除twms_loc')}" data-confirm="${text('确认要删除该twms_loc吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

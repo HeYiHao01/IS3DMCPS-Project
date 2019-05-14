@@ -84,7 +84,7 @@ public class CompareDate {
 	 * 2019.05.11.12:16:00.000000-->12:16
 	 */
 	public static String simplifyTime(Timestamp time) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy.mm.dd.hh24:mi:ss.ff6");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
 		String newTime = format.format(time);
 		int index = newTime.indexOf(":");
 		int hour = Integer.parseInt(newTime.substring(index-2,index));
@@ -92,11 +92,39 @@ public class CompareDate {
 		return hour+":"+min+"";
 	}		
 	
+	/**
+	 * timestamp转为分钟
+	 * 08:26:25.820000 -》 506
+	 * @param time
+	 * @return
+	 */
+	public static double getTimeCost(Timestamp time){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+		String newTime = format.format(time);
+		int index1 = newTime.indexOf(":");
+		int index2 = newTime.lastIndexOf(":");
+		int hour = Integer.parseInt(newTime.substring(index1-2,index1));
+		int min = Integer.parseInt(newTime.substring(index1+1,index2));
+		double sec = Double.valueOf(newTime.substring(index2+1));
+		return (hour * 60 + min + sec / 60);
+	}
+	public static double getTimeCost(Date time){
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+		String newTime = format.format(time);
+		int index1 = newTime.indexOf(":");
+		int index2 = newTime.lastIndexOf(":");
+		int hour = Integer.parseInt(newTime.substring(index1-2,index1));
+		int min = Integer.parseInt(newTime.substring(index1+1,index2));
+		double sec = Double.valueOf(newTime.substring(index2+1));
+		return (hour * 60 + min + sec / 60);
+	}
+	
 	/*public static void main(String[] args) {		
 		for(String date:CompareDate.getSevenDate())	{
 			System.out.println(simplifyDate(date));
 			Timestamp timestamp = Timestamp.valueOf("11-5月 -19 12.16.00.000000  下午");
 			System.out.println(simplifyTime((timestamp)));
 		}
+		System.out.println(getTimeCost(new Date("+00 08:26:25.820000")));
 	}*/
 }

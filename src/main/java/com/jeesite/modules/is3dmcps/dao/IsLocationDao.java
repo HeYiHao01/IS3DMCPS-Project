@@ -8,6 +8,7 @@ import java.util.List;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsLocation;
+import com.jeesite.modules.is3dmcps.entity.Position;
 
 /**
  * is_locationDAO接口
@@ -16,5 +17,5 @@ import com.jeesite.modules.is3dmcps.entity.IsLocation;
  */
 @MyBatisDao
 public interface IsLocationDao extends CrudDao<IsLocation> {
-	
+	public IsLocation getLocationByPosition(Position position);
 }

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.is3dmcps.entity.IsLocation;
+import com.jeesite.modules.is3dmcps.entity.Position;
 import com.jeesite.modules.is3dmcps.dao.IsLocationDao;
 
 /**
@@ -75,6 +76,13 @@ public class IsLocationService extends CrudService<IsLocationDao, IsLocation> {
 
 	public IsLocation get(Integer locationId, boolean isNewRecord) {
 		return super.get(String.valueOf(locationId), isNewRecord);
+	}
+	
+	/**
+	 * 根据position获取location
+	 */
+	public IsLocation getLocationByPosition(Position position){
+		return this.dao.getLocationByPosition(position);
 	}
 	
 }

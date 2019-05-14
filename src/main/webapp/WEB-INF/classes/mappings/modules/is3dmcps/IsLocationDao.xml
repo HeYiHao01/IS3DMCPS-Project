@@ -11,5 +11,7 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="getLocationByPosition" resultType="IsLocation" parameterType="com.jeesite.modules.is3dmcps.entity.Position">
+		select * from is_location where roww = #{row} and col = #{col} and layerr = #{layer}
+	</select>
 </mapper>

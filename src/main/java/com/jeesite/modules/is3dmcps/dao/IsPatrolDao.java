@@ -17,5 +17,6 @@ import java.util.List;
 @MyBatisDao
 public interface IsPatrolDao extends CrudDao<IsPatrol> {
 	public List<IsPatrol> getPatrol();
+	public List<IsPatrol> getNeedPatrol();
 	public List<IsPatrol> getPatrolByDeviceId(String deviceId);
 }

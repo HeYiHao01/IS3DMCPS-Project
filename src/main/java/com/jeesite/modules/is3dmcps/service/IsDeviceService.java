@@ -112,4 +112,11 @@ public class IsDeviceService extends CrudService<IsDeviceDao, IsDevice> {
 	public List<IsDevice> getDeviceByCodeName(String deviceCodeName) {
 		return this.dao.getDeviceByCodeId(deviceCodeName);
 	}
+	
+	/**
+	 * 根据device_no获取device
+	 */
+	public List<IsDevice> getDeviceByDeviceNo(String deviceNo) {
+		return this.dao.getDeviceByDeviceNo(deviceNo);
+	}
 }

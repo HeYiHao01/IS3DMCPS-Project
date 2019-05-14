@@ -3,16 +3,25 @@ package com.jeesite.modules.is3dmcps.web;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.collect.MapUtils;
 import com.jeesite.common.web.BaseController;
+import com.jeesite.modules.is3dmcps.entity.BoxStatics;
 import com.jeesite.modules.is3dmcps.entity.IsFaults;
+import com.jeesite.modules.is3dmcps.entity.IsLocation;
 import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 import com.jeesite.modules.is3dmcps.entity.IsPatrol;
+import com.jeesite.modules.is3dmcps.entity.Position;
 import com.jeesite.modules.is3dmcps.service.*;
+import com.jeesite.modules.twms.entity.TwmsLoc;
+import com.jeesite.modules.twms.service.TwmsLocService;
+import com.jeesite.modules.twms.service.TwmsPltitemService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +32,12 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "static")
 public class PagePackingBoxController extends BaseController{
-
+	@Autowired
+	private TwmsLocService twmsLocService;
+	@Autowired
+	private IsLocationService isLocationService;
+	@Autowired
+	private TwmsPltitemService twmsPltitemService;
 	/**
 	 * 货位状态数据
 	 * @return
@@ -39,48 +53,35 @@ public class PagePackingBoxController extends BaseController{
 		int row;
 		int col;
 		int layer;
-		double location_X;
-		double location_Y;
-		double location_Z;
-		locNum="39";
-		row=1;
-		col=2;
-		layer=4;
-		location_X=-1.2400000095367432;
-		location_Y=-0.41100001335144043;
-		location_Z=-59.194000244140625;
-		Map<String, Object> map = MapUtils.newHashMap();
-		map.put("locNum",locNum);
-		map.put("row",row);
-		map.put("col",col);
-		map.put("layer",layer);
-		map.put("location_X",location_X);
-		map.put("location_Y",location_Y);
-		map.put("location_Z",location_Z);
-		mapList.add(map);
-		String locNum1;
-		int row1;
-		int col1;
-		int layer1;
-		double location_X1;
-		double location_Y1;
-		double location_Z1;
-		locNum1="41";
-		row1=1;
-		col1=2;
-		layer1=4;
-		location_X1=-1.2400000095367432;
-		location_Y1=-0.41100001335144043;
-		location_Z1=-59.194000244140625;
-		Map<String, Object> map1 = MapUtils.newHashMap();
-		map1.put("locNum",locNum1);
-		map1.put("row",row1);
-		map1.put("col",col1);
-		map1.put("layer",layer1);
-		map1.put("location_X",location_X1);
-		map1.put("location_Y",location_Y1);
-		map1.put("location_Z",location_Z1);
-		mapList.add(map1);
+		double location_X = 0.0;
+		double location_Y = 0.0;
+		double location_Z = 0.0;
+		Position position = new Position();
+		IsLocation isLocation = new IsLocation();
+		for(TwmsLoc twmsLoc:twmsLocService.getAll()){
+			Map<String, Object> map = MapUtils.newHashMap();
+			locNum=twmsLoc.getLocnum();
+			row = twmsLoc.getLine();
+			col = twmsLoc.getLie();
+			layer = twmsLoc.getLayer();
+			position.setRow(row);
+			position.setCol(col);
+			position.setLayer(layer);
+			isLocation = isLocationService.getLocationByPosition(position);
+			if (isLocation != null) {
+				location_X = isLocation.getLocationX();
+				location_Y = isLocation.getLocationY();
+				location_Z = isLocation.getLocationZ();
+			}
+			map.put("locNum", locNum);
+			map.put("row", row);
+			map.put("col", col);
+			map.put("layer", layer);
+			map.put("location_X", location_X);
+			map.put("location_Y", location_Y);
+			map.put("location_Z", location_Z);
+			mapList.add(map);
+		}		
 		return mapList;
 	}
 
@@ -94,34 +95,48 @@ public class PagePackingBoxController extends BaseController{
 	 * ”downBoxCtnno”:”201314”,”downBoxWeight”:101.5}
 	 */
 	@RequestMapping(value = {"boxStatics", ""})
-	public List<Map<String, Object>> boxStatics(){
+	public List<Map<String, Object>> boxStatics(HttpServletRequest request){
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	int line = 1;
-    	int lie = 13;
-    	int layer = 1;
-    	double location_X = -1.2400000095367432;
-    	double location_Y = -0.41100001335144043;
-    	double location_Z = -59.194000244140625;
-    	String VPLTNUM = "64310";
-    	String PLTNUM = "200084";
-    	String CURRLOC = "OME01_00110401600100";
-    	String ITEMDESC = "兰州(细支珍品)烟丝";
-    	String LOTNUM = "YXZZP1801001";
-    	String ENTERDATE = "2018-1-13 18:59:39";
-    	Map<String, Object> map = MapUtils.newHashMap();
-    	map.put("line", line);
-    	map.put("lie", lie);
-    	map.put("layer", layer);
-    	map.put("location_X", location_X);
-    	map.put("location_X", location_Y);
-    	map.put("location_X", location_Z);
-    	map.put("VPLTNUM", VPLTNUM);
-    	map.put("PLTNUM", PLTNUM);
-    	map.put("CURRLOC", CURRLOC);
-    	map.put("ITEMDESC", ITEMDESC);
-    	map.put("LOTNUM", LOTNUM);
-    	map.put("ENTERDATE", ENTERDATE);
-    	mapList.add(map);
+    	int line = 0;
+    	int lie = 0;
+    	int layer = 0;
+    	double location_X = 0.0;
+    	double location_Y = 0.0;
+    	double location_Z = 0.0;    	
+    	String VPLTNUM = "";
+    	String PLTNUM = "";
+    	String CURRLOC = "";
+    	String ITEMDESC = "";
+    	String LOTNUM = "";
+    	String ENTERDATE = "";
+    	for(BoxStatics boxStatics : twmsPltitemService.getBoxStatics(request.getParameter("vpltnum"))){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		line = boxStatics.getLine();
+    		lie = boxStatics.getLie();
+    		layer = boxStatics.getLayer();
+    		location_X = boxStatics.getLocation_x();
+    		location_Y = boxStatics.getLocation_y();
+    		location_Z = boxStatics.getLocation_z();
+    		VPLTNUM = boxStatics.getVplnum();
+    		PLTNUM = boxStatics.getPltnum();
+    		CURRLOC = boxStatics.getCurrloc();
+    		ITEMDESC = boxStatics.getItemdesc();
+    		LOTNUM = boxStatics.getLotnum();
+    		ENTERDATE = boxStatics.getEnterdate();
+        	map.put("line", line);
+        	map.put("lie", lie);
+        	map.put("layer", layer);
+        	map.put("location_X", location_X);
+        	map.put("location_X", location_Y);
+        	map.put("location_X", location_Z);
+        	map.put("VPLTNUM", VPLTNUM);
+        	map.put("PLTNUM", PLTNUM);
+        	map.put("CURRLOC", CURRLOC);
+        	map.put("ITEMDESC", ITEMDESC);
+        	map.put("LOTNUM", LOTNUM);
+        	map.put("ENTERDATE", ENTERDATE);
+        	mapList.add(map);
+    	}    	
     	return mapList;
     }
 	/*

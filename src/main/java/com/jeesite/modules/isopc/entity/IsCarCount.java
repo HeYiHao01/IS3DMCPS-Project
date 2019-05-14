@@ -4,6 +4,9 @@
 package com.jeesite.modules.isopc.entity;
 
 import org.hibernate.validator.constraints.NotBlank;
+
+import java.util.Date;
+
 import org.hibernate.validator.constraints.Length;
 
 import com.jeesite.common.entity.DataEntity;
@@ -37,7 +40,7 @@ public class IsCarCount extends DataEntity<IsCarCount> {
 	private static final long serialVersionUID = 1L;
 	private String deviceId;		// 设备ID
 	private String deviceName;		// 设备名称
-	private String countDate;		// 统计日期
+	private Date countDate;		// 统计日期
 	private Integer errCount;		// 故障统计
 	private Integer moveerrCount;		// 行走故障统计
 	private Integer updownerrCount;		// 升降故障统计
@@ -78,11 +81,11 @@ public class IsCarCount extends DataEntity<IsCarCount> {
 	
 	@NotBlank(message="统计日期不能为空")
 	@Length(min=0, max=10, message="统计日期长度不能超过 10 个字符")
-	public String getCountDate() {
+	public Date getCountDate() {
 		return countDate;
 	}
 
-	public void setCountDate(String countDate) {
+	public void setCountDate(Date countDate) {
 		this.countDate = countDate;
 	}
 	
@@ -158,7 +161,7 @@ public class IsCarCount extends DataEntity<IsCarCount> {
 		this.workTime = workTime;
 	}
 
-	public IsCarCount(String deviceId, String deviceName, String countDate, Integer errCount, Integer moveerrCount, Integer updownerrCount, Integer turnerrCount, Double moveMileage, Integer updownCount, Integer turnCount, Integer rechangeCount, Long workTime) {
+	public IsCarCount(String deviceId, String deviceName, Date countDate, Integer errCount, Integer moveerrCount, Integer updownerrCount, Integer turnerrCount, Double moveMileage, Integer updownCount, Integer turnCount, Integer rechangeCount, Long workTime) {
 		this.deviceId = deviceId;
 		this.deviceName = deviceName;
 		this.countDate = countDate;

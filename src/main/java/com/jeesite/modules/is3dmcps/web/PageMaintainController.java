@@ -122,6 +122,22 @@ public class PageMaintainController extends BaseController{
 		}
 		return mapList;
 	}
+	
+	/**
+	 * 需要进行维护保养的设备
+	 */
+	@RequestMapping(value = {"needMaintain", ""})
+	public List<Map<String, Object>> needMaintain() {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.need_maintain_details()){
+			for(IsDevice device:isDeviceService.getDeviceByDeviceNo(isMaintainRec.getDeviceNo())){
+				Map<String, Object> map = MapUtils.newHashMap();				
+				map.put("deviceName", device.getDeviceCodeName());
+				mapList.add(map);
+			}			
+		}		
+		return mapList;
+	}
 }
 	
 	

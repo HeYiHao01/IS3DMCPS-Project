@@ -17,4 +17,7 @@
 	<select id="getPatrol" resultType="IsPatrol">
 		select * from is_patrol
 	</select>
+	<select id="getNeedPatrol" resultType="IsPatrol">
+		select * from is_patrol where type = '1'
+	</select>
 </mapper>

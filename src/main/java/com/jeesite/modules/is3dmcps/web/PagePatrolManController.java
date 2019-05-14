@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 
  * @author ZX
- *生产管理主界面
+ *巡检
  */
 @CrossOrigin
 @RestController
@@ -111,6 +111,20 @@ public class PagePatrolManController extends BaseController{
             mapList.add(map);
         }
         return mapList;
+    }
+    
+    /**
+     * 需要进行人工巡检的设备
+     */
+    @RequestMapping(value = {"needPatrol", ""})
+    public List<Map<String, Object>> needPatrol() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	for(IsPatrol isPatrol:isPatrolService.getNeedPatrol()){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("deviceName", isPatrol.getDeviceName());
+    		mapList.add(map);
+    	}
+    	return mapList;
     }
 }
 	

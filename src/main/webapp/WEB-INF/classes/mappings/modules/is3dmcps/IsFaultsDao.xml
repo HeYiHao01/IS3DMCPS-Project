@@ -17,6 +17,9 @@
 	<select id="getFaultsDetails" resultType="IsFaults">
 		select * from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3')
 	</select>
+	<select id="getNeedRepair" resultType="IsFaults">
+		select * from is_faults where ID in (select faults_id from is_repair_rec where results='0' or results='4')
+	</select>
 	<select id="getAllFaultsCount" resultType="java.lang.Integer">
 		select count(*) from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3')
 	</select>

@@ -78,11 +78,24 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	}
 	
 	/**
-	 * 获取工单信息
+	 * 获取工单信息(完成比例等)
 	 * @return
 	 */
 	public List<WmsGdxdIn> getWorkInfo(String date) {
 		return this.dao.getWorkInfo(date);
 	}
 	
+	/**
+	 * 根据日期获取工单信息
+	 */
+	public List<WmsGdxdIn> getAllIn(String date){
+		return this.dao.getAllIn(date);
+	}
+	
+	/**
+	 * 根据日期获取batch_no和timeCost(end_time-start_time)
+	 */
+	public List<WmsGdxdIn> getBatchAndTime(String date){
+		return this.dao.getBatchAndTime(date);
+	}
 }

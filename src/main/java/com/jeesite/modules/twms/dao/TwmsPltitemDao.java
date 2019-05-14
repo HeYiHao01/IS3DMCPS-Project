@@ -5,8 +5,11 @@ package com.jeesite.modules.twms.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
+import com.jeesite.modules.is3dmcps.entity.BoxStatics;
 import com.jeesite.modules.twms.entity.TwmsPltitem;
 
 /**
@@ -17,4 +20,5 @@ import com.jeesite.modules.twms.entity.TwmsPltitem;
 @MyBatisDao
 public interface TwmsPltitemDao extends CrudDao<TwmsPltitem> {
 	public List<TwmsPltitem> getBrandCount();
+	public List<BoxStatics> getBoxStatics(@Param("vpltnum") String vpltnum);
 }

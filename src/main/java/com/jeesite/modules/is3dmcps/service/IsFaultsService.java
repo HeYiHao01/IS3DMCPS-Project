@@ -102,4 +102,11 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
 	public IsFaults getFaultsStateDetails(String deviceId) {
 		return this.dao.getFaultsStateDetails(deviceId);
 	}
+	
+	/**
+	 * 获取需要维修的设备
+	 */
+	public List<IsFaults> getNeedRepair(){
+		return this.dao.getNeedRepair();
+	}
 }

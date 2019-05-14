@@ -225,12 +225,12 @@ public class PageProductManController extends BaseController{
         for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getWorkInfo(CompareDate.getPastDate(0))){
         	Map<String, Object> map = MapUtils.newHashMap();
         	workOrderNumber = wmsGdxdIn.getWoNo();
-        	//startTime = CompareDate.simplifyTime(wmsGdxdIn.getWoStartTime());
-        	//System.err.println(String.valueOf(wmsGdxdIn.getWoStartTime()));
-        	//completionRatio = Integer.parseInt(wmsGdxdIn.getId());
-        	completionRatio = 25;
-        	startTimeHour = "08";
-        	startTimeMinute = "56";
+        	startTime = CompareDate.simplifyTime(wmsGdxdIn.getWoStartTime());
+        	System.err.println(startTime);
+        	int index = startTime.indexOf(":");
+    		startTimeHour = startTime.substring(index-2,index);
+    		startTimeMinute = startTime.substring(index+1,index+3);
+        	completionRatio = (int)(wmsGdxdIn.getPlanAmount() * 100);        	
         	map.put("completionRatio",completionRatio);
             map.put("workOrderNumber",workOrderNumber);
             map.put("startTimeHour",startTimeHour);

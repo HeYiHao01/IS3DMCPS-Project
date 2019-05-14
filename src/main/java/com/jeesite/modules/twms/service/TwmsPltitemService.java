@@ -5,12 +5,14 @@ package com.jeesite.modules.twms.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.twms.entity.TwmsPltitem;
+import com.jeesite.modules.is3dmcps.entity.BoxStatics;
 import com.jeesite.modules.twms.dao.TwmsPltitemDao;
 
 /**
@@ -78,5 +80,12 @@ public class TwmsPltitemService extends CrudService<TwmsPltitemDao, TwmsPltitem>
 	 */
 	public List<TwmsPltitem> getBrandCount() {
 		return this.dao.getBrandCount();
+	}
+	
+	/**
+	 * 获取货箱状态数据
+	 */
+	public List<BoxStatics> getBoxStatics(@Param("vpltnum") String vpltnum){
+		return this.dao.getBoxStatics(vpltnum);
 	}
 }

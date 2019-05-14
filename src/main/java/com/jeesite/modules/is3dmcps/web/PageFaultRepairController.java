@@ -8,6 +8,7 @@ import java.util.Map;
 import com.jeesite.common.collect.MapUtils;
 import com.jeesite.modules.is3dmcps.entity.IsFaults;
 import com.jeesite.modules.is3dmcps.entity.IsKnowledge;
+import com.jeesite.modules.is3dmcps.entity.IsPatrol;
 import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
 import com.jeesite.modules.is3dmcps.service.IsFaultsService;
 import com.jeesite.modules.is3dmcps.service.IsKnowledgeService;
@@ -147,7 +148,7 @@ public class PageFaultRepairController extends BaseController{
      * [{“date”:1,” faultCount”:123,”repairedCount”:54},{“date”:2,” faultCount”:123,” repairedCount”:54},…]
      */
     @RequestMapping(value = {"sevenFault", ""})
-    public List<Map<String, Object>> sevenFault   () {
+    public List<Map<String, Object>> sevenFault() {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();        
         //SimpleDateFormat format = new SimpleDateFormat("MM.dd");
         int faultCount;
@@ -162,6 +163,20 @@ public class PageFaultRepairController extends BaseController{
             mapList.add(map);
         }
         return mapList;
+    }
+    
+    /**
+     * 故障需要维修的设备
+     */
+    @RequestMapping(value = {"needRepair", ""})
+    public List<Map<String, Object>> needRepair() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	for(IsFaults isFaults:isFaultsService.getNeedRepair()){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("deviceName", isFaults.getDeviceName());
+    		mapList.add(map);
+    	}
+    	return mapList;
     }
 }
 	

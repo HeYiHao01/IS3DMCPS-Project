@@ -223,7 +223,7 @@ public class PageDeviceManController extends BaseController{
      */
     @RequestMapping(value = {"otherParameter", ""})
     public List<Map<String, Object>> otherParameter(HttpServletRequest request) {
-        String deviceID=request.getParameter("deviceID ");
+        String deviceID=request.getParameter("deviceID");
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String installationSite;
         String department;

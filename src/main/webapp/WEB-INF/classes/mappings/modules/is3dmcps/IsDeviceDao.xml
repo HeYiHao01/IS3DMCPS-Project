@@ -29,4 +29,7 @@
 	<select id="getDeviceByCodeName" resultType="IsDevice" parameterType="String">
 		select *  from is_device where device_code_name = #{deviceCodeName}
 	</select>
+	<select id="getDeviceByDeviceNo" resultType="IsDevice" parameterType="String">
+		select *  from is_device where device_no = #{deviceNo}
+	</select>
 </mapper>

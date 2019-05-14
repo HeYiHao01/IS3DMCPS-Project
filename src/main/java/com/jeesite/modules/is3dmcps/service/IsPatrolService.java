@@ -89,4 +89,11 @@ public class IsPatrolService extends CrudService<IsPatrolDao, IsPatrol> {
 	{
 		return this.dao.getPatrolByDeviceId(deviceId);
 	}
+	
+	/**
+	 * 获取需要巡检的设备
+	 */
+	public List<IsPatrol> getNeedPatrol(){
+		return this.dao.getNeedPatrol();
+	}
 }

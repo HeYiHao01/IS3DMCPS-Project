@@ -20,4 +20,5 @@ import com.jeesite.modules.twms.entity.WmsPrdInDetl;
 public interface WmsPrdInDetlDao extends CrudDao<WmsPrdInDetl> {
 	public WmsPrdInDetl getDetailByWB(@Param("woNo")String woNo,@Param("batchNo")String batchNo);
 	public List<WmsPrdInDetl> getDetailByBatchNo(String batchNo);
+	public List<WmsPrdInDetl> getDetailMonthly(String month);
 }

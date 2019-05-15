@@ -17,4 +17,7 @@
 	<select id="getDetailByWB" resultType="WmsPrdInDetl">
 		select * from wms_prd_in_detl where wo_no = #{woNo} and batch_no = #{batchNo}
 	</select>
+	<select id="getDetailMonthly" resultType="WmsPrdInDetl" parameterType="String">
+		select mat_nm,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+	</select>
 </mapper>

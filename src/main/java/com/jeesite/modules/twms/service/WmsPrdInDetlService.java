@@ -87,4 +87,11 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 	public List<WmsPrdInDetl> getDetailByBatchNo(String batchNo){
 		return this.dao.getDetailByBatchNo(batchNo);
 	}
+	
+	/**
+	 * 根据月份获取brand和入库总重
+	 */
+	public List<WmsPrdInDetl> getDetailMonthly(String month){
+		return this.dao.getDetailMonthly(month);
+	}
 }

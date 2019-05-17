@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.jeesite.common.collect.MapUtils;
+import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsFaults;
 import com.jeesite.modules.is3dmcps.entity.IsKnowledge;
-import com.jeesite.modules.is3dmcps.entity.IsPatrol;
 import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
+import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsFaultsService;
 import com.jeesite.modules.is3dmcps.service.IsKnowledgeService;
 import com.jeesite.modules.is3dmcps.service.IsRepairRecService;
@@ -40,6 +41,8 @@ public class PageFaultRepairController extends BaseController{
     IsRepairRecService isRepairRecService;
     @Autowired
     IsKnowledgeService isKnowledgeService;
+    @Autowired
+    IsDeviceService isDeviceService;
     /**
      * 故障及维修的提交
      * @return
@@ -48,43 +51,46 @@ public class PageFaultRepairController extends BaseController{
 	public List<Map<String, Object>> faultSubmit(HttpServletRequest request) {
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();
         Map<String, Object> map = MapUtils.newHashMap();
-        String deviceId = request.getParameter("deviceID");
+        //String deviceId = request.getParameter("deviceID");
+        String deviceName = request.getParameter("deviceName");
         String state;
         Map<String, Object> infoJsonStr = MapUtils.newHashMap();
         String faultId;
         String faultResult;
-        IsFaults isFaults = isFaultsService.getFaultsStateDetails(deviceId);
-        if (isFaults == null) {
-			state = "Normal";
-		}else {
-			if (isRepairRecService.getRepairResult(isFaults.getId()).equals("2") || 
-					isRepairRecService.getRepairResult(isFaults.getId()).equals("3")) {
-				state = "Normal";				
-			}else if(isRepairRecService.getRepairResult(isFaults.getId()).equals("0") || 
-					isRepairRecService.getRepairResult(isFaults.getId()).equals("4")) {
-				state = "Fault";
-			}else {
-				state = "Error";				
-			}
-		}   
-        if (state.equals("Normal")) {
-			for(IsKnowledge isKnowledge:isKnowledgeService.getAll()){
-				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
-			}			
-		}else if (state.equals("Fault")) {						
-			for(IsKnowledge isKnowledge:isKnowledgeService.getKnowledgeById(isFaults.getKnowledgeId())){
-				faultId = isFaults.getId();
-				faultResult = isFaults.getReason();
-				infoJsonStr.put("faultID", faultId);
-				infoJsonStr.put("faultResult", faultResult);
-				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
-				infoJsonStr.put("recommendedSolutionContent", isKnowledge.getContent());
-			}
-		}else {			
-		}     
-        map.put("state",state);
-        map.put("infoJsonStr",infoJsonStr);
-        mapList.add(map);
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+        	IsFaults isFaults = isFaultsService.getFaultsStateDetails(isDevice.getId());
+        	if (isFaults == null) {
+    			state = "Normal";
+    		}else {
+    			if (isRepairRecService.getRepairResult(isFaults.getId()).equals("2") || 
+    					isRepairRecService.getRepairResult(isFaults.getId()).equals("3")) {
+    				state = "Normal";				
+    			}else if(isRepairRecService.getRepairResult(isFaults.getId()).equals("0") || 
+    					isRepairRecService.getRepairResult(isFaults.getId()).equals("4")) {
+    				state = "Fault";
+    			}else {
+    				state = "Error";				
+    			}
+    		}   
+            if (state.equals("Normal")) {
+    			for(IsKnowledge isKnowledge:isKnowledgeService.getAll()){
+    				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
+    			}			
+    		}else if (state.equals("Fault")) {						
+    			for(IsKnowledge isKnowledge:isKnowledgeService.getKnowledgeById(isFaults.getKnowledgeId())){
+    				faultId = isFaults.getId();
+    				faultResult = isFaults.getReason();
+    				infoJsonStr.put("faultID", faultId);
+    				infoJsonStr.put("faultResult", faultResult);
+    				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
+    				infoJsonStr.put("recommendedSolutionContent", isKnowledge.getContent());
+    			}
+    		}else {			
+    		}     
+            map.put("state",state);
+            map.put("infoJsonStr",infoJsonStr);
+            mapList.add(map);
+        }                
 		return mapList;
 	}
 
@@ -100,7 +106,7 @@ public class PageFaultRepairController extends BaseController{
      */
     @RequestMapping(value = {"postFault", ""})
     public Map<String,Object> postFault(HttpServletRequest request){
-        String deviceID=request.getParameter("deviceID");
+        //String deviceID=request.getParameter("deviceID");
         String deviceName=request.getParameter("deviceName");
         String persion=request.getParameter("persion");
         String faultResult=request.getParameter("faultResult");
@@ -108,11 +114,11 @@ public class PageFaultRepairController extends BaseController{
         String faultID=request.getParameter("faultID");
         String state=request.getParameter("state");
         String content=request.getParameter("content");
-        System.out.println(deviceID+deviceName+persion+state+content);
+        //System.out.println(deviceID+deviceName+persion+state+content);
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         if(state==null){
-            IsFaults isFaults=new IsFaults(deviceName,deviceID,deviceName,null,date,persion,faultResult,recommendedSolution);
+            IsFaults isFaults=new IsFaults(deviceName,null,deviceName,null,date,persion,faultResult,recommendedSolution);
             try{
                 isFaultsService.save(isFaults);
             }catch(Exception exception){

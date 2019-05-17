@@ -12,9 +12,6 @@ import com.jeesite.modules.is3dmcps.service.IsDeviceCodeService;
 import com.jeesite.modules.is3dmcps.service.IsDevicePropertiesService;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.isopc.entity.IsCarCount;
-import com.jeesite.modules.isopc.entity.IsCarRec;
-import com.jeesite.modules.isopc.entity.IsCarRec;
-import com.jeesite.modules.isopc.entity.IsDeviceRec;
 import com.jeesite.modules.isopc.service.IsCarCountService;
 import com.jeesite.modules.isopc.service.IsDeviceRecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,7 +220,8 @@ public class PageDeviceManController extends BaseController{
      */
     @RequestMapping(value = {"otherParameter", ""})
     public List<Map<String, Object>> otherParameter(HttpServletRequest request) {
-        String deviceID=request.getParameter("deviceID");
+        //String deviceID=request.getParameter("deviceID");
+    	String deviceName=request.getParameter("deviceName");
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String installationSite;
         String department;
@@ -233,27 +231,28 @@ public class PageDeviceManController extends BaseController{
         String madeDate;
         double yearlyDepreciation;
         double durableYears;
-        IsDevice isDevice=isDeviceService.get(deviceID);
-        installationSite=isDevice.getInstallLocation();
-        department=isDevice.getUseOffice();
-        manufacturer=isDevice.getManufacturer();
-        IsDeviceCode isDeviceCode=isDeviceCodeService.get(isDevice.getDeviceCodeId());
-        purpose=isDeviceCode.getApplication();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        startWorkDate=df.format(isDevice.getUseDate());
-        madeDate=df.format(isDevice.getProductionDate());
-        yearlyDepreciation=Double.parseDouble(isDeviceCode.getDepreciation());
-        durableYears=Double.parseDouble(isDeviceCode.getLife());
-        Map<String, Object> map = MapUtils.newHashMap();
-        map.put("installationSite",installationSite);
-        map.put("department",department);
-        map.put("manufacturer",manufacturer);
-        map.put("purpose",purpose);
-        map.put("startWorkDate",startWorkDate);
-        map.put("madeDate",madeDate);
-        map.put("yearlyDepreciation",yearlyDepreciation);
-        map.put("durableYears",durableYears);
-        mapList.add(map);
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+        	installationSite=isDevice.getInstallLocation();
+            department=isDevice.getUseOffice();
+            manufacturer=isDevice.getManufacturer();
+            IsDeviceCode isDeviceCode=isDeviceCodeService.get(isDevice.getDeviceCodeId());
+            purpose=isDeviceCode.getApplication();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            startWorkDate=df.format(isDevice.getUseDate());
+            madeDate=df.format(isDevice.getProductionDate());
+            yearlyDepreciation=Double.parseDouble(isDeviceCode.getDepreciation());
+            durableYears=Double.parseDouble(isDeviceCode.getLife());
+            Map<String, Object> map = MapUtils.newHashMap();
+            map.put("installationSite",installationSite);
+            map.put("department",department);
+            map.put("manufacturer",manufacturer);
+            map.put("purpose",purpose);
+            map.put("startWorkDate",startWorkDate);
+            map.put("madeDate",madeDate);
+            map.put("yearlyDepreciation",yearlyDepreciation);
+            map.put("durableYears",durableYears);
+            mapList.add(map);
+        }                
         return mapList;
     }
 
@@ -269,7 +268,7 @@ public class PageDeviceManController extends BaseController{
         List<Map<String, Object>> mapList = ListUtils.newArrayList();        
         String property;
         String value;
-        for(IsDeviceProperties isDeviceProperties:isDevicePropertiesService.getDevicePropertiesDetail(request.getParameter("deviceID"))){
+        for(IsDeviceProperties isDeviceProperties:isDevicePropertiesService.getDevicePropertiesDetail(request.getParameter("deviceName"))){
         	Map<String, Object> map = MapUtils.newHashMap();
         	property=isDeviceProperties.getProperty();
             value=isDeviceProperties.getPropertyValue();            

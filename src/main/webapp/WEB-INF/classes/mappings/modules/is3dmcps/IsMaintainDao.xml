@@ -11,7 +11,7 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	<select id="getMaintainPopContent" resultType="IsMaintain">
-		select is_maintain.id,is_maintain.name,content from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id
+	<select id="getMaintainPopContent" resultType="IsMaintain" parameterType="String">
+		select is_maintain.id,is_maintain.name,content from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id and device_code_id = #{codeId}
 	</select>
 </mapper>

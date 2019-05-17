@@ -46,11 +46,12 @@ public class PageMaintainController extends BaseController{
 	@RequestMapping(value = {"maintainPop", ""})
 	public List<Map<String, Object>> maintainPop(HttpServletRequest request) {
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();		
-		String deviceId  = request.getParameter("deviceID");
+		//String deviceId  = request.getParameter("deviceID");
+		String deviceName  = request.getParameter("deviceName");
 		String maintainID;
 		String maintainName;
 		String maintainContent;	
-		for(IsDevice isDevice:isDeviceService.getDeviceById(deviceId)){
+		for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
 			for (IsMaintain maintain : isMaintainService.getMaintainPopContent(isDevice.getDeviceCodeId())){
 				Map<String, Object> map = MapUtils.newHashMap();
 				maintainID = maintain.getId();						
@@ -74,7 +75,8 @@ public class PageMaintainController extends BaseController{
      */
     @RequestMapping(value = {"postMaintain", ""})
     public Map<String,Object> postMaintain(HttpServletRequest request){
-        String deviceID=request.getParameter("deviceID");
+        //String deviceID=request.getParameter("deviceID");
+    	String deviceName  = request.getParameter("deviceName");
         String maintainID=request.getParameter("maintainID");
         String maintainPersion=request.getParameter("maintainPersion");
         String state=request.getParameter("state");
@@ -84,12 +86,12 @@ public class PageMaintainController extends BaseController{
         	state="0";
 		}
         String remark=request.getParameter("remark");
-		System.out.println(deviceID+maintainID+maintainPersion+state+remark);
+		System.out.println(deviceName+maintainID+maintainPersion+state+remark);
         Date date=new Date();
 		Map<String,Object> map=new HashMap<>();
         try{
 			String maintainName=isMaintainService.get(maintainID).getName();
-			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceID,null,null,remark,maintainPersion,date,state);
+			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,null,remark,maintainPersion,date,state);
             isMaintainRecService.save(isMaintainRec);
         }catch(Exception exception){
 			map.put("result",exception.toString());

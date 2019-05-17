@@ -21,4 +21,5 @@ public interface WmsPrdInDetlDao extends CrudDao<WmsPrdInDetl> {
 	public WmsPrdInDetl getDetailByWB(@Param("woNo")String woNo,@Param("batchNo")String batchNo);
 	public List<WmsPrdInDetl> getDetailByBatchNo(String batchNo);
 	public List<WmsPrdInDetl> getDetailMonthly(String month);
+	public List<WmsPrdInDetl> getDetailByWN(String workNo);
 }

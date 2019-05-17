@@ -78,7 +78,7 @@ public class PageDeviceDisplayController extends BaseController{
         String devicePartDetailedName;
         int devicePartCount;
         String devicePartDescription;
-        for(IsDevice isDevice:isDeviceService.getDeviceByCodeId(request.getParameter("devicePartID"))){
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(request.getParameter("devicePartName"))){
         	Map<String, Object> map = MapUtils.newHashMap();
         	devicePartID=isDevice.getDeviceCodeId();
             devicePartName=isDevice.getDeviceNo();
@@ -109,7 +109,7 @@ public class PageDeviceDisplayController extends BaseController{
         String deviceComponentID;
         String deviceComponentName;
         String deviceComponentSceneParentPath="";
-        for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeID"))){
+        for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeName"))){
         	Map<String, Object> map = MapUtils.newHashMap();            
             deviceComponentID=isDeviceCode.getId();
             deviceComponentName=isDeviceCode.getName();
@@ -137,7 +137,7 @@ public class PageDeviceDisplayController extends BaseController{
         String devicePartName;
         String deviceComponentID;
         String deviceComponentName;
-        for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeID"))){
+        for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeName"))){
         	Map<String, Object> map = MapUtils.newHashMap();            
         	devicePartID=isDeviceCode.getId();
         	devicePartName=isDeviceCode.getName();

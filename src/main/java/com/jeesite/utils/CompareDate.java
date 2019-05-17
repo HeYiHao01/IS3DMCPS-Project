@@ -98,7 +98,7 @@ public class CompareDate {
 	 * @param time
 	 * @return
 	 */
-	public static double getTimeCost(Timestamp time){
+	/*public static double getTimeCost(Timestamp time){
 		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
 		String newTime = format.format(time);
 		int index1 = newTime.indexOf(":");
@@ -117,7 +117,7 @@ public class CompareDate {
 		int min = Integer.parseInt(newTime.substring(index1+1,index2));
 		double sec = Double.valueOf(newTime.substring(index2+1));
 		return (hour * 60 + min + sec / 60);
-	}
+	}*/
 	
 	/*public static void main(String[] args) {		
 		for(String date:CompareDate.getSevenDate())	{

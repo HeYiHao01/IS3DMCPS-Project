@@ -12,6 +12,6 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getDevicePropertiesDetail" resultType="IsDeviceProperties" parameterType="String">
-		select * from is_device_properties where device_id = #{deviceId}
+		select * from is_device_properties where device_name = #{deviceId}
 	</select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.jeesite.modules.is3dmcps.web;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,11 +46,12 @@ public class PagePatrolManController extends BaseController{
 	public List<Map<String, Object>> patrolPop(HttpServletRequest request) {
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();
         Map<String, Object> map = MapUtils.newHashMap();
-        String deviceId = request.getParameter("deviceID");
+        //String deviceId = request.getParameter("deviceID");
+        String deviceName  = request.getParameter("deviceName");
 		String patrolID;
         String patrolName;
         String patrolContent;
-		for(IsPatrol isPatrol : isPatrolService.getPatrolByDeviceId(deviceId)){
+		for(IsPatrol isPatrol : isPatrolService.getPatrolByName(deviceName)){
 			patrolID = isPatrol.getId();
 			patrolName = isPatrol.getName();
 			patrolContent = isPatrol.getContent();
@@ -72,12 +72,13 @@ public class PagePatrolManController extends BaseController{
      */
     @RequestMapping(value = {"postPatrol", ""})
     public Map<String,Object> postPatrol(HttpServletRequest request){
-        String deviceID=request.getParameter("deviceID");
+        //String deviceID=request.getParameter("deviceID");
+        String deviceName  = request.getParameter("deviceName");
         String patrolID=request.getParameter("patrolID");
         String patrolPersion=request.getParameter("patrolPersion");
         String state=request.getParameter("state");
         String remark=request.getParameter("remark");
-        System.out.println(deviceID+patrolID+patrolPersion+state+remark);
+        System.out.println(deviceName+patrolID+patrolPersion+state+remark);
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         try{

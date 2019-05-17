@@ -91,6 +91,14 @@ public class IsPatrolService extends CrudService<IsPatrolDao, IsPatrol> {
 	}
 	
 	/**
+	 * 根据name获取patrol
+	 * @return
+	 */
+	public List<IsPatrol> getPatrolByName(String deviceName){
+		return this.dao.getPatrolByName(deviceName);
+	}
+	
+	/**
 	 * 获取需要巡检的设备
 	 */
 	public List<IsPatrol> getNeedPatrol(){

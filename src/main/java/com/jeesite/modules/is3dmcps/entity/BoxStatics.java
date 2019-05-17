@@ -4,9 +4,9 @@ public class BoxStatics {
 	private int line;
 	private int lie;
 	private int layer;
-	private Double location_x;
-	private Double location_y;
-	private Double location_z;
+	private Double locationX;
+	private Double locationY;
+	private Double locationZ;
 	private String vplnum;
 	private String pltnum;
 	private String currloc;
@@ -31,23 +31,23 @@ public class BoxStatics {
 	public void setLayer(int layer) {
 		this.layer = layer;
 	}
-	public Double getLocation_x() {
-		return location_x;
+	public Double getLocationX() {
+		return locationX;
 	}
-	public void setLocation_x(Double location_x) {
-		this.location_x = location_x;
+	public void setLocation_x(Double locationX) {
+		this.locationX = locationX;
 	}
-	public Double getLocation_y() {
-		return location_y;
+	public Double getLocationY() {
+		return locationY;
 	}
-	public void setLocation_y(Double location_y) {
-		this.location_y = location_y;
+	public void setLocationY(Double locationY) {
+		this.locationY = locationY;
 	}
-	public Double getLocation_z() {
-		return location_z;
+	public Double getLocationZ() {
+		return locationZ;
 	}
-	public void setLocation_z(Double location_z) {
-		this.location_z = location_z;
+	public void setLocationZ(Double locationZ) {
+		this.locationZ = locationZ;
 	}
 	public String getVplnum() {
 		return vplnum;

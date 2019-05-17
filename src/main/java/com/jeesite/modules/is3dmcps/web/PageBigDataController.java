@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
+import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
+import com.jeesite.modules.is3dmcps.service.IsDeviceCodeService;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.isopc.entity.CarCount;
 import com.jeesite.modules.isopc.entity.IsCarCount;
@@ -27,7 +29,6 @@ import com.jeesite.modules.twms.service.WmsGdxdInService;
 import com.jeesite.modules.twms.service.WmsGdxdOutService;
 import com.jeesite.modules.twms.service.WmsPrdInDetlService;
 import com.jeesite.modules.twms.service.WmsPrdOutDetlService;
-import com.jeesite.utils.CompareDate;
 
 /**
  * 
@@ -50,6 +51,8 @@ public class PageBigDataController extends BaseController{
 	private WmsGdxdOutService wmsGdxdOutService;
 	@Autowired
 	private WmsPrdOutDetlService wmsPrdOutDetlService;
+	@Autowired
+	private IsDeviceCodeService isDeviceCodeService;
 	
     /**
      * 生产信息分析界面
@@ -93,19 +96,20 @@ public class PageBigDataController extends BaseController{
 					for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailMonthly(dateThis)){
 						Map<String, Object> mapThis = MapUtils.newHashMap();						
 				        mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-				        mapThis.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapThis);
+				        mapThis.put("totalWeightThis", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListThis.add(mapThis);
 					}
 					for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailMonthly(dateLast)){
 						Map<String, Object> mapLast = MapUtils.newHashMap();						
 						mapLast.put("brand", wmsPrdOutDetl.getMatNm());
-						mapLast.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapLast);
+						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", j);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -133,19 +137,20 @@ public class PageBigDataController extends BaseController{
 					for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailMonthly(dateThis)){
 						Map<String, Object> mapThis = MapUtils.newHashMap();						
 				        mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-				        mapThis.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapThis);
+				        mapThis.put("totalWeightThis", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListThis.add(mapThis);
 					}
 					for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailMonthly(dateLast)){
 						Map<String, Object> mapLast = MapUtils.newHashMap();						
 						mapLast.put("brand", wmsPrdOutDetl.getMatNm());
-						mapLast.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapLast);
+						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
-						for(Map<String, Object> mapL:mapListLast){
+						for(Map<String, Object> mapL:mapListLast){							
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", j);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -173,19 +178,20 @@ public class PageBigDataController extends BaseController{
 					for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailMonthly(dateThis)){
 						Map<String, Object> mapThis = MapUtils.newHashMap();						
 				        mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-				        mapThis.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapThis);
+				        mapThis.put("totalWeightThis", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListThis.add(mapThis);
 					}
 					for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailMonthly(dateLast)){
 						Map<String, Object> mapLast = MapUtils.newHashMap();						
 						mapLast.put("brand", wmsPrdOutDetl.getMatNm());
-						mapLast.put("totalWeightThis", Integer.parseInt(wmsPrdOutDetl.getWeight()));
-				        mapList.add(mapLast);
+						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdOutDetl.getWeight()));
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", j);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -233,10 +239,10 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getAllOut(dateThis)){					
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						String brandThis;
-				        int totalWeightThis = 0;
+				        double totalWeightThis = 0;
 				        brandThis = wmsGdxdOut.getMatNm();
-				        for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightThis += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightThis += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapThis.put("brand", brandThis);
 				        mapThis.put("totalWeightThis", totalWeightThis);
@@ -246,19 +252,21 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getAllOut(dateLast)){						
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-				        int totalWeightLast = 0;
+				        double totalWeightLast = 0;
 				        brandLast = wmsGdxdOut.getMatNm();
-				        for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightLast += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightLast += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapLast.put("brand", brandLast);
-				        mapLast.put("totalWeightThis", totalWeightLast);
-				        mapListThis.add(mapLast);
+				        mapLast.put("totalWeightLast", totalWeightLast);
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){
+							System.err.println(mapT.get("brand")+" "+mapL.get("brand"));							
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -293,10 +301,10 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdIn wmsGdxdOut:wmsGdxdInService.getAllIn(dateThis)){					
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						String brandThis;
-				        int totalWeightThis = 0;
+				        double totalWeightThis = 0;
 				        brandThis = wmsGdxdOut.getMatNm();
-				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightThis += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightThis += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapThis.put("brand", brandThis);
 				        mapThis.put("totalWeightThis", totalWeightThis);
@@ -306,19 +314,20 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdIn wmsGdxdOut:wmsGdxdInService.getAllIn(dateLast)){						
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-				        int totalWeightLast = 0;
+				        double totalWeightLast = 0;
 				        brandLast = wmsGdxdOut.getMatNm();
-				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightLast += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightLast += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapLast.put("brand", brandLast);
-				        mapLast.put("totalWeightThis", totalWeightLast);
-				        mapListThis.add(mapLast);
+				        mapLast.put("totalWeightLast", totalWeightLast);
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -353,10 +362,10 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdIn wmsGdxdOut:wmsGdxdInService.getAllIn(dateThis)){					
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						String brandThis;
-				        int totalWeightThis = 0;
+				        double totalWeightThis = 0;
 				        brandThis = wmsGdxdOut.getMatNm();
-				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightThis += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightThis += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapThis.put("brand", brandThis);
 				        mapThis.put("totalWeightThis", totalWeightThis);
@@ -366,19 +375,20 @@ public class PageBigDataController extends BaseController{
 					for(WmsGdxdIn wmsGdxdOut:wmsGdxdInService.getAllIn(dateLast)){						
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-				        int totalWeightLast = 0;
+				        double totalWeightLast = 0;
 				        brandLast = wmsGdxdOut.getMatNm();
-				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByBatchNo(wmsGdxdOut.getBatchNo())){
-				        	totalWeightLast += Integer.parseInt(wmsPrdOutDetl.getWeight());
+				        for(WmsPrdInDetl wmsPrdOutDetl:wmsPrdInDetlService.getDetailByWN(wmsGdxdOut.getWoNo())){
+				        	totalWeightLast += Double.valueOf(wmsPrdOutDetl.getWeight());
 				        }
 				        mapLast.put("brand", brandLast);
-				        mapLast.put("totalWeightThis", totalWeightLast);
+				        mapLast.put("totalWeightLast", totalWeightLast);
 				        mapListThis.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){
 							if (mapT.get("brand").equals(mapL.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
@@ -410,7 +420,12 @@ public class PageBigDataController extends BaseController{
     @RequestMapping(value = {"carRunStatics", ""})
     public List<Map<String, Object>> carRunStatics(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        String deviceID = request.getParameter("deviceID");
+        //String deviceID = request.getParameter("deviceID");
+        String deviceID = "";
+        String deviceName = request.getParameter("deviceName");
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+        	deviceID = isDevice.getId();
+        }
         String timeCoordinate = request.getParameter("timeCoordinate");
         String timeDomainYear = request.getParameter("timeDomainYear");
         if (timeCoordinate.equals("Monthly")) {        							
@@ -440,8 +455,10 @@ public class PageBigDataController extends BaseController{
 					}
 					carCountThis = isCarCountService.getByDaily(dateThis, deviceID);
 					carCountLast = isCarCountService.getByDaily(dateLast, deviceID);
-					if (carCountThis != null || carCountLast != null) {
-						taskTimeCountThis += carCountThis.getTaskTimeCount();
+					if (carCountThis != null) {
+						taskTimeCountThis += carCountThis.getTaskTimeCount();						
+					}
+					if (carCountLast != null) {
 						taskTimeCountLast += carCountLast.getTaskTimeCount();
 					}
 				}
@@ -512,31 +529,35 @@ public class PageBigDataController extends BaseController{
     @RequestMapping(value = {"carRunStatus", ""})
     public List<Map<String, Object>> carRunStatus(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();        
-        Double runDistance;
-        int liftCount;
-        int veerCount;
-        int runFaultsCount;
-        int liftFaultsCount;
-        int veerFaultsCount;
-        int allFaultsCount;
-        for(IsCarCount isCarCount:isCarCountService.getAllByDeviceId(request.getParameter("deviceID"))){
-        	Map<String, Object> map = MapUtils.newHashMap();
+        Double runDistance = 0.0;
+        int liftCount=0;
+        int veerCount=0;
+        int runFaultsCount=0;
+        int liftFaultsCount=0;
+        int veerFaultsCount=0;
+        int allFaultsCount=0;
+        String deviceId = "";
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(request.getParameter("deviceName"))){
+        	deviceId = isDevice.getId();
+        }
+        Map<String, Object> map = MapUtils.newHashMap();
+        for(IsCarCount isCarCount:isCarCountService.getAllByDeviceId(deviceId)){        	
         	runDistance=isCarCount.getMoveMileage();
-            liftCount=isCarCount.getUpdownCount();
-            veerCount=isCarCount.getTurnCount();
-            runFaultsCount=isCarCount.getMoveerrCount();
-            liftFaultsCount=isCarCount.getUpdownerrCount();
-            veerFaultsCount=isCarCount.getTurnerrCount();
-            allFaultsCount=isCarCount.getErrCount();
-            map.put("runDistance",runDistance);
-            map.put("liftCount",liftCount);
-            map.put("veerCount",veerCount);
-            map.put("runFaultsCount",runFaultsCount);
-            map.put("liftFaultsCount",liftFaultsCount);
-            map.put("veerFaultsCount",veerFaultsCount);
-            map.put("allFaultsCount",allFaultsCount);
-            mapList.add(map);
-        }                
+            liftCount+=isCarCount.getUpdownCount();
+            veerCount+=isCarCount.getTurnCount();
+            runFaultsCount+=isCarCount.getMoveerrCount();
+            liftFaultsCount+=isCarCount.getUpdownerrCount();
+            veerFaultsCount+=isCarCount.getTurnerrCount();
+            allFaultsCount+=isCarCount.getErrCount();           
+        }  
+        map.put("runDistance",runDistance);
+        map.put("liftCount",liftCount);
+        map.put("veerCount",veerCount);
+        map.put("runFaultsCount",runFaultsCount);
+        map.put("liftFaultsCount",liftFaultsCount);
+        map.put("veerFaultsCount",veerFaultsCount);
+        map.put("allFaultsCount",allFaultsCount);
+        mapList.add(map);
         return mapList;
     }
 
@@ -550,16 +571,18 @@ public class PageBigDataController extends BaseController{
     public List<Map<String, Object>> carHistoryFault(HttpServletRequest request) {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();	
     	String deviceName;
-		int allFaultsCount;
-		for(IsDevice isDevice:isDeviceService.getDeviceByCodeName(request.getParameter("deviceTypeName"))){
-			for(IsCarCount isCarCount:isCarCountService.getAllByDeviceName(isDevice.getDeviceCodeName())){
+		int allFaultsCount=0;
+		for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeName"))){
+			for(IsDevice isDevice:isDeviceService.getDeviceByCodeName(isDeviceCode.getName())){
 				Map<String, Object> map = MapUtils.newHashMap();				
-				deviceName=isCarCount.getDeviceName();
-				allFaultsCount=isCarCount.getErrCount();
+				deviceName=isDevice.getDeviceNo();
+				for(IsCarCount isCarCount:isCarCountService.getAllByDeviceName(isDevice.getDeviceCodeName())){					
+					allFaultsCount+=isCarCount.getErrCount();					
+				}	
 				map.put("deviceName",deviceName);
 				map.put("allFaultsCount",allFaultsCount);		
 				mapList.add(map);
-			}			
+			}
 		}
 		return mapList;			
     }
@@ -575,16 +598,16 @@ public class PageBigDataController extends BaseController{
     public List<Map<String, Object>> productionLine(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String timeDomainYear = request.getParameter("timeDomainYear");
-        String timeDomainMonth = request.getParameter("timeDomainMonth");
-        String date = timeDomainYear+".";
-        if (Integer.parseInt(timeDomainMonth) < 10) {
-			date += "0"+timeDomainMonth+".";			
-		}else {
-			date += timeDomainMonth+".";		
-		}	
+        String timeDomainMonth = request.getParameter("timeDomainMonth");        
         int timeVariable;
-        int productionCapacity;
+        Double productionCapacity;
         for(int i=1;i<32;i++){
+        	String date = timeDomainYear+".";
+            if (Integer.parseInt(timeDomainMonth) < 10) {
+    			date += "0"+timeDomainMonth+".";			
+    		}else {
+    			date += timeDomainMonth+".";		
+    		}	
         	if(i<10){
 				date += "0"+i; 				
 			}else {
@@ -598,14 +621,14 @@ public class PageBigDataController extends BaseController{
             	timeVariable=i;
             	if (productionLineName.equals("1")) {
             		productionLineName = "生产线一";
-            		productionCapacity = Integer.parseInt(wmsPrdInDetlService.getDetailByWB(wmsGdxdIn.getWoNo(), wmsGdxdIn.getBatchNo()).getWeight());
+            		productionCapacity = Double.valueOf(wmsPrdInDetlService.getDetailByWB(wmsGdxdIn.getWoNo(), wmsGdxdIn.getBatchNo()).getWeight());
             		map.put("productionLineName",productionLineName);
                     map.put("timeVariable",timeVariable);
                     map.put("productionCapacity",productionCapacity);
                     mapList.add(map);
-				}else if(productionLineName.equals("1")){
+				}else if(productionLineName.equals("2")){
 					productionLineName = "生产线二";
-					productionCapacity = Integer.parseInt(wmsPrdInDetlService.getDetailByWB(wmsGdxdIn.getWoNo(), wmsGdxdIn.getBatchNo()).getWeight());
+					productionCapacity = Double.valueOf(wmsPrdInDetlService.getDetailByWB(wmsGdxdIn.getWoNo(), wmsGdxdIn.getBatchNo()).getWeight());
 					map.put("productionLineName",productionLineName);
 		            map.put("timeVariable",timeVariable);
 		            map.put("productionCapacity",productionCapacity);
@@ -655,7 +678,7 @@ public class PageBigDataController extends BaseController{
                 double timeCost;
                 for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getBatchAndTime(date)){
                 	batch = wmsGdxdIn.getBatchNo();
-                	timeCost=CompareDate.getTimeCost(wmsGdxdIn.getWoStartTime());
+                	timeCost=wmsGdxdIn.getBoxtotalnum();
                 	for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getDetailByBatchNo(batch)){
                 		weight += Double.valueOf(wmsPrdInDetl.getWeight());
                 	}
@@ -670,8 +693,8 @@ public class PageBigDataController extends BaseController{
                 double weight = 0.0;
                 double timeCost;
                 for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getBatchAndTime(date)){
-                	batch = wmsGdxdOut.getBatchNo();
-                	timeCost=CompareDate.getTimeCost(wmsGdxdOut.getWoStartTime());
+                	batch = wmsGdxdOut.getBatchNo();                	
+                	timeCost=wmsGdxdOut.getBoxtotalnum();
                 	for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getDetailByBatchNo(batch)){
                 		weight += Double.valueOf(wmsPrdOutDetl.getWeight());
                 	}

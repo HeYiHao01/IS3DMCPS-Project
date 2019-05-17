@@ -15,7 +15,7 @@
 		select itemdesc,sum(weight) as weight from twms_pltitem group by itemdesc
 	</select>
 	<select id="getBoxStatics" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
-		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x,location_y,location_z,twms_plt.vpltnum as vpltnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
 		from is_location,twms_plt,twms_pltitem,twms_loc,
       	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
        	from (select  lpad(lie,2,0) a_lie,

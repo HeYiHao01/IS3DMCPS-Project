@@ -94,4 +94,11 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 	public List<WmsPrdInDetl> getDetailMonthly(String month){
 		return this.dao.getDetailMonthly(month);
 	}
+	
+	/**
+	 * 根据wo_no获取工单详情
+	 */
+	public List<WmsPrdInDetl> getDetailByWN(String workNo){
+		return this.dao.getDetailByWN(workNo);
+	}
 }

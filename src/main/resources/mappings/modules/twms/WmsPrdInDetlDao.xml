@@ -14,6 +14,9 @@
 	<select id="getDetailByBatchNo" resultType="WmsPrdInDetl" parameterType="String">
 		select * from wms_prd_in_detl where batch_no = #{batchNo}
 	</select>
+	<select id="getDetailByWN" resultType="WmsPrdInDetl" parameterType="String">
+		select * from wms_prd_in_detl where wo_no = #{workNo}
+	</select>
 	<select id="getDetailByWB" resultType="WmsPrdInDetl">
 		select * from wms_prd_in_detl where wo_no = #{woNo} and batch_no = #{batchNo}
 	</select>

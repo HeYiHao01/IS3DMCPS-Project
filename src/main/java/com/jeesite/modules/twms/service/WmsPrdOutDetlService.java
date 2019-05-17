@@ -88,4 +88,11 @@ public class WmsPrdOutDetlService extends CrudService<WmsPrdOutDetlDao, WmsPrdOu
 	public List<WmsPrdOutDetl> getDetailMonthly(String month){
 		return this.dao.getDetailMonthly(month);
 	}
+	
+	/**
+	 * 根据wo_no获取
+	 */
+	public List<WmsPrdOutDetl> getDetailByWN(String workNo){
+		return this.dao.getDetailByWN(workNo);
+	}
 }

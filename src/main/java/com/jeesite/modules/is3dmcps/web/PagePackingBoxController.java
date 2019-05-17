@@ -4,10 +4,7 @@ import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.collect.MapUtils;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.is3dmcps.entity.BoxStatics;
-import com.jeesite.modules.is3dmcps.entity.IsFaults;
 import com.jeesite.modules.is3dmcps.entity.IsLocation;
-import com.jeesite.modules.is3dmcps.entity.IsMaintain;
-import com.jeesite.modules.is3dmcps.entity.IsPatrol;
 import com.jeesite.modules.is3dmcps.entity.Position;
 import com.jeesite.modules.is3dmcps.service.*;
 import com.jeesite.modules.twms.entity.TwmsLoc;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -114,9 +110,9 @@ public class PagePackingBoxController extends BaseController{
     		line = boxStatics.getLine();
     		lie = boxStatics.getLie();
     		layer = boxStatics.getLayer();
-    		location_X = boxStatics.getLocation_x();
-    		location_Y = boxStatics.getLocation_y();
-    		location_Z = boxStatics.getLocation_z();
+    		location_X = boxStatics.getLocationX();
+    		location_Y = boxStatics.getLocationY();
+    		location_Z = boxStatics.getLocationZ();
     		VPLTNUM = boxStatics.getVplnum();
     		PLTNUM = boxStatics.getPltnum();
     		CURRLOC = boxStatics.getCurrloc();
@@ -127,8 +123,8 @@ public class PagePackingBoxController extends BaseController{
         	map.put("lie", lie);
         	map.put("layer", layer);
         	map.put("location_X", location_X);
-        	map.put("location_X", location_Y);
-        	map.put("location_X", location_Z);
+        	map.put("location_Y", location_Y);
+        	map.put("location_Z", location_Z);
         	map.put("VPLTNUM", VPLTNUM);
         	map.put("PLTNUM", PLTNUM);
         	map.put("CURRLOC", CURRLOC);

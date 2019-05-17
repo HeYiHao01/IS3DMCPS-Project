@@ -14,6 +14,9 @@
 	<select id="getPatrolByDeviceId" resultType="IsPatrol" parameterType="String">
 		select * from is_patrol where device_id = #{deviceId}
 	</select>
+	<select id="getPatrolByName" resultType="IsPatrol" parameterType="String">
+		select * from is_patrol where name = #{deviceName}
+	</select>
 	<select id="getPatrol" resultType="IsPatrol">
 		select * from is_patrol
 	</select>

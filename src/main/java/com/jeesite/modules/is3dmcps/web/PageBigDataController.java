@@ -382,7 +382,7 @@ public class PageBigDataController extends BaseController{
 				        }
 				        mapLast.put("brand", brandLast);
 				        mapLast.put("totalWeightLast", totalWeightLast);
-				        mapListThis.add(mapLast);
+				        mapListLast.add(mapLast);
 					}
 					for(Map<String, Object> mapT:mapListThis){
 						for(Map<String, Object> mapL:mapListLast){

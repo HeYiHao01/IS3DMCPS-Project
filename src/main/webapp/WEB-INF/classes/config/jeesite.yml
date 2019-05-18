@@ -34,7 +34,7 @@ jdbc:
   driver: oracle.jdbc.driver.OracleDriver
   url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
   username: c##is3dmp
-  password: f118f79491dc6b493b0144ff61c921b5
+  password: root
   testSql: SELECT 1 FROM DUAL
 
 #  # Sql Server 数据库配置

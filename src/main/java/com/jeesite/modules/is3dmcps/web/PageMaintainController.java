@@ -77,8 +77,9 @@ public class PageMaintainController extends BaseController{
     public Map<String,Object> postMaintain(HttpServletRequest request){
         //String deviceID=request.getParameter("deviceID");
     	String deviceName  = request.getParameter("deviceName");
-        String maintainID=request.getParameter("maintainID");
-        String maintainPersion=request.getParameter("maintainPersion");
+        //String maintainID=request.getParameter("maintainID");
+    	String maintainName=request.getParameter("maintainName");
+        String maintainPersion=request.getParameter("maintainPerson");
         String state=request.getParameter("state");
         if(state.equals("true")){
         	state="1";
@@ -86,11 +87,11 @@ public class PageMaintainController extends BaseController{
         	state="0";
 		}
         String remark=request.getParameter("remark");
-		System.out.println(deviceName+maintainID+maintainPersion+state+remark);
+		System.out.println(deviceName+maintainName+maintainPersion+state+remark);
         Date date=new Date();
 		Map<String,Object> map=new HashMap<>();
         try{
-			String maintainName=isMaintainService.get(maintainID).getName();
+			String maintainID=isMaintainService.getByName(maintainName).getId();
 			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,null,remark,maintainPersion,date,state);
             isMaintainRecService.save(isMaintainRec);
         }catch(Exception exception){
@@ -134,7 +135,7 @@ public class PageMaintainController extends BaseController{
 		for(IsMaintainRec isMaintainRec:isMaintainRecService.need_maintain_details()){
 			for(IsDevice device:isDeviceService.getDeviceByDeviceNo(isMaintainRec.getDeviceNo())){
 				Map<String, Object> map = MapUtils.newHashMap();				
-				map.put("deviceName", device.getDeviceCodeName());
+				map.put("deviceName", device.getDeviceNo());
 				mapList.add(map);
 			}			
 		}		

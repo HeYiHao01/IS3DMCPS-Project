@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.jeesite.common.collect.MapUtils;
+import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsPatrol;
 import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
+import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsPatrolRecService;
 import com.jeesite.modules.is3dmcps.service.IsPatrolService;
 import com.jeesite.utils.CompareDate;
@@ -35,6 +37,8 @@ public class PagePatrolManController extends BaseController{
     IsPatrolRecService isPatrolRecService;
     @Autowired
     IsPatrolService isPatrolService;
+    @Autowired
+    IsDeviceService isDeviceService;
     /**
      * 巡检弹窗
      * Post:deviceID or deviceName
@@ -67,22 +71,25 @@ public class PagePatrolManController extends BaseController{
      *
      * @param request
      * Post(Put):
-     * {“deviceID”:”xxx”,” patrolID”:”xxx”,” patrolPersion”:”xxx”,”state”:true,”remark”:”xxxxxxxxxxxx”}
+     * {“deviceName”:”xxx”,” patrolName”:”xxx”,” patrolPerson”:”xxx”,”state”:true,”remark”:”xxxxxxxxxxxx”}
      * @return
      */
     @RequestMapping(value = {"postPatrol", ""})
     public Map<String,Object> postPatrol(HttpServletRequest request){
         //String deviceID=request.getParameter("deviceID");
         String deviceName  = request.getParameter("deviceName");
-        String patrolID=request.getParameter("patrolID");
-        String patrolPersion=request.getParameter("patrolPersion");
+        //String patrolID=request.getParameter("patrolID");
+        String patrolName=request.getParameter("patrolName");
+        String patrolPersion=request.getParameter("patrolPerson");
         String state=request.getParameter("state");
         String remark=request.getParameter("remark");
-        System.out.println(deviceName+patrolID+patrolPersion+state+remark);
+        System.out.println(deviceName+patrolName+patrolPersion+state+remark);
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         try{
-            String patrolName=isPatrolService.get(patrolID).getName();
+        	String patrolID = "";
+        	for(IsPatrol isPatrol:isPatrolService.getPatrolByName(deviceName))
+        		patrolID=isPatrol.getId();
             IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,remark,patrolPersion,date);
             isPatrolRecService.save(isPatrolRec);
         }catch(Exception exception){
@@ -120,11 +127,13 @@ public class PagePatrolManController extends BaseController{
     @RequestMapping(value = {"needPatrol", ""})
     public List<Map<String, Object>> needPatrol() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	for(IsPatrol isPatrol:isPatrolService.getNeedPatrol()){
-    		Map<String, Object> map = MapUtils.newHashMap();
-    		map.put("deviceName", isPatrol.getDeviceName());
-    		mapList.add(map);
-    	}
+		for (IsPatrol isPatrol : isPatrolService.getNeedPatrol()) {
+			for (IsDevice isDevice : isDeviceService.getDeviceById(isPatrol.getDeviceId())) {
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("deviceName", isDevice.getDeviceNo());
+				mapList.add(map);
+			}
+		}
     	return mapList;
     }
 }

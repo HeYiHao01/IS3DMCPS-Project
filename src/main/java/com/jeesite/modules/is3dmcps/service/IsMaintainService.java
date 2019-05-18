@@ -80,4 +80,11 @@ public class IsMaintainService extends CrudService<IsMaintainDao, IsMaintain> {
 	public List<IsMaintain> getMaintainPopContent(String deviceCodeId){
 		return this.dao.getMaintainPopContent(deviceCodeId);
 	}
+	
+	/**
+	 * 根据name获取
+	 */
+	public IsMaintain getByName(String name){
+		return this.dao.getByName(name);
+	}
 }

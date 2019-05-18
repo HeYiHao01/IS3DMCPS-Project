@@ -99,16 +99,16 @@ public class PageFaultRepairController extends BaseController{
      * @param request
      * @return
      * （1）报故障：
-     * {“deviceID”:”xxx”,”deviceName”:”xxxxx”,”persion”:”xxxxx”,”faultResult”:”xxx损坏”,”recommendedSolution”:”xxx”}
+     * {”deviceName”:”xxxxx”,”person”:”xxxxx”,”faultResult”:”xxx损坏”,”recommendedSolution”:”xxx”}
      * （2）维修：（state：true代表完成，false代表未完成。false时，content仍会发送,但不用管content字段， content字段可能包含脏数据）
      * Post:
-     * {“deviceID”:”xxx”,”deviceName”:”xxxxx”,”persion”:”xxxxx”,“faultID”:”xxx”,”state”:false,”content”,”xxxxxxxxxx”}
+     * {”deviceName”:”xxxxx”, “faultID”:”xxx”,”person”:”xxxxx”,”state”:false,”content”,”xxxxxxxxxx”}
      */
     @RequestMapping(value = {"postFault", ""})
     public Map<String,Object> postFault(HttpServletRequest request){
         //String deviceID=request.getParameter("deviceID");
         String deviceName=request.getParameter("deviceName");
-        String persion=request.getParameter("persion");
+        String persion=request.getParameter("person");
         String faultResult=request.getParameter("faultResult");
         String recommendedSolution=request.getParameter("recommendedSolution");
         String faultID=request.getParameter("faultID");
@@ -118,14 +118,16 @@ public class PageFaultRepairController extends BaseController{
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         if(state==null){
-            IsFaults isFaults=new IsFaults(deviceName,null,deviceName,null,date,persion,faultResult,recommendedSolution);
-            try{
-                isFaultsService.save(isFaults);
-            }catch(Exception exception){
-                map.put("result",exception.toString());
-                return map;
-            }
-            map.put("result","ok");
+        	for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+	            IsFaults isFaults=new IsFaults(deviceName,isDevice.getId(),deviceName,null,date,persion,faultResult,recommendedSolution);
+	            try{
+	                isFaultsService.save(isFaults);
+	            }catch(Exception exception){
+	                map.put("result",exception.toString());
+	                return map;
+	            }
+	            map.put("result","ok");
+        	}
             return map;
         }else{
             if(state.equals("true")){
@@ -178,9 +180,11 @@ public class PageFaultRepairController extends BaseController{
     public List<Map<String, Object>> needRepair() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
     	for(IsFaults isFaults:isFaultsService.getNeedRepair()){
-    		Map<String, Object> map = MapUtils.newHashMap();
-    		map.put("deviceName", isFaults.getDeviceName());
-    		mapList.add(map);
+    		for(IsDevice isDevice:isDeviceService.getDeviceById(isFaults.getDeviceId())){
+	    		Map<String, Object> map = MapUtils.newHashMap();
+	    		map.put("deviceName", isDevice.getDeviceNo());
+	    		mapList.add(map);
+    		}
     	}
     	return mapList;
     }

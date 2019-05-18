@@ -17,4 +17,5 @@ import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 @MyBatisDao
 public interface IsMaintainDao extends CrudDao<IsMaintain> {
 	public List<IsMaintain> getMaintainPopContent(String deviceCodeId);
+	public IsMaintain getByName(String name);
 }

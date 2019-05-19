@@ -26,4 +26,7 @@
 	<select id="getFaultsStateDetails" resultType="IsFaults" parameterType="String">
 		select * from is_faults where device_id=#{deviceId} and rownum=1 order by faults_time
 	</select>
+	<select id="getFaultsByName" resultType="IsFaults" parameterType="String">
+		select * from is_faults where name = #{name}
+	</select>
 </mapper>

@@ -28,14 +28,14 @@ jdbc:
 #      username: root
 #      password: root
 #      testSql: SELECT 1
-
-  # Oracle 数据库配置
-  type: oracle
-  driver: oracle.jdbc.driver.OracleDriver
-  url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
-  username: c##is3dmp
-  password: root
-  testSql: SELECT 1 FROM DUAL
+  
+# Oracle 数据库配置
+# type: oracle
+# driver: oracle.jdbc.driver.OracleDriver
+# url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+# username: LZOME
+# password: ONLYonly1
+# testSql: SELECT 1 FROM DUAL
 
 #  # Sql Server 数据库配置
 #  type: mssql

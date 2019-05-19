@@ -98,4 +98,8 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	public List<WmsGdxdIn> getBatchAndTime(String date){
 		return this.dao.getBatchAndTime(date);
 	}
+	
+	public List<WmsGdxdIn> getByWN(String woNo){
+		return this.dao.getByWN(woNo);
+	}
 }

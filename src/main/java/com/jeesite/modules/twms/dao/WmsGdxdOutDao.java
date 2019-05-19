@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
+import com.jeesite.modules.twms.entity.WmsGdxdIn;
 import com.jeesite.modules.twms.entity.WmsGdxdOut;
 
 /**
@@ -17,5 +18,6 @@ import com.jeesite.modules.twms.entity.WmsGdxdOut;
 @MyBatisDao
 public interface WmsGdxdOutDao extends CrudDao<WmsGdxdOut> {
 	public List<WmsGdxdOut> getAllOut(String date);
-	public List<WmsGdxdOut> getBatchAndTime(String date);	
+	public List<WmsGdxdOut> getBatchAndTime(String date);
+	public List<WmsGdxdOut> getByWN(String woNo);
 }

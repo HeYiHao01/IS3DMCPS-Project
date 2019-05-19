@@ -21,4 +21,5 @@ public interface IsFaultsDao extends CrudDao<IsFaults> {
     public Integer getAllFaultsCount();    
     public IsFaults getFaultsStateDetails(String deviceId);
     public List<IsFaults> getNeedRepair();
+    public List<IsFaults> getFaultsByName(String name);    
 }

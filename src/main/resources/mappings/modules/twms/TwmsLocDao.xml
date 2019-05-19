@@ -12,6 +12,6 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getAll" resultType="TwmsLoc">
-		select * from twms_loc
+		select * from twms_loc_just
 	</select>
 </mapper>

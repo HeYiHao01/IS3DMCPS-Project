@@ -12,9 +12,12 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getAllOut" resultType="WmsGdxdOut" parameterType="String">
-		select * from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+		select * from wms_gdxd_out_just where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
 	</select>
 	<select id="getBatchAndTime" resultType="WmsGdxdOut" parameterType="String">
-		select batch_no,floor(((to_date(to_char(cast(wo_end_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') - to_date(to_char(cast(wo_start_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')) *24*60)) as boxtotalnum from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+		select batch_no,floor(((to_date(to_char(cast(wo_end_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') - to_date(to_char(cast(wo_start_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')) *24*60)) as boxtotalnum from wms_gdxd_out_just where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
+	<select id="getByWN" resultType="WmsGdxdOut" parameterType="String">
+		select * from wms_gdxd_out_just where wo_no = #{woNo}
 	</select>
 </mapper>

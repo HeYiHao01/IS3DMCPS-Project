@@ -18,5 +18,6 @@ import com.jeesite.modules.twms.entity.WmsGdxdIn;
 public interface WmsGdxdInDao extends CrudDao<WmsGdxdIn> {
 	public List<WmsGdxdIn> getWorkInfo(String date);
 	public List<WmsGdxdIn> getAllIn(String date);
-	public List<WmsGdxdIn> getBatchAndTime(String date);	
+	public List<WmsGdxdIn> getBatchAndTime(String date);
+	public List<WmsGdxdIn> getByWN(String woNo);
 }

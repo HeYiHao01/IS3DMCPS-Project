@@ -17,4 +17,10 @@
 	<select id="getByName" resultType="IsMaintain" parameterType="String">
 		select * from is_maintain where name=#{name}
 	</select>
+	<select id="getById" resultType="IsMaintain" parameterType="String">
+		select * from is_maintain where ID=#{id}
+	</select>
+	<select id="maintainTypeCount" resultType="IsMaintain">
+		select type,count(type) as interval from is_maintain group by type
+	</select>
 </mapper>

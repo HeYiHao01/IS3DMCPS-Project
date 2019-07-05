@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeesite.modules.twms.dao.TwmsTransferloggDao">
+	
+	<!-- 查询数据
+	<select id="findList" resultType="TwmsTransferlogg">
+		SELECT ${sqlMap.column.toSql()}
+		FROM ${sqlMap.table.toSql()}
+		<where>
+			${sqlMap.where.toSql()}
+		</where>
+		ORDER BY ${sqlMap.order.toSql()}
+	</select> -->
+	<select id="getByLoggnum" resultType="TwmsTransferlogg">
+		SELECT * FROM 
+		(SELECT t.*,ROWNUM AS rowno
+		FROM twms_transferlogg t         
+		where ROWNUM &lt;= 1000*(#{count}+1)) table_alias
+		where table_alias.loggnum = #{loggNum}			
+	</select>
+</mapper>

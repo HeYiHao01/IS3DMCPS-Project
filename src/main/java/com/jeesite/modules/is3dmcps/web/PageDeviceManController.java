@@ -14,6 +14,9 @@ import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.isopc.entity.IsCarCount;
 import com.jeesite.modules.isopc.service.IsCarCountService;
 import com.jeesite.modules.isopc.service.IsDeviceRecService;
+import com.jeesite.modules.twms.service.TwmsLocService;
+import com.jeesite.modules.twms.service.TwmsPltitemService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +46,10 @@ public class PageDeviceManController extends BaseController{
     private IsDeviceRecService isDeviceRecService;
     @Autowired
     private IsDevicePropertiesService isDevicePropertiesService;
+    @Autowired
+    private TwmsLocService twmsLocService;
+    @Autowired
+    private TwmsPltitemService twmsPltitemService;
 
     /**
      * 场景设备都能点
@@ -87,8 +94,8 @@ public class PageDeviceManController extends BaseController{
      *  [”deviceID”:”xxx”,”deviceName”:”XXX”,”deviceCategoryName”:”XXX” ,”deviceTypeName”:”xxxx” ,”runState”:”Sleep”],
      *  [”deviceID”:”xxx”,”deviceName”:”XXX”,”deviceCategoryName”:”XXX” ,”deviceTypeName”:”xxxx” ,”runState”:”Fault”]}
      */
-    @RequestMapping(value = {"deveiceList", ""})
-    public List<Map<String, Object>> deveiceList() {
+    @RequestMapping(value = {"deviceList", ""})
+    public List<Map<String, Object>> deviceList() {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String deviceID;
         String deviceName;
@@ -145,68 +152,75 @@ public class PageDeviceManController extends BaseController{
      * “runState”:”正常”,”FaultCount”:46,”runTimeCount”:10.5,”useTime”:256}
      */
     @RequestMapping(value = {"deviceClick", ""})
-    public List<Map<String, Object>> maintainRecList(HttpServletRequest request) {
-        String deviceID=request.getParameter("deviceID");
-        IsDevice isDevice=isDeviceService.get(deviceID);
-        List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        String deviceName;
-        String deviceCategoryName;
-        String deviceTypeName;
-        String runState;
-        int FaultCount;
-        double runTimeCount;
-        double useTime;
-        deviceName=isDevice.getDeviceNo();
-        deviceCategoryName=isDevice.getDeviceCodeName();
-        String device_code_id=isDevice.getDeviceCodeId();
-        IsDeviceCode isDeviceCode=isDeviceCodeService.get(device_code_id);
-        if(isDeviceCode!=null){
-            deviceTypeName=isDeviceCode.getModel();
-        }else{
-            deviceTypeName="";
+    public List<Map<String, Object>> deviceClick(HttpServletRequest request) {
+        //String deviceID=request.getParameter("deviceID");
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String deviceName=request.getParameter("deviceName");
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+			String deviceID;
+			String deviceCategoryName;
+			String deviceTypeName;
+			String runState;
+			int FaultCount;
+			double runTimeCount;
+			double useTime;
+			deviceID = isDevice.getId();
+			deviceCategoryName = isDevice.getDeviceCodeName();
+			String device_code_id = isDevice.getDeviceCodeId();
+			IsDeviceCode isDeviceCode = isDeviceCodeService.get(device_code_id);
+			if (isDeviceCode != null) {
+				deviceTypeName = isDeviceCode.getModel();
+			} else {
+				deviceTypeName = "";
+			}
+			runState = isDevice.getDeviceStatus();
+			System.out.println(runState);
+			switch (runState) {
+			case "0":
+				runState = "Sleep";
+				break;
+			case "1":
+				runState = "Run";
+				break;
+			case "2":
+				runState = "Fault";
+				break;
+			case "9":
+				runState = "abandon";
+				break;
+			}
+			IsCarCount isCarCount = null;
+			useTime = isDeviceRecService.getTimeById(deviceID);
+			for (IsCarCount isCarCount2:isCarCountService.getAllByDeviceId(deviceID)) {
+				isCarCount = isCarCount2;
+			}
+			if (isCarCount != null) {					
+				if(isCarCount.getErrCount() != null)
+					FaultCount = isCarCount.getErrCount();
+				else
+					FaultCount = 0;
+				runTimeCount = isCarCountService.get(isCarCount).getWorkTime();
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("deviceName", deviceName);
+				map.put("deviceCategoryName", deviceCategoryName);
+				map.put("deviceTypeName", deviceTypeName);
+				map.put("runState", runState);
+				map.put("FaultCount", FaultCount);
+				map.put("runTimeCount", runTimeCount);
+				map.put("useTime", useTime);
+				mapList.add(map);
+			} else {
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("deviceName", deviceName);
+				map.put("deviceCategoryName", deviceCategoryName);
+				map.put("deviceTypeName", deviceTypeName);
+				map.put("runState", runState);
+				map.put("FaultCount", 0);
+				map.put("runTimeCount", 0.0);
+				map.put("useTime", 0.0);
+				mapList.add(map);
+			} 
         }
-        runState=isDevice.getDeviceStatus();
-        System.out.println(runState);
-        switch (runState){
-            case "0":
-                runState="Sleep";
-                break;
-            case "1":
-                runState="Run";
-                break;
-            case "2":
-                runState="Fault";
-                break;
-            case "9":
-                runState="abandon";
-                break;
-        }
-        IsCarCount isCarCount=new IsCarCount(deviceID,null,null,null,null,null,null,null,null,null,null,null);
-        useTime=isDeviceRecService.getTimeById(deviceID);
-        if(isCarCountService.get(isCarCount)!=null){
-            FaultCount= isCarCountService.get(isCarCount).getErrCount();
-            runTimeCount=isCarCountService.get(isCarCount).getWorkTime();
-            Map<String, Object> map = MapUtils.newHashMap();
-            map.put("deviceName",deviceName);
-            map.put("deviceCategoryName",deviceCategoryName);
-            map.put("deviceTypeName",deviceTypeName);
-            map.put("runState",runState);
-            map.put("FaultCount",FaultCount);
-            map.put("runTimeCount",runTimeCount);
-            map.put("useTime",useTime);
-            mapList.add(map);
-        }else{
-            Map<String, Object> map = MapUtils.newHashMap();
-            map.put("deviceName",deviceName);
-            map.put("deviceCategoryName",deviceCategoryName);
-            map.put("deviceTypeName",deviceTypeName);
-            map.put("runState",runState);
-            map.put("FaultCount","");
-            map.put("runTimeCount","");
-            map.put("useTime",useTime);
-            mapList.add(map);
-        }
-
         return mapList;
     }
 
@@ -278,5 +292,6 @@ public class PageDeviceManController extends BaseController{
         }
         return mapList;
     }
+    
 }
 		

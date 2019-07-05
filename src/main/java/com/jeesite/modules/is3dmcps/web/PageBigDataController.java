@@ -140,8 +140,7 @@ public class PageBigDataController extends BaseController{
 								mapF.put("finishWeight", finishWeight);
 								mapF.put("totalWeightLast", 0);								
 								mapList.add(mapF);
-							}
-							
+							}							
 						}
 					}
 				}

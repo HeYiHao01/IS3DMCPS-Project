@@ -21,4 +21,9 @@ import com.jeesite.modules.twms.entity.TwmsPltitem;
 public interface TwmsPltitemDao extends CrudDao<TwmsPltitem> {
 	public List<TwmsPltitem> getBrandCount();
 	public List<BoxStatics> getBoxStatics(@Param("vpltnum") String vpltnum);
+	public List<TwmsPltitem> getNewBrandCount();
+	public List<BoxStatics> getNewBoxStatics(@Param("vpltnum") String vpltnum);
+	public List<BoxStatics> getContainLocation();
+	public int getRealCase();
+	public int getEmptyCase();
 }

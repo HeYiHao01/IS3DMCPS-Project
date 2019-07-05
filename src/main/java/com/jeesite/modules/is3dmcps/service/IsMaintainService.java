@@ -87,4 +87,16 @@ public class IsMaintainService extends CrudService<IsMaintainDao, IsMaintain> {
 	public IsMaintain getByName(String name){
 		return this.dao.getByName(name);
 	}
+	
+	public IsMaintain getById(String id){
+		return this.dao.getById(id);
+	}
+	
+	/**
+	 * 根据维保种类统计
+	 * @return
+	 */
+	public List<IsMaintain> maintainTypeCount(){
+		return this.dao.maintainTypeCount();
+	}
 }

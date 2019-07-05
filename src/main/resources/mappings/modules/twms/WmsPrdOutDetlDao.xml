@@ -20,4 +20,14 @@
 	<select id="getDetailMonthly" resultType="WmsPrdOutDetl" parameterType="String">
 		select mat_nm,sum(weight) as weight from wms_prd_out_detl_just where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
 	</select>
+	
+	<select id="getNewDetailByBatchNo" resultType="WmsPrdOutDetl" parameterType="String">
+		select * from wms_prd_out_detl where batch_no = #{batchNo}
+	</select>
+	<select id="getNewDetailByWN" resultType="WmsPrdOutDetl" parameterType="String">
+		select * from wms_prd_out_detl where wo_no = #{workNo}
+	</select>
+	<select id="getNewDetailMonthly" resultType="WmsPrdOutDetl" parameterType="String">
+		select mat_nm,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+	</select>
 </mapper>

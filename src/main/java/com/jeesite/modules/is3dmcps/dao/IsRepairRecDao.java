@@ -3,6 +3,8 @@
  */
 package com.jeesite.modules.is3dmcps.dao;
 
+import java.util.List;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
@@ -16,4 +18,5 @@ import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
 public interface IsRepairRecDao extends CrudDao<IsRepairRec> {
 	public Integer getRepairCount(String repairTime);
 	public String getRepairResult(String faultsId);
+	public List<IsRepairRec> repairList();
 }

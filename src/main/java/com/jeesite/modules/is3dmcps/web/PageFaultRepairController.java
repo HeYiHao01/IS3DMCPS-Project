@@ -1,5 +1,6 @@
 package com.jeesite.modules.is3dmcps.web;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -73,9 +74,15 @@ public class PageFaultRepairController extends BaseController{
     			}
     		}   
             if (state.equals("Normal")) {
-    			for(IsKnowledge isKnowledge:isKnowledgeService.getAll()){
-    				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
-    			}			
+            	List<Map<String, Object>> info = ListUtils.newArrayList();
+    			for(IsKnowledge isKnowledge:isKnowledgeService.getAll()){    
+    				//System.err.println(isKnowledge.getTitle());
+    				Map<String, Object> infoJson = MapUtils.newHashMap();
+    				infoJson.put("recommendedSolution", isKnowledge.getTitle());
+    				info.add(infoJson);
+    			}
+    			map.put("state",state);
+                map.put("infoJsonStr",info);
     		}else if (state.equals("Fault")) {						
     			for(IsKnowledge isKnowledge:isKnowledgeService.getKnowledgeById(isFaults.getKnowledgeId())){
     				faultId = isFaults.getId();
@@ -85,10 +92,11 @@ public class PageFaultRepairController extends BaseController{
     				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
     				infoJsonStr.put("recommendedSolutionContent", isKnowledge.getContent());
     			}
-    		}else {			
-    		}     
-            map.put("state",state);
-            map.put("infoJsonStr",infoJsonStr);
+    			map.put("state",state);
+                map.put("infoJsonStr",infoJsonStr);
+    		}else {		
+    			map.put("Error", "状态参数错误");
+    		}                 
             mapList.add(map);
         }                
 		return mapList;
@@ -190,6 +198,71 @@ public class PageFaultRepairController extends BaseController{
     	}
     	return mapList;
     }
+    
+    /**
+     * 设备故障信息展示与查询
+     * Json:
+	[{"faultName": "升降输送机故障","deviceName": "智能双向穿梭车","deviceNumber": "Car1","faultCode": "fault001","faultTime": "2019-05-2 00::00:00 ","repairsPersonnel": "兰州烟草","status": "新故障"}]
+     * @return
+     */
+    @RequestMapping(value = {"faultsInfoList", ""})
+    public List<Map<String, Object>> faultsInfoList() {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		for(IsFaults isFaults:isFaultsService.faultsList()){
+			Map<String, Object> map = MapUtils.newHashMap();
+			map.put("faultName", isFaults.getName());
+			for(IsDevice isDevice:isDeviceService.getDeviceById(isFaults.getDeviceId())){
+				map.put("deviceName", isDevice.getDeviceCodeName());
+				map.put("deviceNumber", isDevice.getDeviceNo());
+			}
+			map.put("faultCode", isFaults.getFaultsCode());
+			map.put("faultTime", String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(isFaults.getFaultsTime())));
+			map.put("repairsPersonnel", isFaults.getOperator());
+			if (isFaults.getStatus().equals("0")) {
+				map.put("status", "新故障");
+			}else if (isFaults.getStatus().equals("2")) {
+				map.put("status", "已受理");
+			}else if (isFaults.getStatus().equals("3")) {
+				map.put("status", "维修完成");
+			}else if (isFaults.getStatus().equals("4")) {
+				map.put("status", "报废处理");
+			}else {
+				map.put("status", "Error");
+			}
+			mapList.add(map);
+		}
+		return mapList;
+	}
+    
+    /**
+     * 维修记录信息展示与查询 
+     * Json:
+	 *[{"faultName": "升降输送机故障","repairResults": "维修失败","repairPersonnel": "兰州烟草","repairTime": "2019-05-2 00::00:00 "}]
+     * @return
+     */
+    @RequestMapping(value = {"faultsRepairList", ""})
+    public List<Map<String, Object>> faultsRepairList() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	for(IsRepairRec isRepairRec:isRepairRecService.repairList()){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("faultName", isRepairRec.getFaultsName());
+    		if (isRepairRec.getResults().equals("0")) {
+				map.put("repairResults", "维修中");
+			}else if(isRepairRec.getResults().equals("2")) {
+				map.put("repairResults", "维修完成，恢复使用");
+			}else if(isRepairRec.getResults().equals("3")) {
+				map.put("repairResults", "维修完成，设备闲置");
+			}else if(isRepairRec.getResults().equals("4")) {
+				map.put("repairResults", "维修失败，设备报废");
+			}else {
+				map.put("repairResults", "Error");
+			} 
+    		map.put("repairPersonnel", isRepairRec.getOperator());
+    		map.put("faultTime", String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(isRepairRec.getRepairTime())));
+    		mapList.add(map);
+    	}
+		return mapList;
+	}
 }
 	
 	

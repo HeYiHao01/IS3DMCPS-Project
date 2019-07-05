@@ -18,4 +18,6 @@ import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 public interface IsMaintainDao extends CrudDao<IsMaintain> {
 	public List<IsMaintain> getMaintainPopContent(String deviceCodeId);
 	public IsMaintain getByName(String name);
+	public IsMaintain getById(String id);
+	public List<IsMaintain> maintainTypeCount();
 }

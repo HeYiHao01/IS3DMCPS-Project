@@ -3,6 +3,8 @@
  */
 package com.jeesite.modules.is3dmcps.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,5 +85,13 @@ public class IsRepairRecService extends CrudService<IsRepairRecDao, IsRepairRec>
 	 */
 	public String getRepairResult(String faultsId) {
 		return this.dao.getRepairResult(faultsId);
+	}
+	
+	/**
+	 * 获取维修记录
+	 * @return
+	 */
+	public List<IsRepairRec> repairList(){
+		return this.dao.repairList();
 	}
 }

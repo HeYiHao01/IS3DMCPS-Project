@@ -101,4 +101,25 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 	public List<WmsPrdInDetl> getDetailByWN(String workNo){
 		return this.dao.getDetailByWN(workNo);
 	}
+	
+	/**
+	 * 根据batch_no获取工单详情
+	 */
+	public List<WmsPrdInDetl> getNewDetailByBatchNo(String batchNo){
+		return this.dao.getNewDetailByBatchNo(batchNo);
+	}
+	
+	/**
+	 * 根据月份获取brand和入库总重
+	 */
+	public List<WmsPrdInDetl> getNewDetailMonthly(String month){
+		return this.dao.getNewDetailMonthly(month);
+	}
+	
+	/**
+	 * 根据wo_no获取工单详情
+	 */
+	public List<WmsPrdInDetl> getNewDetailByWN(String workNo){
+		return this.dao.getNewDetailByWN(workNo);
+	}
 }

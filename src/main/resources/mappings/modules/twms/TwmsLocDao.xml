@@ -14,4 +14,13 @@
 	<select id="getAll" resultType="TwmsLoc">
 		select * from twms_loc_just
 	</select>
+	<select id="getNewAll" resultType="TwmsLoc">
+		select * from twms_loc
+	</select>
+	<select id="getGoodsAllocation" resultType="int">
+		select count(OBJECTTYPE) from twms_loc where LOCSTATUS = 'Normal' and OBJECTTYPE = 'TBuff'
+	</select>
+	<select id="getNormalGoodsAllocation" resultType="int">
+		select count(OBJECTTYPE) from twms_loc where OBJECTTYPE = 'TBuff'
+	</select>
 </mapper>

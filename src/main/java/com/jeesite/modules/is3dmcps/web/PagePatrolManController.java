@@ -1,5 +1,6 @@
 package com.jeesite.modules.is3dmcps.web;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +121,30 @@ public class PagePatrolManController extends BaseController{
         }
         return mapList;
     }
+    
+    /**
+     * 设备巡检记录展示与查询
+     * Json:
+	 *[{"inspectionName": "拆码垛机保养","inspectionRecord": "加快检修","inspectionPersonnel": "兰州烟草","inspectionTime": "2019-05-2 00::00:00 "}]
+     * @return
+     */
+    @RequestMapping(value = {"patrolList", ""})
+    public List<Map<String, Object>> patrolList() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList(); 
+    	for(IsPatrolRec isPatrolRec:isPatrolRecService.patrolList()){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("inspectionName", isPatrolRec.getPatrolName());
+    		if (isPatrolRec.getRecord() != null) {
+				map.put("inspectionRecord", isPatrolRec.getRecord());
+			}else {
+				map.put("inspectionRecord", "");
+			}
+    		map.put("inspectionPersonnel", isPatrolRec.getOperator());
+    		map.put("inspectionTime", String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(isPatrolRec.getPatrolTime())));
+    		mapList.add(map);
+    	}
+    	return mapList;
+	}
     
     /**
      * 需要进行人工巡检的设备

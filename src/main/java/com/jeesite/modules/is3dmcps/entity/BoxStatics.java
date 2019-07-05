@@ -1,18 +1,27 @@
 package com.jeesite.modules.is3dmcps.entity;
 
 public class BoxStatics {
+	private int lineNum;	
 	private int line;
 	private int lie;
 	private int layer;
+	private Double weight;
 	private Double locationX;
 	private Double locationY;
 	private Double locationZ;
+	private String boxNum;
 	private String vplnum;
 	private String pltnum;
 	private String currloc;
 	private String itemdesc;
 	private String lotnum;
 	private String enterdate;
+	public int getLineNum() {
+		return lineNum;
+	}
+	public void setLineNum(int lineNum) {
+		this.lineNum = lineNum;
+	}
 	public int getLine() {
 		return line;
 	}
@@ -34,7 +43,7 @@ public class BoxStatics {
 	public Double getLocationX() {
 		return locationX;
 	}
-	public void setLocation_x(Double locationX) {
+	public void setLocationX(Double locationX) {
 		this.locationX = locationX;
 	}
 	public Double getLocationY() {
@@ -84,5 +93,17 @@ public class BoxStatics {
 	}
 	public void setEnterdate(String enterdate) {
 		this.enterdate = enterdate;
+	}
+	public String getBoxNum() {
+		return boxNum;
+	}
+	public void setBoxNum(String boxNum) {
+		this.boxNum = boxNum;
+	}
+	public Double getWeight() {
+		return weight;
+	}
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 }

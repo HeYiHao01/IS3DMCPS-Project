@@ -17,4 +17,7 @@
 	<select id="getRepairResult" resultType="java.lang.String" parameterType="String">
 		select results from is_repair_rec where faults_id=#{faultsId} and rownum=1 order by repair_time
 	</select>
+	<select id="repairList" resultType="IsRepairRec">
+		select * from is_repair_rec
+	</select>
 </mapper>

@@ -102,4 +102,30 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	public List<WmsGdxdIn> getByWN(String woNo){
 		return this.dao.getByWN(woNo);
 	}
+	
+	/**
+	 * 获取工单信息(完成比例等)
+	 * @return
+	 */
+	public List<WmsGdxdIn> getNewWorkInfo(String date) {
+		return this.dao.getNewWorkInfo(date);
+	}
+	
+	/**
+	 * 根据日期获取工单信息
+	 */
+	public List<WmsGdxdIn> getNewAllIn(String date){
+		return this.dao.getNewAllIn(date);
+	}
+	
+	/**
+	 * 根据日期获取batch_no和timeCost(end_time-start_time)
+	 */
+	public List<WmsGdxdIn> getNewBatchAndTime(String date){
+		return this.dao.getNewBatchAndTime(date);
+	}
+	
+	public List<WmsGdxdIn> getNewByWN(String woNo){
+		return this.dao.getNewByWN(woNo);
+	}
 }

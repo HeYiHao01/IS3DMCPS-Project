@@ -90,8 +90,8 @@ public class IsMaintainRecService extends CrudService<IsMaintainRecDao, IsMainta
 	/**
 	 * 获取保养弹窗的maintainID和maintainName
 	 */
-	public List<IsMaintainRec> getMaintainPop(String maintainId) {
-		return this.dao.getMaintainPop(maintainId);
+	public List<IsMaintainRec> getMaintainPop(String deviceNo) {
+		return this.dao.getMaintainPop(deviceNo);
 	}
 	
 	/**
@@ -99,6 +99,14 @@ public class IsMaintainRecService extends CrudService<IsMaintainRecDao, IsMainta
 	 */
 	public int getMaintainPlanCount(String planDate){
 		return super.dao.getMaintainPlanCount(planDate);
+	}
+	
+	/**
+	 * 获取维修记录（all）
+	 * @return
+	 */
+	public List<IsMaintainRec> maintainList(){
+		return this.dao.maintainList();
 	}
 	
 	/**

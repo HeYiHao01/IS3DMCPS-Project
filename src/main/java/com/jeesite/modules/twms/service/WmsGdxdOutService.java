@@ -97,4 +97,25 @@ public class WmsGdxdOutService extends CrudService<WmsGdxdOutDao, WmsGdxdOut> {
 	public List<WmsGdxdOut> getByWN(String woNo){
 		return this.dao.getByWN(woNo);
 	}
+	
+	/**
+	 * 根据日期获取出库工单信息
+	 * @param date
+	 * @return
+	 */
+	public List<WmsGdxdOut> getNewAllOut(String date){
+		return this.dao.getNewAllOut(date);
+	}
+	/**
+	 * 根据日期获取出库batch_no和timeCost
+	 * @param date
+	 * @return
+	 */
+	public List<WmsGdxdOut> getNewBatchAndTime(String date){
+		return this.dao.getNewBatchAndTime(date);
+	}
+	
+	public List<WmsGdxdOut> getNewByWN(String woNo){
+		return this.dao.getNewByWN(woNo);
+	}
 }

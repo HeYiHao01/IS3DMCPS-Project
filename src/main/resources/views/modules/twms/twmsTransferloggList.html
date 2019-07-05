@@ -1,0 +1,297 @@
+<% layout('/layouts/default.html', {title: 'twms_transferlogg管理', libs: ['dataGrid']}){ %>
+<div class="main-content">
+	<div class="box box-main">
+		<div class="box-header">
+			<div class="box-title">
+				<i class="fa fa-list-alt"></i> ${text('twms_transferlogg管理')}
+			</div>
+			<div class="box-tools pull-right">
+				<a href="#" class="btn btn-default" id="btnSearch" title="${text('查询')}"><i class="fa fa-filter"></i> ${text('查询')}</a>
+				<% if(hasPermi('twms:twmsTransferlogg:edit')){ %>
+					<a href="${ctx}/twms/twmsTransferlogg/form" class="btn btn-default btnTool" title="${text('新增twms_transferlogg')}"><i class="fa fa-plus"></i> ${text('新增')}</a>
+				<% } %>
+			</div>
+		</div>
+		<div class="box-body">
+			<#form:form id="searchForm" model="${twmsTransferlogg}" action="${ctx}/twms/twmsTransferlogg/listData" method="post" class="form-inline hide"
+					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
+				<div class="form-group">
+					<label class="control-label">${text('jobnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="jobnum" maxlength="20" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('objecttype')}：</label>
+					<div class="control-inline">
+						<#form:input path="objecttype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('lotnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="lotnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('conveytype')}：</label>
+					<div class="control-inline">
+						<#form:input path="conveytype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('priority')}：</label>
+					<div class="control-inline">
+						<#form:input path="priority" maxlength="3" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('vpltnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="vpltnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pltnum')}：</label>
+					<div class="control-inline">
+						<#form:input path="pltnum" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('pltautotype')}：</label>
+					<div class="control-inline">
+						<#form:input path="pltautotype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('plttype')}：</label>
+					<div class="control-inline">
+						<#form:input path="plttype" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('ssysnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="ssysnode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('sloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="sloc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('slocdcs')}：</label>
+					<div class="control-inline">
+						<#form:input path="slocdcs" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dsysnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="dsysnode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="dloc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dlocdcs')}：</label>
+					<div class="control-inline">
+						<#form:input path="dlocdcs" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('bgndate')}：</label>
+					<div class="control-inline">
+						<#form:input path="bgndate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('enddate')}：</label>
+					<div class="control-inline">
+						<#form:input path="enddate" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('routeid')}：</label>
+					<div class="control-inline">
+						<#form:input path="routeid" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('subfromsysnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="subfromsysnode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('subfrom')}：</label>
+					<div class="control-inline">
+						<#form:input path="subfrom" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('subtosysnode')}：</label>
+					<div class="control-inline">
+						<#form:input path="subtosysnode" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('subto')}：</label>
+					<div class="control-inline">
+						<#form:input path="subto" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('controlid')}：</label>
+					<div class="control-inline">
+						<#form:input path="controlid" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('status')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('plterrcode')}：</label>
+					<div class="control-inline">
+						<#form:input path="plterrcode" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('prerequest')}：</label>
+					<div class="control-inline">
+						<#form:input path="prerequest" maxlength="50" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('hisroute')}：</label>
+					<div class="control-inline">
+						<#form:input path="hisroute" maxlength="200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('remark')}：</label>
+					<div class="control-inline">
+						<#form:input path="remark" maxlength="200" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvstock1')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvstock1" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('mvstock2')}：</label>
+					<div class="control-inline">
+						<#form:input path="mvstock2" maxlength="60" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('onlydloc')}：</label>
+					<div class="control-inline">
+						<#form:input path="onlydloc" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dcsexestep')}：</label>
+					<div class="control-inline">
+						<#form:input path="dcsexestep" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('dcsgroup')}：</label>
+					<div class="control-inline">
+						<#form:input path="dcsgroup" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('curreqp')}：</label>
+					<div class="control-inline">
+						<#form:input path="curreqp" maxlength="36" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('jobid')}：</label>
+					<div class="control-inline">
+						<#form:input path="jobid" maxlength="10" class="form-control width-120"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary btn-sm">${text('查询')}</button>
+					<button type="reset" class="btn btn-default btn-sm">${text('重置')}</button>
+				</div>
+			</#form:form>
+			<table id="dataGrid"></table>
+			<div id="dataGridPage"></div>
+		</div>
+	</div>
+</div>
+<% } %>
+<script>
+// 初始化DataGrid对象
+$('#dataGrid').dataGrid({
+	searchForm: $("#searchForm"),
+	columnModel: [
+		{header:'${text('jobnum')}', name:'jobnum', index:'a.jobnum', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
+			return '<a href="${ctx}/twms/twmsTransferlogg/form?loggnum='+row.loggnum+'" class="btnList" data-title="${text('编辑twms_transferlogg')}">'+(val||row.id)+'</a>';
+		}},
+		{header:'${text('objecttype')}', name:'objecttype', index:'a.objecttype', width:150, align:"left"},
+		{header:'${text('lotnum')}', name:'lotnum', index:'a.lotnum', width:150, align:"left"},
+		{header:'${text('conveytype')}', name:'conveytype', index:'a.conveytype', width:150, align:"left"},
+		{header:'${text('priority')}', name:'priority', index:'a.priority', width:150, align:"center"},
+		{header:'${text('vpltnum')}', name:'vpltnum', index:'a.vpltnum', width:150, align:"left"},
+		{header:'${text('pltnum')}', name:'pltnum', index:'a.pltnum', width:150, align:"left"},
+		{header:'${text('pltautotype')}', name:'pltautotype', index:'a.pltautotype', width:150, align:"left"},
+		{header:'${text('plttype')}', name:'plttype', index:'a.plttype', width:150, align:"left"},
+		{header:'${text('ssysnode')}', name:'ssysnode', index:'a.ssysnode', width:150, align:"left"},
+		{header:'${text('sloc')}', name:'sloc', index:'a.sloc', width:150, align:"left"},
+		{header:'${text('slocdcs')}', name:'slocdcs', index:'a.slocdcs', width:150, align:"left"},
+		{header:'${text('dsysnode')}', name:'dsysnode', index:'a.dsysnode', width:150, align:"left"},
+		{header:'${text('dloc')}', name:'dloc', index:'a.dloc', width:150, align:"left"},
+		{header:'${text('dlocdcs')}', name:'dlocdcs', index:'a.dlocdcs', width:150, align:"left"},
+		{header:'${text('bgndate')}', name:'bgndate', index:'a.bgndate', width:150, align:"left"},
+		{header:'${text('enddate')}', name:'enddate', index:'a.enddate', width:150, align:"left"},
+		{header:'${text('routeid')}', name:'routeid', index:'a.routeid', width:150, align:"left"},
+		{header:'${text('subfromsysnode')}', name:'subfromsysnode', index:'a.subfromsysnode', width:150, align:"left"},
+		{header:'${text('subfrom')}', name:'subfrom', index:'a.subfrom', width:150, align:"left"},
+		{header:'${text('subtosysnode')}', name:'subtosysnode', index:'a.subtosysnode', width:150, align:"left"},
+		{header:'${text('subto')}', name:'subto', index:'a.subto', width:150, align:"left"},
+		{header:'${text('controlid')}', name:'controlid', index:'a.controlid', width:150, align:"left"},
+		{header:'${text('status')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text('未知')}', true);
+		}},
+		{header:'${text('plterrcode')}', name:'plterrcode', index:'a.plterrcode', width:150, align:"left"},
+		{header:'${text('prerequest')}', name:'prerequest', index:'a.prerequest', width:150, align:"left"},
+		{header:'${text('hisroute')}', name:'hisroute', index:'a.hisroute', width:150, align:"left"},
+		{header:'${text('remark')}', name:'remark', index:'a.remark', width:150, align:"left"},
+		{header:'${text('mvstock1')}', name:'mvstock1', index:'a.mvstock1', width:150, align:"left"},
+		{header:'${text('mvstock2')}', name:'mvstock2', index:'a.mvstock2', width:150, align:"left"},
+		{header:'${text('onlydloc')}', name:'onlydloc', index:'a.onlydloc', width:150, align:"left"},
+		{header:'${text('dcsexestep')}', name:'dcsexestep', index:'a.dcsexestep', width:150, align:"left"},
+		{header:'${text('dcsgroup')}', name:'dcsgroup', index:'a.dcsgroup', width:150, align:"left"},
+		{header:'${text('curreqp')}', name:'curreqp', index:'a.curreqp', width:150, align:"left"},
+		{header:'${text('jobid')}', name:'jobid', index:'a.jobid', width:150, align:"center"},
+		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
+			var actions = [];
+			<% if(hasPermi('twms:twmsTransferlogg:edit')){ %>
+				actions.push('<a href="${ctx}/twms/twmsTransferlogg/form?loggnum='+row.loggnum+'" class="btnList" title="${text('编辑twms_transferlogg')}"><i class="fa fa-pencil"></i></a>&nbsp;');
+				actions.push('<a href="${ctx}/twms/twmsTransferlogg/delete?loggnum='+row.loggnum+'" class="btnList" title="${text('删除twms_transferlogg')}" data-confirm="${text('确认要删除该twms_transferlogg吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			<% } %>
+			return actions.join('');
+		}}
+	],
+	// 加载成功后执行事件
+	ajaxSuccess: function(data){
+		
+	}
+});
+</script>

@@ -120,11 +120,13 @@ public class CompareDate {
 	}*/
 	
 	/*public static void main(String[] args) {		
-		for(String date:CompareDate.getSevenDate())	{
-			System.out.println(simplifyDate(date));
-			Timestamp timestamp = Timestamp.valueOf("11-5月 -19 12.16.00.000000  下午");
-			System.out.println(simplifyTime((timestamp)));
-		}
-		System.out.println(getTimeCost(new Date("+00 08:26:25.820000")));
+//		for(String date:CompareDate.getSevenDate())	{
+//			System.out.println(simplifyDate(date));
+//			Timestamp timestamp = Timestamp.valueOf("11-5月 -19 12.16.00.000000  下午");
+//			System.out.println(simplifyTime((timestamp)));
+//		}
+//		System.out.println(getTimeCost(new Date("+00 08:26:25.820000")));
+		Calendar calendar = Calendar.getInstance();			
+		System.out.println(calendar.get(calendar.YEAR)+"."+getPastDate(1));
 	}*/
 }

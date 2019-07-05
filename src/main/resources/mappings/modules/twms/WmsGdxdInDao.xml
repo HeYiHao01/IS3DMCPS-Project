@@ -23,4 +23,17 @@
 	<select id="getByWN" resultType="WmsGdxdIn" parameterType="String">
 		select * from wms_gdxd_in_just where wo_no = #{woNo}
 	</select>
+	
+	<select id="getNewAllIn" resultType="WmsGdxdIn" parameterType="String">
+		select * from wms_gdxd_in where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
+	<select id="getNewByWN" resultType="WmsGdxdIn" parameterType="String">
+		select * from wms_gdxd_in where wo_no = #{woNo}
+	</select>
+	<select id="getNewWorkInfo" resultType="WmsGdxdIn" parameterType="String">
+		select boxtotalnum/plan_amount as plan_amount,wo_no,wo_start_time from wms_gdxd_in where to_char(wo_start_time,'mm.dd') = #{date}
+	</select>
+	<select id="getNewBatchAndTime" resultType="WmsGdxdIn" parameterType="String">
+		select batch_no,floor(((to_date(to_char(cast(wo_end_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') - to_date(to_char(cast(wo_start_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')) *24*60)) as boxtotalnum from wms_gdxd_in where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+	</select>
 </mapper>

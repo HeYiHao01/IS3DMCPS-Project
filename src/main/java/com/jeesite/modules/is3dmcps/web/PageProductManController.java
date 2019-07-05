@@ -228,8 +228,8 @@ public class PageProductManController extends BaseController{
         	startTime = CompareDate.simplifyTime(wmsGdxdIn.getWoStartTime());
         	System.err.println(startTime);
         	int index = startTime.indexOf(":");
-    		startTimeHour = startTime.substring(index-2,index);
-    		startTimeMinute = startTime.substring(index+1,index+3);
+    		startTimeHour = startTime.substring(0,index);
+    		startTimeMinute = startTime.substring(index+1);
         	completionRatio = (int)(wmsGdxdIn.getPlanAmount() * 100);        	
         	map.put("completionRatio",completionRatio);
             map.put("workOrderNumber",workOrderNumber);

@@ -11,5 +11,10 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="getAll" resultType="IsKnowledge">
+		select * from is_knowledge
+	</select>
+	<select id="getKnowledgeById" resultType="IsKnowledge">
+		select * from is_knowledge where ID = #{id}
+	</select>
 </mapper>

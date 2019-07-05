@@ -12,13 +12,16 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="need_maintain" resultType="java.lang.Integer">
-		select count(*) from is_maintain_rec where rec_status=0
+		select count(*) from is_maintain_rec where rec_status='0'
 	</select>
 	<select id="need_maintain_details" resultType="IsMaintainRec">
-		select * from is_maintain_rec where rec_status=0
+		select * from is_maintain_rec where rec_status='0'
 	</select>
-	<select id="getMaintainPop" resultType="IsMaintainRec">
-		select maintain_id,maintain_name from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id
+	<select id="maintainList" resultType="IsMaintainRec">
+		select * from is_maintain_rec
+	</select>
+	<select id="getMaintainPop" resultType="IsMaintainRec" parameterType="String">
+		select maintain_id,maintain_name from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id and device_no = #{deviceNo} and rec_status = '0'
 	</select>
 	<select id="getMaintainPlanCount" resultType="java.lang.Integer" parameterType="String">
 		select count(rec_status) from is_maintain_rec where to_char(plan_date,'yyyy.mm.dd') = #{planDate}

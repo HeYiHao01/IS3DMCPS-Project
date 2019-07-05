@@ -20,4 +20,8 @@ public interface WmsGdxdOutDao extends CrudDao<WmsGdxdOut> {
 	public List<WmsGdxdOut> getAllOut(String date);
 	public List<WmsGdxdOut> getBatchAndTime(String date);
 	public List<WmsGdxdOut> getByWN(String woNo);
+	
+	public List<WmsGdxdOut> getNewAllOut(String date);
+	public List<WmsGdxdOut> getNewBatchAndTime(String date);
+	public List<WmsGdxdOut> getNewByWN(String woNo);
 }

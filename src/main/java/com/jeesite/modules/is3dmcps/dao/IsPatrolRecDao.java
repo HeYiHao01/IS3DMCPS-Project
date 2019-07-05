@@ -8,6 +8,7 @@ import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 巡检记录DAO接口
@@ -18,4 +19,5 @@ import java.util.Date;
 public interface IsPatrolRecDao extends CrudDao<IsPatrolRec> {
 	public Date getLastTime(String id);
 	public Integer getPatrolCount(String date);
+	public List<IsPatrolRec> patrolList();
 }

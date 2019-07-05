@@ -17,4 +17,7 @@ import com.jeesite.modules.twms.entity.TwmsLoc;
 @MyBatisDao
 public interface TwmsLocDao extends CrudDao<TwmsLoc> {
 	public List<TwmsLoc> getAll();
+	public List<TwmsLoc> getNewAll();
+	public int getGoodsAllocation();
+	public int getNormalGoodsAllocation();
 }

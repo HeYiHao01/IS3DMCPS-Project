@@ -11,6 +11,9 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
+	<select id="faultsList" resultType="IsFaults" parameterType="String">
+		select * from is_faults
+	</select>
 	<select id="getFaultsCount" resultType="java.lang.Integer" parameterType="String">
 		select count(*) from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3') and to_char(faults_time,'yyyy.mm.dd') = #{faultsTime}
 	</select>

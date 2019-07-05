@@ -18,5 +18,9 @@ import com.jeesite.modules.twms.entity.WmsPrdOutDetl;
 public interface WmsPrdOutDetlDao extends CrudDao<WmsPrdOutDetl> {
 	public List<WmsPrdOutDetl> getDetailByBatchNo(String batchNo);
 	public List<WmsPrdOutDetl> getDetailMonthly(String month);	
-	public List<WmsPrdOutDetl> getDetailByWN(String workNo);	
+	public List<WmsPrdOutDetl> getDetailByWN(String workNo);
+	
+	public List<WmsPrdOutDetl> getNewDetailByBatchNo(String batchNo);
+	public List<WmsPrdOutDetl> getNewDetailMonthly(String month);	
+	public List<WmsPrdOutDetl> getNewDetailByWN(String workNo);
 }

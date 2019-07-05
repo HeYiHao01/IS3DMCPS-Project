@@ -116,4 +116,12 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
     public List<IsFaults> getFaultsByName(String name){
     	return this.dao.getFaultsByName(name);
     }
+    
+    /**
+     * 获取故障记录
+     * @return
+     */
+    public List<IsFaults> faultsList(){
+    	return this.dao.faultsList();
+    }
 }

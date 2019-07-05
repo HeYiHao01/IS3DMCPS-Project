@@ -79,4 +79,27 @@ public class TwmsLocService extends CrudService<TwmsLocDao, TwmsLoc> {
 	public List<TwmsLoc> getAll(){
 		return this.dao.getAll();
 	}
+	
+	/**
+	 * 获取货位状态表详情（新服务器上的数据）
+	 */
+	public List<TwmsLoc> getNewAll(){
+		return this.dao.getNewAll();
+	}
+	
+	/**
+	 * 获取货位数
+	 * @return
+	 */
+	public int getGoodsAllocation(){
+		return this.dao.getGoodsAllocation();
+	}
+	
+	/**
+	 * 获取Normal货位数
+	 * @return
+	 */
+	public int getNormalGoodsAllocation(){
+		return this.dao.getNormalGoodsAllocation();
+	}
 }

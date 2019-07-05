@@ -88,4 +88,42 @@ public class TwmsPltitemService extends CrudService<TwmsPltitemDao, TwmsPltitem>
 	public List<BoxStatics> getBoxStatics(@Param("vpltnum") String vpltnum){
 		return this.dao.getBoxStatics(vpltnum);
 	}
+	
+	/**
+	 * 获取各品牌当前库存数量
+	 */
+	public List<TwmsPltitem> getNewBrandCount() {
+		return this.dao.getNewBrandCount();
+	}
+	
+	/**
+	 * 货箱刷新
+	 * @return
+	 */
+	public List<BoxStatics> getContainLocation(){
+		return this.dao.getContainLocation();
+	}
+	
+	/**
+	 * 获取货箱状态数据
+	 */
+	public List<BoxStatics> getNewBoxStatics(@Param("vpltnum") String vpltnum){
+		return this.dao.getNewBoxStatics(vpltnum);
+	}
+	
+	/**
+	 * 获取实箱数
+	 * @return
+	 */
+	public int getRealCase() {
+		return this.dao.getRealCase();
+	}
+	
+	/**
+	 * 获取空箱数
+	 * @return
+	 */
+	public int getEmptyCase() {
+		return this.dao.getEmptyCase();
+	}
 }

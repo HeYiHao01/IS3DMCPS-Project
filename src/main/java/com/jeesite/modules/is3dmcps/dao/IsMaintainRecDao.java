@@ -18,7 +18,8 @@ import java.util.List;
 public interface IsMaintainRecDao extends CrudDao<IsMaintainRec> {
     public int need_maintain();
     public List<IsMaintainRec> need_maintain_details();
-    public List<IsMaintainRec> getMaintainPop(String maintainId);
+    public List<IsMaintainRec> maintainList();
+    public List<IsMaintainRec> getMaintainPop(String deviceNo);
     public int getMaintainPlanCount(String planDate);
     public int getFinishCount(String maintainTime);
 }

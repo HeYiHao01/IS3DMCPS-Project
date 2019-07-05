@@ -12,6 +12,7 @@ import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
 import com.jeesite.modules.is3dmcps.dao.IsPatrolRecDao;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 巡检记录Service
@@ -84,5 +85,13 @@ public class IsPatrolRecService extends CrudService<IsPatrolRecDao, IsPatrolRec>
 	 */
 	public Integer getPatrolCount(String date){
 		return super.dao.getPatrolCount(date);
+	}
+	
+	/**
+	 * 获取所有巡检记录
+	 * @return
+	 */
+	public List<IsPatrolRec> patrolList(){
+		return this.dao.patrolList();
 	}
 }

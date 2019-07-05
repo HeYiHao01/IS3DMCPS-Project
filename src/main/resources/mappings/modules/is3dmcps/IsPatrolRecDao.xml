@@ -17,4 +17,7 @@
 	<select id="getPatrolCount" resultType="java.lang.Integer" parameterType="String">
 		select count(patrol_time) from is_patrol_rec where to_char(patrol_time,'yyyy.mm.dd') = #{patrolTime}
 	</select>
+	<select id="patrolList" resultType="IsPatrolRec">
+		select * from is_patrol_rec
+	</select>
 </mapper>

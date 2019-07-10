@@ -55,7 +55,7 @@
                      line,
                      lie 
              from twms_locc_just loc)) locc
-		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by twms_pltitem.enterdate
 	</select>
 	<select id="getRealCase" resultType="int">
 		select count(lotnum) from twms_pltitem

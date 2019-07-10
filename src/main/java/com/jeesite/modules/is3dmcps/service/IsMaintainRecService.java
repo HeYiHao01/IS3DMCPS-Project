@@ -3,12 +3,14 @@
  */
 package com.jeesite.modules.is3dmcps.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
+import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.dao.IsMaintainRecDao;
 
 import java.util.List;
@@ -113,6 +115,20 @@ public class IsMaintainRecService extends CrudService<IsMaintainRecDao, IsMainta
 	 * 需要维修完成数（维修记录）
 	 */
 	public int getFinishCount(String maintainTime){
-		return super.dao.getFinishCount(maintainTime);
+		return this.dao.getFinishCount(maintainTime);
 	}
+	
+	public List<IsMaintainRec> filterMaintainRec(@Param("maintainName")String maintainName, @Param("deviceNo")String deviceNo, @Param("planPerson")String planPerson){
+		return this.dao.filterMaintainRec(maintainName, deviceNo, planPerson);
+	}
+	
+    public List<MaintainPersonInfo> getMaintainPersonAll(){
+    	return this.dao.getMaintainPersonAll();
+    }
+    public List<MaintainPersonInfo> getMaintainPersonPlan(){
+    	return this.dao.getMaintainPersonPlan();
+    }
+    public List<MaintainPersonInfo> getMaintainPersonFinish(){
+    	return this.dao.getMaintainPersonFinish();
+    }
 }

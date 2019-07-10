@@ -20,4 +20,14 @@
 	<select id="patrolList" resultType="IsPatrolRec">
 		select * from is_patrol_rec
 	</select>
+	
+	<select id="patrolPlanList" resultType="IsPatrolRec">
+		select patrol_time,is_device.device_code_name as patrol_name from is_patrol_rec,is_device,is_patrol where is_patrol_rec.patrol_id = is_patrol.id and is_patrol.device_id = is_device.id order by patrol_time
+	</select>
+	<select id="patrolLogList" resultType="IsPatrolRec">
+		select is_patrol_rec.record,is_patrol_rec.operator,patrol_time,is_device.device_code_name as patrol_name from is_patrol_rec,is_device,is_patrol where is_patrol_rec.patrol_id = is_patrol.id and is_patrol.device_id = is_device.id order by patrol_time
+	</select>
+	<select id="filterPatrolLog" resultType="IsPatrolRec">
+		select is_patrol_rec.record,is_patrol_rec.operator,patrol_time,is_device.device_code_name as patrol_name from is_patrol_rec,is_device,is_patrol where is_patrol_rec.patrol_id = is_patrol.id and is_patrol.device_id = is_device.id and is_device.device_code_name = #{patrolName} and operator = #{operator} and patrol_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd')
+	</select>
 </mapper>

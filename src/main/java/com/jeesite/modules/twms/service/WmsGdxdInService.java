@@ -128,4 +128,24 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	public List<WmsGdxdIn> getNewByWN(String woNo){
 		return this.dao.getNewByWN(woNo);
 	}
+	
+	public List<WmsGdxdIn> getPackingLine(){
+		return this.dao.getPackingLine();
+	}
+	public List<WmsGdxdIn> getAllByPackingLine(String inLine){
+		return this.dao.getAllByPackingLine(inLine);
+	}
+	
+	public List<WmsGdxdIn> getClassTeam(){
+		return this.dao.getClassTeam();
+	}
+	public List<WmsGdxdIn> classTeamList(){
+		return this.dao.classTeamList();
+	}
+	public List<WmsGdxdIn> getAllByClassTeam(String teamCd){
+		return this.dao.getAllByClassTeam(teamCd);
+	}
+	public List<WmsGdxdIn> getAllByClassTeamNull(){
+		return this.dao.getAllByClassTeamNull();
+	}
 }

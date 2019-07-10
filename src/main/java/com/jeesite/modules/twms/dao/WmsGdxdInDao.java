@@ -25,4 +25,12 @@ public interface WmsGdxdInDao extends CrudDao<WmsGdxdIn> {
 	public List<WmsGdxdIn> getNewAllIn(String date);
 	public List<WmsGdxdIn> getNewBatchAndTime(String date);
 	public List<WmsGdxdIn> getNewByWN(String woNo);
+	
+	public List<WmsGdxdIn> getPackingLine();
+	public List<WmsGdxdIn> getAllByPackingLine(String inLine);
+	
+	public List<WmsGdxdIn> getClassTeam();
+	public List<WmsGdxdIn> classTeamList();
+	public List<WmsGdxdIn> getAllByClassTeam(String teamCd);
+	public List<WmsGdxdIn> getAllByClassTeamNull();
 }

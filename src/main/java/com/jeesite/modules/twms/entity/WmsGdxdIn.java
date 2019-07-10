@@ -207,7 +207,7 @@ public class WmsGdxdIn extends DataEntity<WmsGdxdIn> {
 		this.state = state;
 	}
 	
-	@JsonFormat(pattern = "yyyy.MM.dd.HH:mm:ss.ff6")
+	@JsonFormat(pattern = "yyyy.MM.dd.HH:mm:ss.ff6")	
 	public Timestamp getWoStartTime() {
 		return woStartTime;
 	}
@@ -286,6 +286,9 @@ public class WmsGdxdIn extends DataEntity<WmsGdxdIn> {
 	
 	@Length(min=0, max=4, message="班组长度不能超过 4 个字符")
 	public String getTeamCd() {
+		if (teamCd == null || teamCd.equals("")) {
+			teamCd = "null";
+		}
 		return teamCd;
 	}
 

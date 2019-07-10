@@ -5,12 +5,14 @@ package com.jeesite.modules.is3dmcps.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
+import com.jeesite.modules.is3dmcps.entity.PartsConsumption;
 import com.jeesite.modules.is3dmcps.dao.IsRepairRecDao;
 
 /**
@@ -93,5 +95,17 @@ public class IsRepairRecService extends CrudService<IsRepairRecDao, IsRepairRec>
 	 */
 	public List<IsRepairRec> repairList(){
 		return this.dao.repairList();
+	}
+	
+	public List<IsRepairRec> repairLogList(){
+		return this.dao.repairLogList();
+	}
+	
+	public List<IsRepairRec> filterRepairLog(@Param("faultsName")String faultsName,@Param("operator")String operator,@Param("results")String results,@Param("startTime")String startTime,@Param("endTime")String endTime){
+		return this.dao.filterRepairLog(faultsName, operator, results, startTime, endTime);
+	}
+
+	public List<PartsConsumption> partsConsumptionList(){
+		return this.dao.partsConsumptionList();
 	}
 }

@@ -5,11 +5,13 @@ package com.jeesite.modules.twms.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.twms.entity.WmsGdxdIn;
 import com.jeesite.modules.twms.entity.WmsGdxdOut;
 import com.jeesite.modules.twms.dao.WmsGdxdOutDao;
 
@@ -117,5 +119,19 @@ public class WmsGdxdOutService extends CrudService<WmsGdxdOutDao, WmsGdxdOut> {
 	
 	public List<WmsGdxdOut> getNewByWN(String woNo){
 		return this.dao.getNewByWN(woNo);
+	}
+	
+	public List<WmsGdxdOut> getEquId(){
+		return this.dao.getEquId();
+	}
+	public List<WmsGdxdOut> getAllByEquId(@Param("equId")String equId, @Param("count")int count){
+		return this.dao.getAllByEquId(equId, count);
+	}
+	
+	public List<WmsGdxdOut> getClassTeam(){
+		return this.dao.getClassTeam();
+	}
+	public List<WmsGdxdOut> getAllByClassTeam(String teamCd){
+		return this.dao.getAllByClassTeam(teamCd);
 	}
 }

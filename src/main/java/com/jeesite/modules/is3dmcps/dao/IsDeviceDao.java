@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
+import com.jeesite.modules.is3dmcps.entity.Device;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 
 /**
@@ -23,4 +24,6 @@ public interface IsDeviceDao extends CrudDao<IsDevice> {
     public Integer getPartCountByCodeId(String deviceCodeId);
     public List<IsDevice> getDeviceByCodeName(String deviceCodeName);
     public List<IsDevice> getDeviceByDeviceNo(String deviceNo);
+    
+    public List<Device> sparePartsList();
 }

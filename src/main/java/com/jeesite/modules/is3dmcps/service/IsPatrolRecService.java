@@ -3,6 +3,7 @@
  */
 package com.jeesite.modules.is3dmcps.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,5 +94,17 @@ public class IsPatrolRecService extends CrudService<IsPatrolRecDao, IsPatrolRec>
 	 */
 	public List<IsPatrolRec> patrolList(){
 		return this.dao.patrolList();
+	}
+	
+	public List<IsPatrolRec> patrolPlanList(){
+		return this.dao.patrolPlanList();
+	}
+	
+	public List<IsPatrolRec> patrolLogList(){
+		return this.dao.patrolLogList();
+	}
+	
+	public List<IsPatrolRec> filterPatrolLog(@Param("patrolName")String patrolName, @Param("operator")String operator, @Param("startTime")String startTime, @Param("endTime")String endTime){
+		return this.dao.filterPatrolLog(patrolName, operator, startTime, endTime);
 	}
 }

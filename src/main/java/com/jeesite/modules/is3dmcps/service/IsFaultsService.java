@@ -3,6 +3,7 @@
  */
 package com.jeesite.modules.is3dmcps.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,4 +125,13 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
     public List<IsFaults> faultsList(){
     	return this.dao.faultsList();
     }
+    
+    public List<IsFaults> faultsLogList(){
+    	return this.dao.faultsLogList();
+    }
+    
+    public List<IsFaults> filterFaultsLog(@Param("faultName")String faultName, @Param("deviceName")String deviceName, @Param("operator")String operator, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime){
+    	return this.dao.filterFaultsLog(faultName, deviceName, operator, status, startTime, endTime);
+    }
+
 }

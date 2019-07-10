@@ -32,4 +32,11 @@
 	<select id="getFaultsByName" resultType="IsFaults" parameterType="String">
 		select * from is_faults where name = #{name}
 	</select>
+	
+	<select id="faultsLogList" resultType="IsFaults">
+		select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status from is_faults,is_device where is_faults.device_id = is_device.id
+	</select>
+	<select id="filterFaultsLog" resultType="IsFaults">
+		select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status from is_faults,is_device where is_faults.device_id = is_device.id and is_faults.name = #{faultName} and is_device.device_code_name = #{deviceName} and is_faults.operator = #{operator} and is_faults.status = #{status} and is_faults.faults_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd')
+	</select>
 </mapper>

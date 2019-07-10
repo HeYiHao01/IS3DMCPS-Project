@@ -14,6 +14,7 @@ import com.jeesite.modules.twms.service.TwmsPltitemService;
 import com.jeesite.modules.twms.service.TwmsTransferloggService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 货物状态
@@ -123,7 +125,7 @@ public class PagePackingBoxController extends BaseController{
         	map.put("CURRLOC", CURRLOC);
         	mapList.add(map);
     	}
-    	return mapList;
+    	return mapList;    	
 	}
 	
 	/**
@@ -334,7 +336,54 @@ public class PagePackingBoxController extends BaseController{
 				}
 				mapList.add(map);
 			}
+			/*CURRLOC = boxStatics.getCurrloc();
+			ITEMDESC = boxStatics.getItemdesc();
+			LOTNUM = boxStatics.getLotnum();
+			ENTERDATE = boxStatics.getEnterdate();
+			System.err.println(boxStatics.getLineNum());
+			if (boxStatics.getLineNum() == 10) {
+				upBoxNum = boxStatics.getBoxNum();
+				upBoxWeight = boxStatics.getWeight();
+				if (downBoxNum.equals("") && downBoxWeight == 0)
+					continue;
+				else {
+					map.put("line", line);
+					map.put("lie", lie);
+					map.put("layer", layer);
+					map.put("VPLTNUM", VPLTNUM);
+					map.put("CURRLOC", CURRLOC);
+					map.put("ITEMDESC", ITEMDESC);
+					map.put("LOTNUM", LOTNUM);
+					map.put("ENTERDATE", ENTERDATE);
+					map.put("upBoxNum", upBoxNum);
+					map.put("downBoxNum", downBoxNum);
+					map.put("upBoxWeight", upBoxWeight);
+					map.put("downBoxWeight", downBoxWeight);
+				}
+			} else if (boxStatics.getLineNum() == 20) {
+				downBoxNum = boxStatics.getBoxNum();
+				downBoxWeight = boxStatics.getWeight();
+				if (upBoxNum.equals("") && upBoxWeight == 0)
+					continue;
+				else {
+					map.put("line", line);
+					map.put("lie", lie);
+					map.put("layer", layer);
+					map.put("VPLTNUM", VPLTNUM);
+					map.put("CURRLOC", CURRLOC);
+					map.put("ITEMDESC", ITEMDESC);
+					map.put("LOTNUM", LOTNUM);
+					map.put("ENTERDATE", ENTERDATE);
+					map.put("upBoxNum", upBoxNum);
+					map.put("downBoxNum", downBoxNum);
+					map.put("upBoxWeight", upBoxWeight);
+					map.put("downBoxWeight", downBoxWeight);
+				}
+			} else {
+				map.put("Error", "数据库缺少相关数据");
+			}*/
+			mapList.add(map);
 		}
 		return mapList;
-	}
+	}   
 }

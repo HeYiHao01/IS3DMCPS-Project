@@ -22,4 +22,7 @@ public interface IsCarCountDao extends CrudDao<IsCarCount> {
 	public List<IsCarCount> getAllByDeviceId(String deviceId);
 	public List<IsCarCount> getAllByDeviceName(String deviceName);
 	public CarCount getByDaily(@Param("date")String date,@Param("deviceId")String deviceId);
+	
+	public IsCarCount getFaultMonthly(@Param("date")String date,@Param("deviceId")String deviceId);
+	public IsCarCount getFaultDaily(@Param("date")String date,@Param("deviceId")String deviceId);
 }

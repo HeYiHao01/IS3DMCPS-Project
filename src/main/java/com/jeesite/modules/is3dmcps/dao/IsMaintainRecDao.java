@@ -6,8 +6,11 @@ package com.jeesite.modules.is3dmcps.dao;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
+import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 保养记录DAO接口
@@ -22,4 +25,9 @@ public interface IsMaintainRecDao extends CrudDao<IsMaintainRec> {
     public List<IsMaintainRec> getMaintainPop(String deviceNo);
     public int getMaintainPlanCount(String planDate);
     public int getFinishCount(String maintainTime);
+    public List<IsMaintainRec> filterMaintainRec(@Param("maintainName")String maintainName, @Param("deviceNo")String deviceNo, @Param("planPerson")String planPerson);
+    
+    public List<MaintainPersonInfo> getMaintainPersonAll();
+    public List<MaintainPersonInfo> getMaintainPersonPlan();
+    public List<MaintainPersonInfo> getMaintainPersonFinish();
 }

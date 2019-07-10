@@ -95,4 +95,11 @@ public class IsCarCountService extends CrudService<IsCarCountDao, IsCarCount> {
 	public CarCount getByDaily(@Param("date")String date,@Param("deviceId")String deviceId){
 		return this.dao.getByDaily(date, deviceId);
 	}
+	
+	public IsCarCount getFaultMonthly(@Param("date")String date,@Param("deviceId")String deviceId){
+		return this.dao.getFaultMonthly(date, deviceId);
+	}
+	public IsCarCount getFaultDaily(@Param("date")String date,@Param("deviceId")String deviceId){
+		return this.dao.getFaultDaily(date, deviceId);
+	}
 }

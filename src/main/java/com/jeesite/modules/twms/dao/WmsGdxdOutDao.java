@@ -5,6 +5,8 @@ package com.jeesite.modules.twms.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.twms.entity.WmsGdxdIn;
@@ -24,4 +26,11 @@ public interface WmsGdxdOutDao extends CrudDao<WmsGdxdOut> {
 	public List<WmsGdxdOut> getNewAllOut(String date);
 	public List<WmsGdxdOut> getNewBatchAndTime(String date);
 	public List<WmsGdxdOut> getNewByWN(String woNo);
+	
+	public List<WmsGdxdOut> getEquId();
+	//public List<WmsGdxdOut> getAllByEquId(String equId);
+	public List<WmsGdxdOut> getAllByEquId(@Param("equId")String equId, @Param("count")int count);
+	
+	public List<WmsGdxdOut> getClassTeam();
+	public List<WmsGdxdOut> getAllByClassTeam(String teamCd);
 }

@@ -10,6 +10,8 @@ import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 巡检记录DAO接口
  * @author xx
@@ -20,4 +22,8 @@ public interface IsPatrolRecDao extends CrudDao<IsPatrolRec> {
 	public Date getLastTime(String id);
 	public Integer getPatrolCount(String date);
 	public List<IsPatrolRec> patrolList();
+	
+	public List<IsPatrolRec> patrolPlanList();
+	public List<IsPatrolRec> patrolLogList();
+	public List<IsPatrolRec> filterPatrolLog(@Param("patrolName")String patrolName, @Param("operator")String operator, @Param("startTime")String startTime, @Param("endTime")String endTime);
 }

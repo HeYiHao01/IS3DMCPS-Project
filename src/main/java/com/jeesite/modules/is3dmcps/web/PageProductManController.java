@@ -222,7 +222,7 @@ public class PageProductManController extends BaseController{
         String startTime; //回头格式化
         String startTimeHour;
         String startTimeMinute;        
-        for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getWorkInfo(CompareDate.getPastDate(0))){
+        for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewWorkInfo(CompareDate.getPastDate(0))){
         	Map<String, Object> map = MapUtils.newHashMap();
         	workOrderNumber = wmsGdxdIn.getWoNo();
         	startTime = CompareDate.simplifyTime(wmsGdxdIn.getWoStartTime());
@@ -240,6 +240,49 @@ public class PageProductManController extends BaseController{
         }                          
         return mapList;
     }
+    
+    /**
+     * （当前正在执行的工单出入库信息）
+	 * Json：
+	 * [{"incomingLine": "XXXX","workOrderNumber": "XXXX","batchNumber": "XXX","brand": "XXX","batchTotalWeight": "XXX","boxSum": "XXX","finishWeight": "XXX","finishBoxNumber,": "XXXX","workOrderStatus": "XXX"}]
+     * @return
+     */
+    @RequestMapping(value = "workOrderInList")
+    public List<Map<String, Object>> workOrderInList() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		String incomingLine = wmsGdxdIn.getInLine();
+    		String workOrderNumber = wmsGdxdIn.getWoNo();
+    		String batchNumber = wmsGdxdIn.getBatchNo();
+    		String brand = wmsGdxdIn.getMatNm();
+    		double batchTotalWeight = wmsGdxdIn.getBatchweight();
+    		int boxSum = wmsGdxdIn.getBoxtotalnum();
+    		double finishWeight = batchTotalWeight * 0.8;
+    		int finishBoxNumber = (int)(boxSum * 0.8);
+    		String workOrderStatus = wmsGdxdIn.getState();
+    		String endPoint = "";
+    		if (incomingLine.equals("1")) {
+				endPoint = "18巷道21行1层";
+			}else if (incomingLine.equals("2")) {
+				endPoint = "18巷道21行2层";
+			}else {
+				endPoint = "unknown";
+			}
+    		map.put("incomingLine", incomingLine);
+    		map.put("workOrderNumber", workOrderNumber);
+    		map.put("batchNumber", batchNumber);
+    		map.put("brand", brand);
+    		map.put("batchTotalWeight", batchTotalWeight);
+    		map.put("boxSum", boxSum);
+    		map.put("finishWeight", finishWeight);
+    		map.put("finishBoxNumber", finishBoxNumber);
+    		map.put("workOrderStatus", workOrderStatus);
+    		map.put("", endPoint);
+    		mapList.add(map);
+    	}
+    	return mapList;
+	}
     
     /**
      * 货箱入库时间，所属品牌相关数据

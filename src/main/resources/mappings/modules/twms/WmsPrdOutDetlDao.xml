@@ -27,7 +27,23 @@
 	<select id="getNewDetailByWN" resultType="WmsPrdOutDetl" parameterType="String">
 		select * from wms_prd_out_detl where wo_no = #{workNo}
 	</select>
+		
 	<select id="getNewDetailMonthly" resultType="WmsPrdOutDetl" parameterType="String">
 		select mat_nm,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+	</select>
+	<select id="getBatchWeightMonthly" resultType="WmsPrdOutDetl" parameterType="String">
+		select batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by batch_no
+	</select>
+	<select id="getClassWeightMonthly" resultType="WmsPrdOutDetl" parameterType="String">
+		select team_cd,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by team_cd
+	</select>
+	<select id="getBrandDaily" resultType="WmsPrdOutDetl" parameterType="String">
+		select mat_nm,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
+	</select>
+	<select id="getBatchWeightDaily" resultType="WmsPrdOutDetl" parameterType="String">
+		select batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by batch_no
+	</select>
+	<select id="getClassWeightDaily" resultType="WmsPrdOutDetl" parameterType="String">
+		select team_cd,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
 	</select>
 </mapper>

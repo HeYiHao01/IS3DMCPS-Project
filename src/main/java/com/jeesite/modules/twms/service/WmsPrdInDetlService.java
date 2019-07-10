@@ -107,6 +107,13 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 	 */
 	public List<WmsPrdInDetl> getNewDetailByBatchNo(String batchNo){
 		return this.dao.getNewDetailByBatchNo(batchNo);
+	}	
+	
+	/**
+	 * 根据wo_no获取工单详情
+	 */
+	public List<WmsPrdInDetl> getNewDetailByWN(String workNo){
+		return this.dao.getNewDetailByWN(workNo);
 	}
 	
 	/**
@@ -116,10 +123,19 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 		return this.dao.getNewDetailMonthly(month);
 	}
 	
-	/**
-	 * 根据wo_no获取工单详情
-	 */
-	public List<WmsPrdInDetl> getNewDetailByWN(String workNo){
-		return this.dao.getNewDetailByWN(workNo);
+	public List<WmsPrdInDetl> getBatchWeightMonthly(String month){
+		return this.dao.getBatchWeightMonthly(month);
+	}
+	public List<WmsPrdInDetl> getClassWeightMonthly(String month){
+		return this.dao.getClassWeightMonthly(month);
+	}
+	public List<WmsPrdInDetl> getBrandDaily(String day){
+		return this.dao.getBrandDaily(day);
+	}
+	public List<WmsPrdInDetl> getBatchWeightDaily(String day){
+		return this.dao.getBatchWeightDaily(day);
+	}
+	public List<WmsPrdInDetl> getClassWeightDaily(String day){
+		return this.dao.getClassWeightDaily(day);
 	}
 }

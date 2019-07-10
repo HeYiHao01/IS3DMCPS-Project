@@ -1,8 +1,10 @@
 package com.jeesite.modules.is3dmcps.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -262,6 +264,188 @@ public class PageFaultRepairController extends BaseController{
     		mapList.add(map);
     	}
 		return mapList;
+	}
+    
+    /**
+     * 6.4.1.故障日志界面：
+     * Json：
+	 * {"faultName": ["智能双向穿梭车故障", "提升机故障", "拆码垛机故障"],"deviceName": ["智能双向穿梭车", "提升机", "拆码垛机"],"servicePersonnel": ["xxx", "xxx", "xxx"],"status": ["xxx", "xxx", "xxx"]}
+     * @return
+     */
+    @RequestMapping(value = {"faultLogList", ""})
+    public Map<String, Object> faultLogList() {
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	List<String> faultName = new ArrayList<>();
+    	List<String> deviceName = new ArrayList<>();
+    	List<String> servicePersonnel = new ArrayList<>();
+    	List<String> status = new ArrayList<>();
+    	for(IsFaults isFaults:isFaultsService.faultsLogList()){
+    		faultName.add(isFaults.getName());
+    		deviceName.add(isFaults.getDeviceName());
+    		servicePersonnel.add(isFaults.getOperator());
+    		switch (isFaults.getStatus()) {
+			case "0":
+				status.add("新故障");
+				break;
+			case "2":
+				status.add("已受理");
+				break;
+			case "3":
+				status.add("维修完成");
+				break;
+			case "4":
+				status.add("报废处理");
+				break;
+			default:
+				status.add("statusError");
+				break;
+			}
+    	}
+    	List<String> faultNameSet = new ArrayList<>(new HashSet<>(faultName));
+    	List<String> deviceNameSet = new ArrayList<>(new HashSet<>(deviceName));
+    	List<String> servicePersonnelSet = new ArrayList<>(new HashSet<>(servicePersonnel));
+    	List<String> statusSet = new ArrayList<>(new HashSet<>(status));
+    	map.put("faultName", faultNameSet);
+    	map.put("deviceName", deviceNameSet);
+    	map.put("servicePersonnel", servicePersonnelSet);
+    	map.put("status", statusSet);
+    	return map;
+	}
+    
+    /**
+     * Post:	
+	 *{"faultName":"xxx","deviceName":"xxx","servicePersonnel":"xxx" ,"status":"xxx","startTime":"xxx","endTime":"xxx"}
+	
+	 *Json:（根据条件请求筛选的数据）
+	 *[{"faultName": "智能双向穿梭车故障","deviceName": "智能双向穿梭车","deviceNumber": "Car1","faultCode": "fault001","faultTime": "2019-05-2 00::00:00 ","servicePersonnel": "兰州烟草","status": "保养计划"}]
+
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "filterFaultsLog")
+    public List<Map<String, Object>> filterFaultsLog(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String faultName = request.getParameter("faultName");
+    	String deviceName = request.getParameter("deviceName");
+    	String servicePersonnel = request.getParameter("servicePersonnel");    	
+    	String status = "";
+    	switch (request.getParameter("status")) {
+    	case "新故障":
+			status = "0";
+			break;
+		case "已受理":
+			status = "2";
+			break;
+		case "维修完成":
+			status = "3";
+			break;
+		case "报废处理":
+			status = "4";
+			break;
+		default:
+			status = "";
+			break;
+		}
+    	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
+    	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
+    	for(IsFaults isFaults:isFaultsService.filterFaultsLog(faultName, deviceName, servicePersonnel, status, startTime, endTime)){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("faultName", faultName);
+    		map.put("deviceName", deviceName);
+    		map.put("deviceNumber", isFaults.getDeviceId());
+    		map.put("faultCode", isFaults.getFaultsCode());
+    		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
+    		map.put("servicePersonnel", servicePersonnel);
+    		map.put("status", request.getParameter("status"));
+    		mapList.add(map);
+    	}
+    	return mapList;
+	}
+    
+    /**
+     * 维修日志界面
+     * Json：
+	 *{"faultName": ["智能双向穿梭车故障", "提升机故障", "拆码垛机故障"],"repairResults": ["维修中", "维修完成", "维修失败"],"repairPersonnel": ["xxx", "xxx", "xxx"]}
+     * @return
+     */
+    @RequestMapping(value = {"repairLogList", ""})
+    public Map<String, Object> repairLogList() {
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	List<String> faultName = new ArrayList<>();    	
+    	List<String> repairPersonnel = new ArrayList<>();
+    	List<String> repairResults = new ArrayList<>();
+    	for(IsRepairRec isRepairRec:isRepairRecService.repairLogList()){
+    		faultName.add(isRepairRec.getFaultsName());    		
+    		repairPersonnel.add(isRepairRec.getOperator());
+    		switch (isRepairRec.getResults()) {
+			case "0":
+				repairResults.add("维修中");
+				break;
+			case "2":
+				repairResults.add("修理完成恢复使用");
+				break;
+			case "3":
+				repairResults.add("维修完成设备闲置");
+				break;
+			case "4":
+				repairResults.add("维修失败设备报废");
+				break;
+			default:
+				repairResults.add("resultsError");
+				break;
+			}
+    	}
+    	List<String> faultNameSet = new ArrayList<>(new HashSet<>(faultName));    	
+    	List<String> repairPersonnelSet = new ArrayList<>(new HashSet<>(repairPersonnel));
+    	List<String> repairResultsSet = new ArrayList<>(new HashSet<>(repairResults));
+    	map.put("faultName", faultNameSet);    	
+    	map.put("repairPersonnel", repairPersonnelSet);
+    	map.put("repairResults", repairResultsSet);
+    	return map;
+	}
+    
+    /**
+     * Post:
+	 * {"faultName":"xxx","repairResults":"xxx","repairPersonnel":"xxx","startTime":"xxx","endTime":"xxx"}	
+	 * Json:（根据条件请求筛选的数据）
+	 * [{"faultName": "升降输送机故障","repairResults": "维修失败","repairPersonnel": "兰州烟草","repairTime": "2019-05-2 00::00:00 "}]
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = {"filterRepairLog", ""})
+    public List<Map<String, Object>> filterRepairLog(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String faultName = request.getParameter("faultName");    	
+    	String repairPersonnel = request.getParameter("repairPersonnel");    	
+    	String repairResults = "";
+    	switch (request.getParameter("repairResults")) {
+    	case "维修中":
+    		repairResults = "0";
+			break;
+		case "修理完成恢复使用":
+			repairResults = "2";
+			break;
+		case "维修完成设备闲置":
+			repairResults = "3";
+			break;
+		case "维修失败设备报废":
+			repairResults = "4";
+			break;
+		default:
+			repairResults = "";
+			break;
+		}
+    	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
+    	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
+    	for(IsRepairRec isRepairRec:isRepairRecService.filterRepairLog(faultName, repairPersonnel, repairResults, startTime, endTime)){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		map.put("faultName", faultName);    		
+    		map.put("repairResults", request.getParameter("repairResults"));
+    		map.put("repairPersonnel", repairPersonnel);
+    		map.put("repairTime", CompareDate.simplifyDate(isRepairRec.getRepairTime()));    		
+    		mapList.add(map);
+    	}
+    	return mapList;
 	}
 }
 	

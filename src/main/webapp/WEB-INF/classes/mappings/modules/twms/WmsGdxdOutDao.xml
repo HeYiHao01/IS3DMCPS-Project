@@ -30,4 +30,22 @@
 	<select id="getNewBatchAndTime" resultType="WmsGdxdOut" parameterType="String">
 		select batch_no,floor(((to_date(to_char(cast(wo_end_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss') - to_date(to_char(cast(wo_start_time as date),'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd hh24:mi:ss')) *24*60)) as boxtotalnum from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
 	</select>
+	
+	<select id="getEquId" resultType="WmsGdxdOut">
+		select equ_id from(select trim(equ_id) as equ_id from wms_gdxd_out group by equ_id) group by equ_id
+	</select>
+	<select id="getAllByEquId" resultType="WmsGdxdOut">
+		SELECT * FROM 
+		(SELECT t.*,ROWNUM AS rowno
+		FROM wms_gdxd_out t         
+		where ROWNUM &lt;= 1000*(#{count}+1)) table_alias
+		where trim(table_alias.equ_id) = #{equId}
+	</select>
+	
+	<select id="getClassTeam" resultType="WmsGdxdOut">
+		select team_cd from(select trim(team_cd) as team_cd from wms_gdxd_out group by team_cd) group by team_cd
+	</select>
+	<select id="getAllByClassTeam" resultType="WmsGdxdOut" parameterType="String">
+		select * from wms_gdxd_out where trim(team_cd) = #{teamCd}
+	</select>
 </mapper>

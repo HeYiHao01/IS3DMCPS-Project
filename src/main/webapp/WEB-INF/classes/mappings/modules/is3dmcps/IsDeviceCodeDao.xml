@@ -20,4 +20,15 @@
 	<select id="getPartByModel" resultType="IsDeviceCode" parameterType="String">
 		select * from is_device_code where model = #{model}
 	</select>
+	
+	<select id="getPatrolPoint" resultType="IsDeviceCode">
+		select is_device_code.name,is_device_code.model from is_device_code,is_device,is_patrol where is_device_code.id = is_device.device_code_id and is_patrol.device_id = is_device.id
+	</select>
+	
+	<select id="partOfDevice" resultType="IsDeviceCode">
+		select is_device_code.name,is_device_code.id,is_device_code.life from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}
+	</select>
+	<select id="partOfPart" resultType="IsDeviceCode">
+		select distinct is_device_code.name,is_device_code.id,is_device_code.life from (select is_device_code.name na,is_device_code.id cid from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}),is_device_code,is_device where is_device_code.parent_code = cid
+	</select>
 </mapper>

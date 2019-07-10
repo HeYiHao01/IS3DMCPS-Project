@@ -20,4 +20,15 @@
 	<select id="repairList" resultType="IsRepairRec">
 		select * from is_repair_rec
 	</select>
+	
+	<select id="repairLogList" resultType="IsRepairRec">
+		select faults_name,operator,repair_time,results from is_repair_rec order by repair_time
+	</select>
+	<select id="filterRepairLog" resultType="IsRepairRec">
+		select faults_name,operator,repair_time,results from is_repair_rec where faults_name = #{faultsName} and operator = #{operator} and results = #{results} and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') order by repair_time
+	</select>
+	
+	<select id="partsConsumptionList" resultType="com.jeesite.modules.is3dmcps.entity.PartsConsumption">
+		select is_device.device_code_name,is_device_code.model,is_device.device_no,to_char(is_repair_rec.repair_time,'yyyy.MM.dd HH:mm:ss') as repair_time,is_repair_rec.operator,is_repair_rec.results from is_device,is_device_code,is_faults,is_repair_rec where is_device.device_code_id = is_device_code.id and is_repair_rec.faults_id = is_faults.id and is_faults.device_id = is_device.id order by is_repair_rec.repair_time
+	</select>	
 </mapper>

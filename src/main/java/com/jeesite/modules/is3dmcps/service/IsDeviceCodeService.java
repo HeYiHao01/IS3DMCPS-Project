@@ -5,6 +5,7 @@ package com.jeesite.modules.is3dmcps.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -86,9 +87,21 @@ public class IsDeviceCodeService extends TreeService<IsDeviceCodeDao, IsDeviceCo
 	}
 	
 	/**
-	 * 更加model（deviceTypeId）获取零件信息
+	 * 根据model（deviceTypeId）获取零件信息
 	 */
 	public List<IsDeviceCode> getPartByModel(String model){
 		return this.dao.getPartByModel(model);
+	}
+	
+	public List<IsDeviceCode> getPatrolPoint(){
+		return this.dao.getPatrolPoint();
+	}
+	
+	public List<IsDeviceCode> partOfDevice(@Param("deviceNo")String deviceNo){
+		return this.dao.partOfDevice(deviceNo);
+	}
+	
+	public List<IsDeviceCode> partOfPart(@Param("deviceNo")String deviceNo){
+		return this.dao.partOfPart(deviceNo);
 	}
 }

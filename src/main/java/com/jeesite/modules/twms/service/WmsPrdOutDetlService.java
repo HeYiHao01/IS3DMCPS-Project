@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.twms.entity.WmsPrdInDetl;
 import com.jeesite.modules.twms.entity.WmsPrdOutDetl;
 import com.jeesite.modules.twms.dao.WmsPrdOutDetlDao;
 
@@ -103,6 +104,13 @@ public class WmsPrdOutDetlService extends CrudService<WmsPrdOutDetlDao, WmsPrdOu
 	 */
 	public List<WmsPrdOutDetl> getNewDetailByBatchNo(String batchNo){
 		return this.dao.getNewDetailByBatchNo(batchNo);
+	}		
+	
+	/**
+	 * 根据wo_no获取
+	 */
+	public List<WmsPrdOutDetl> getNewDetailByWN(String workNo){
+		return this.dao.getNewDetailByWN(workNo);
 	}
 	
 	/**
@@ -112,10 +120,19 @@ public class WmsPrdOutDetlService extends CrudService<WmsPrdOutDetlDao, WmsPrdOu
 		return this.dao.getNewDetailMonthly(month);
 	}
 	
-	/**
-	 * 根据wo_no获取
-	 */
-	public List<WmsPrdOutDetl> getNewDetailByWN(String workNo){
-		return this.dao.getNewDetailByWN(workNo);
+	public List<WmsPrdOutDetl> getBatchWeightMonthly(String month){
+		return this.dao.getBatchWeightMonthly(month);
+	}
+	public List<WmsPrdOutDetl> getClassWeightMonthly(String month){
+		return this.dao.getClassWeightMonthly(month);
+	}
+	public List<WmsPrdOutDetl> getBrandDaily(String day){
+		return this.dao.getBrandDaily(day);
+	}
+	public List<WmsPrdOutDetl> getBatchWeightDaily(String day){
+		return this.dao.getBatchWeightDaily(day);
+	}
+	public List<WmsPrdOutDetl> getClassWeightDaily(String day){
+		return this.dao.getClassWeightDaily(day);
 	}
 }

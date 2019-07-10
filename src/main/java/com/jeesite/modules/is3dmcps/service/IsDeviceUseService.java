@@ -3,11 +3,15 @@
  */
 package com.jeesite.modules.is3dmcps.service;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
+import com.jeesite.modules.is3dmcps.entity.DeviceUse;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceUse;
 import com.jeesite.modules.is3dmcps.dao.IsDeviceUseDao;
 
@@ -71,4 +75,15 @@ public class IsDeviceUseService extends CrudService<IsDeviceUseDao, IsDeviceUse>
 		super.delete(isDeviceUse);
 	}
 	
+	public List<DeviceUse> deviceUseList(){
+		return this.dao.deviceUseList();
+	}
+	
+	public DeviceUse getDeviceUseByNo(@Param("deviceNo")String deviceNo){
+		return this.dao.getDeviceUseByNo(deviceNo);
+	}
+	
+	public DeviceUse getDeviceUseByPartId(@Param("partId")String partId){
+		return this.dao.getDeviceUseByPartId(partId);
+	}
 }

@@ -11,5 +11,13 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
-	
+	<select id="deviceUseList" resultType="com.jeesite.modules.is3dmcps.entity.DeviceUse">
+		select is_device.device_no,to_char(is_device_use.create_date,'yyyy.MM.dd HH:mm:ss') as create_date,is_device_code.life,is_device_use.type,is_device_use.part_id from is_device_code,is_device,is_device_use where is_device.device_code_id = is_device_code.id and is_device_use.part_id = is_device.id order by is_device_use.create_date
+	</select>
+	<select id="getDeviceUseByNo" resultType="com.jeesite.modules.is3dmcps.entity.DeviceUse">
+		select is_device.device_no,to_char(is_device_use.create_date,'yyyy.MM.dd HH:mm:ss') as create_date,is_device_code.life,is_device_use.type,is_device_use.part_id from is_device_code,is_device,is_device_use where is_device.device_code_id = is_device_code.id and is_device_use.part_id = is_device.id and is_device.device_no = #{deviceNo} and ROWNUM = 1 order by is_device_use.create_date
+	</select>
+	<select id="getDeviceUseByPartId" resultType="com.jeesite.modules.is3dmcps.entity.DeviceUse">
+		select is_device.device_no,to_char(is_device_use.create_date,'yyyy.MM.dd HH:mm:ss') as create_date,is_device_code.life,is_device_use.type,is_device_use.part_id from is_device_code,is_device,is_device_use where is_device.device_code_id = is_device_code.id and is_device_use.part_id = is_device.id and part_id = #{partId} and ROWNUM = 1 order by is_device_use.create_date
+	</select>
 </mapper>

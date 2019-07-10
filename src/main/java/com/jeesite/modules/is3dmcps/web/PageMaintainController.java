@@ -1,9 +1,11 @@
 package com.jeesite.modules.is3dmcps.web;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import com.jeesite.common.collect.MapUtils;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
+import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainRecService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainService;
@@ -211,6 +214,113 @@ public class PageMaintainController extends BaseController{
 			mapList.add(map);
 		}
 		return mapList;	
+	}
+	
+	/**
+	 * （1）计划筛选
+		Json：（默认给到所有的筛选条件）
+		{"maintenanceName": ["xxx", "xxx", "xxx"],"deviceNumber": ["xxx", "xxx", "xxx"],"planners": ["xxx", "xxx", "xxx"]}
+	 * @return
+	 */
+	@RequestMapping(value = "maintenanceNameList")
+	public Map<String, Object> maintenanceNameList() {
+		Map<String, Object> map = MapUtils.newHashMap();
+		List<String> maintenanceName = new ArrayList<>();
+		List<String> deviceNumber = new ArrayList<>();
+		List<String> planners = new ArrayList<>();
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.maintainList()){
+			maintenanceName.add(isMaintainRec.getMaintainName());
+			deviceNumber.add(isMaintainRec.getDeviceNo());
+			planners.add(isMaintainRec.getPlanPerson());
+		}
+		List<String> maintenanceNameSet = new ArrayList<>(new HashSet<>(maintenanceName));
+		List<String> deviceNumberSet = new ArrayList<>(new HashSet<>(deviceNumber));
+		List<String> plannersSet = new ArrayList<>(new HashSet<>(planners));
+		map.put("maintenanceName", maintenanceNameSet);
+		map.put("deviceNumber", deviceNumberSet);
+		map.put("planners", plannersSet);
+		return map;
+	}
+	
+	/**
+	 * Post:
+	 * {"maintenanceName":"xxx","deviceNumber":"xxx","planners":"xxx"}	
+	 * Json:（根据条件请求筛选的数据）
+	 *[{"maintenanceName": "拆码垛机保养","deviceNumber": "cmd1","planners": "兰州烟草","plannedMaintenanceTime": "2019-05-2 00::00:00 "}]
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "filterMaintainRec")
+	public List<Map<String, Object>> filterMaintainRec(HttpServletRequest request) {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.filterMaintainRec(request.getParameter("maintenanceName"), request.getParameter("deviceNumber"), request.getParameter("planners"))){
+			Map<String, Object> map = MapUtils.newHashMap();
+			String maintenanceName = isMaintainRec.getMaintainName();
+			String deviceNumber = isMaintainRec.getDeviceNo();
+			String planners = isMaintainRec.getPlanPerson();
+			String plannedMaintenanceTime = CompareDate.simplifyDate(isMaintainRec.getPlanDate());
+			map.put("maintenanceName", maintenanceName);
+			map.put("deviceNumber", deviceNumber);
+			map.put("planners", planners);
+			map.put("plannedMaintenanceTime", plannedMaintenanceTime);
+			mapList.add(map);
+		}
+		return mapList;
+	}
+	
+	/**
+	 * 维保值班情况
+	 * Json：
+	 * [{"name":"xxx","deviceTotalNumber":100,"maintenanceDeviceNumber":45,"maintenanceFinishNumber":45,"score":"96"},{"name":"xxx","deviceTotalNumber":100,"maintenanceDeviceNumber":45,"maintenanceFinishNumber":45,"score":"96"}	 * @return
+	 */
+	@RequestMapping(value = "maintainDutyInfo")
+	public List<Map<String, Object>> maintainDutyInfo() {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		List<Map<String, Object>> mapListAll = ListUtils.newArrayList();
+		List<Map<String, Object>> mapListPlan = ListUtils.newArrayList();
+		List<Map<String, Object>> mapListFinish = ListUtils.newArrayList();
+		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonAll()){
+			Map<String, Object> map = MapUtils.newHashMap();
+			String name = maintainPersonInfo.getMaintainPerson();
+			int deviceTotalNumber = maintainPersonInfo.getCountNum();
+			map.put("name", name);
+			map.put("deviceTotalNumber", deviceTotalNumber);
+			mapListAll.add(map);
+		}
+		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonPlan()){
+			Map<String, Object> map = MapUtils.newHashMap();
+			String name = maintainPersonInfo.getMaintainPerson();
+			int maintenanceDeviceNumber = maintainPersonInfo.getCountNum();
+			map.put("name", name);
+			map.put("maintenanceDeviceNumber", maintenanceDeviceNumber);
+			mapListPlan.add(map);
+		}
+		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonFinish()){
+			Map<String, Object> map = MapUtils.newHashMap();
+			String name = maintainPersonInfo.getMaintainPerson();
+			int maintenanceFinishNumber = maintainPersonInfo.getCountNum();
+			map.put("name", name);
+			map.put("maintenanceFinishNumber", maintenanceFinishNumber);
+			mapListFinish.add(map);
+		}
+		for(Map<String, Object> mapAll:mapListAll){
+			for(Map<String, Object> mapPlan:mapListPlan){
+				for(Map<String, Object> mapFinish:mapListFinish){
+					if (mapAll.get("name").equals(mapPlan.get("name")) &&
+							mapAll.get("name").equals(mapFinish.get("name")) &&
+							mapPlan.get("name").equals(mapFinish.get("name"))) {
+						Map<String, Object> map = MapUtils.newHashMap();
+						map.put("name", mapAll.get("name"));
+						map.put("deviceTotalNumber", mapAll.get("deviceTotalNumber"));
+						map.put("maintenanceDeviceNumber", mapPlan.get("maintenanceDeviceNumber"));
+						map.put("maintenanceFinishNumber", mapFinish.get("maintenanceFinishNumber"));
+						map.put("score", (int)(Double.valueOf(String.valueOf(mapFinish.get("maintenanceFinishNumber")))/(Double.valueOf(String.valueOf(mapAll.get("deviceTotalNumber"))))*100));
+						mapList.add(map);
+					}
+				}
+			}
+		}
+		return mapList;
 	}
 	
 	/**

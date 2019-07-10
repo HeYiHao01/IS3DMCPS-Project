@@ -21,15 +21,19 @@
 		select * from is_device where ID = #{deviceId}
 	</select>
 	<select id="getDeviceByCodeId" resultType="IsDevice" parameterType="String">
-		select *  from is_device where device_code_id = #{deviceCodeId}
+		select * from is_device where device_code_id = #{deviceCodeId}
 	</select>
 	<select id="getPartCountByCodeId" resultType="java.lang.Integer" parameterType="String">
 		select count(device_code_id) from is_device where device_code_id = #{deviceCodeId}
 	</select>
 	<select id="getDeviceByCodeName" resultType="IsDevice" parameterType="String">
-		select *  from is_device where device_code_name = #{deviceCodeName}
+		select * from is_device where device_code_name = #{deviceCodeName}
 	</select>
 	<select id="getDeviceByDeviceNo" resultType="IsDevice" parameterType="String">
-		select *  from is_device where device_no = #{deviceNo}
+		select * from is_device where device_no = #{deviceNo}
+	</select>
+	
+	<select id="sparePartsList" resultType="com.jeesite.modules.is3dmcps.entity.Device">
+		select is_device.device_no,is_device.device_code_name,is_device_code.model from is_device, is_device_code where is_device.device_code_id = is_device_code.id and device_status='0'
 	</select>
 </mapper>

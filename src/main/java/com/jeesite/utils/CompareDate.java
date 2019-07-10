@@ -2,6 +2,7 @@ package com.jeesite.utils;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -80,6 +81,43 @@ public class CompareDate {
 	}
 	
 	/**
+	 * 格式化日期
+	 */
+	public static String simplifyDate(Date date) {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		return df.format(date);
+	}
+	
+	public static String formatDate(String date) {
+		Date dt = new Date(date);
+		DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+		return df.format(dt);
+	}
+	
+	public static int dateCount(Date date) {
+		Date now = new Date();
+//		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+//		Date dt = new Date(df.format(date));
+//		long diff = now.getTime() - dt.getTime();		
+		long diff = now.getTime() - date.getTime();
+		long days = diff / (1000 * 60 * 60 * 24);
+		return (int)days;
+	}
+	
+	public static int dateCount(String date) {
+		Date now = new Date();
+		long days = 0;
+		try {
+			long diff = now.getTime() - new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").parse(date).getTime();
+			days = diff / (1000 * 60 * 60 * 24);
+		} catch (ParseException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}		
+		return (int)days;
+	}
+	
+	/**
 	 * 格式化timestamp
 	 * 2019.05.11.12:16:00.000000-->12:16
 	 */
@@ -126,7 +164,9 @@ public class CompareDate {
 //			System.out.println(simplifyTime((timestamp)));
 //		}
 //		System.out.println(getTimeCost(new Date("+00 08:26:25.820000")));
-		Calendar calendar = Calendar.getInstance();			
-		System.out.println(calendar.get(calendar.YEAR)+"."+getPastDate(1));
+//		System.out.println(simplifyDate(new Date("11-9月 -17")));
+		
+		//Date date = new Date("2019/03/13 02:03:16");		
+		System.out.println(dateCount("2019.03.13 02:03:16"));
 	}*/
 }

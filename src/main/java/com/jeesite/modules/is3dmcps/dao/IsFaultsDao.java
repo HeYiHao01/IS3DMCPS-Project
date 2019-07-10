@@ -9,6 +9,8 @@ import com.jeesite.modules.is3dmcps.entity.IsFaults;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 /**
  * 设备故障DAO接口
  * @author xx
@@ -23,4 +25,7 @@ public interface IsFaultsDao extends CrudDao<IsFaults> {
     public List<IsFaults> getNeedRepair();
     public List<IsFaults> getFaultsByName(String name);
     public List<IsFaults> faultsList();
+    
+    public List<IsFaults> faultsLogList();
+    public List<IsFaults> filterFaultsLog(@Param("faultName")String faultName, @Param("deviceName")String deviceName, @Param("operator")String operator, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime);
 }

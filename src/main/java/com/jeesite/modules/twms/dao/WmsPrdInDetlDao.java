@@ -23,7 +23,13 @@ public interface WmsPrdInDetlDao extends CrudDao<WmsPrdInDetl> {
 	public List<WmsPrdInDetl> getDetailMonthly(String month);
 	public List<WmsPrdInDetl> getDetailByWN(String workNo);
 	
-	public List<WmsPrdInDetl> getNewDetailByBatchNo(String batchNo);
-	public List<WmsPrdInDetl> getNewDetailMonthly(String month);
+	public List<WmsPrdInDetl> getNewDetailByBatchNo(String batchNo);	
 	public List<WmsPrdInDetl> getNewDetailByWN(String workNo);
+	
+	public List<WmsPrdInDetl> getNewDetailMonthly(String month);
+	public List<WmsPrdInDetl> getBatchWeightMonthly(String month);
+	public List<WmsPrdInDetl> getClassWeightMonthly(String month);
+	public List<WmsPrdInDetl> getBrandDaily(String day);
+	public List<WmsPrdInDetl> getBatchWeightDaily(String day);
+	public List<WmsPrdInDetl> getClassWeightDaily(String day);
 }

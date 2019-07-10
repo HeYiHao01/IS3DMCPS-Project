@@ -16,8 +16,15 @@
 	</select>
 	<select id="getAllByDeviceName" resultType="IsCarCount" parameterType="String">
 		select * from is_car_count where device_name = #{deviceName}
-	</select>
+	</select>	
 	<select id="getByDaily" resultType="com.jeesite.modules.isopc.entity.CarCount">
 		select to_char(count_date,'mm.dd') as timeVariable,work_time as taskTimeCount from is_car_count where to_char(count_date,'yyyy.mm.dd') = #{date} and device_id = #{deviceId}
 	</select> 	
+	
+	<select id="getFaultMonthly" resultType="IsCarCount">
+		select sum(err_count) as err_count from is_car_count where device_id = #{deviceId} and to_char(count_date,'yyyy.mm') = #{date}
+	</select>
+	<select id="getFaultDaily" resultType="IsCarCount">
+		select sum(err_count) as err_count from is_car_count where device_id = #{deviceId} and to_char(count_date,'yyyy.mm.dd') = #{date}
+	</select>
 </mapper>

@@ -29,4 +29,17 @@
 	<select id="getFinishCount" resultType="java.lang.Integer" parameterType="String">
 		select count(rec_status) from is_maintain_rec where rec_status=1 and to_char(maintain_time,'yyyy.mm.dd') = #{maintainTime}
 	</select>
+	<select id="filterMaintainRec" resultType="IsMaintainRec">
+		select * from is_maintain_rec where maintain_name = #{maintainName} and device_no = #{deviceNo} and plan_person = #{planPerson}
+	</select>
+	
+	<select id="getMaintainPersonAll" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
+		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec group by maintain_person
+	</select>
+	<select id="getMaintainPersonPlan" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
+		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='0' group by maintain_person
+	</select>
+	<select id="getMaintainPersonFinish" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
+		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='1' group by maintain_person
+	</select>
 </mapper>

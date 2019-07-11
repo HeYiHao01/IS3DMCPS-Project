@@ -18,7 +18,7 @@
 		select * from is_car_count where device_name = #{deviceName}
 	</select>	
 	<select id="getByDaily" resultType="com.jeesite.modules.isopc.entity.CarCount">
-		select to_char(count_date,'mm.dd') as timeVariable,work_time as taskTimeCount from is_car_count where to_char(count_date,'yyyy.mm.dd') = #{date} and device_id = #{deviceId}
+		select to_char(count_date,'mm.dd') as timeVariable,work_time as taskTimeCount from is_car_count where to_char(count_date,'yyyy.mm.dd') = #{date} and device_id = #{deviceId}  and rownum = 1 order by count_date
 	</select> 	
 	
 	<select id="getFaultMonthly" resultType="IsCarCount">

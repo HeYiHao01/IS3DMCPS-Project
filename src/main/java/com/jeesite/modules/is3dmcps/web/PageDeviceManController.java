@@ -430,7 +430,7 @@ public class PageDeviceManController extends BaseController{
     	for(IsDeviceCode isDeviceCode:isDeviceCodeService.partOfDevice(deviceName)){
     		Map<String, Object> map = MapUtils.newHashMap();
     		map.put("partName", isDeviceCode.getName());
-    		map.put("lifecycle", isDeviceCode.getLife());
+    		map.put("lifecycle", (Double.valueOf(isDeviceCode.getLife())*365.25));
     		DeviceUse deviceUse = isDeviceUseService.getDeviceUseByPartId(isDeviceCode.getId());
     		if (deviceUse!=null && deviceUse.getType().equals("2")) {
     			map.put("usedLlifecycle", CompareDate.dateCount(deviceUse.getCreateDate()));
@@ -442,7 +442,7 @@ public class PageDeviceManController extends BaseController{
     	for(IsDeviceCode isDeviceCode:isDeviceCodeService.partOfPart(deviceName)){
     		Map<String, Object> map = MapUtils.newHashMap();
     		map.put("partName", isDeviceCode.getName());
-    		map.put("lifecycle", isDeviceCode.getLife());
+    		map.put("lifecycle", (Double.valueOf(isDeviceCode.getLife())*365.25));
     		DeviceUse deviceUse = isDeviceUseService.getDeviceUseByPartId(isDeviceCode.getId());
     		if (deviceUse!=null && deviceUse.getType().equals("2")) {
     			map.put("usedLlifecycle", CompareDate.dateCount(deviceUse.getCreateDate()));
@@ -482,7 +482,7 @@ public class PageDeviceManController extends BaseController{
 				for(IsDeviceCode isDeviceCode:isDeviceCodeService.partOfDevice(deviceName)){
 					if (isDeviceCode.getName().equals(partName)) {
 						map.put("partName", isDeviceCode.getName());
-			    		map.put("lifecycle", isDeviceCode.getLife());
+			    		map.put("lifecycle", (Double.valueOf(isDeviceCode.getLife())*365.25));
 			    		DeviceUse deviceUse = isDeviceUseService.getDeviceUseByPartId(isDeviceCode.getId());
 			    		if (deviceUse!=null && deviceUse.getType().equals("2")) {
 			    			map.put("usedLlifecycle", CompareDate.dateCount(deviceUse.getCreateDate()));
@@ -495,7 +495,7 @@ public class PageDeviceManController extends BaseController{
 				for(IsDeviceCode isDeviceCode:isDeviceCodeService.partOfPart(deviceName)){
 					if (isDeviceCode.getName().equals(partName)) {
 						map.put("partName", isDeviceCode.getName());
-			    		map.put("lifecycle", isDeviceCode.getLife());
+			    		map.put("lifecycle", (Double.valueOf(isDeviceCode.getLife())*365.25));
 			    		DeviceUse deviceUse = isDeviceUseService.getDeviceUseByPartId(isDeviceCode.getId());
 			    		if (deviceUse!=null && deviceUse.getType().equals("2")) {
 			    			map.put("usedLlifecycle", CompareDate.dateCount(deviceUse.getCreateDate()));

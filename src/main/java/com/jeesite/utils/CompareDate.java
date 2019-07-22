@@ -41,8 +41,8 @@ public class CompareDate {
 	 */
 	public static ArrayList<String> getSevenDate() {
 		ArrayList<String> pastDaysList = new ArrayList<>();
-		for (int i = 0; i < 7; i++) {
-			pastDaysList.add(getPastDate(i));
+		for (int i = 0; i < 7; i++) {			
+			pastDaysList.add(String.valueOf(Calendar.getInstance().get(Calendar.YEAR))+"."+getPastDate(i));
 		}
 		return pastDaysList;
 	}
@@ -65,8 +65,25 @@ public class CompareDate {
 	/**
 	 * 格式化日期字符串 05.01-->5.1
 	 */
-	public static String simplifyDate(String date) {
+	/*public static String simplifyDate(String date) {
 		int index = date.indexOf(".");
+		int month;
+		int day;
+		if (date.substring(index - 2, index + 1).equals("0")) {
+			month = Integer.parseInt(date.substring(index - 1, index ));
+			day = Integer.parseInt(date.substring(index + 2));
+		}else {
+			month = Integer.parseInt(date.substring(index - 2, index ));
+			day = Integer.parseInt(date.substring(index + 1));
+		}
+		String date1 = month + "." + day + "";
+		return date1;
+	}*/
+	/**
+	 * 格式化日期字符串2019.07.17-->7.17
+	 */
+	public static String simplifyDate(String date) {
+		int index = date.lastIndexOf(".");
 		int month;
 		int day;
 		if (date.substring(index - 2, index + 1).equals("0")) {
@@ -157,7 +174,7 @@ public class CompareDate {
 		return (hour * 60 + min + sec / 60);
 	}*/
 	
-	/*public static void main(String[] args) {		
+	public static void main(String[] args) {		
 //		for(String date:CompareDate.getSevenDate())	{
 //			System.out.println(simplifyDate(date));
 //			Timestamp timestamp = Timestamp.valueOf("11-5月 -19 12.16.00.000000  下午");
@@ -167,6 +184,7 @@ public class CompareDate {
 //		System.out.println(simplifyDate(new Date("11-9月 -17")));
 		
 		//Date date = new Date("2019/03/13 02:03:16");		
-		System.out.println(dateCount("2019.03.13 02:03:16"));
-	}*/
+		//System.out.println(dateCount("2019.03.13 02:03:16"));
+		System.out.println(simplifyDate("2019.07.17"));
+	}
 }

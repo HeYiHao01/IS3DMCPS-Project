@@ -34,6 +34,20 @@
 	</select>
 	
 	<select id="sparePartsList" resultType="com.jeesite.modules.is3dmcps.entity.Device">
-		select is_device.device_no,is_device.device_code_name,is_device_code.model from is_device, is_device_code where is_device.device_code_id = is_device_code.id and device_status='0'
+		select is_device.device_no,is_device.device_code_name,is_device_code.model,is_device_code.code from is_device, is_device_code where is_device.device_code_id = is_device_code.id and device_status='0'
+	</select>
+	
+	<select id="sparePartsCount" resultType="com.jeesite.modules.is3dmcps.entity.SpareParts">
+		select a.codeName,a.model,(case when b.counts is null then 0 else b.counts end) as counts from
+		(select is_device.device_code_name as codeName,is_device_code.model as model,COUNT(device_code_name) as counts
+		from is_device, is_device_code 
+		where is_device.device_code_id = is_device_code.id
+		GROUP by is_device.device_code_name, is_device_code.model) a
+		left join
+		(select is_device.device_code_name as codeName,is_device_code.model as model,COUNT(device_code_name) as counts
+		from is_device, is_device_code 
+		where is_device.device_code_id = is_device_code.id and is_device.device_status = '0'
+		GROUP by is_device.device_code_name, is_device_code.model) b
+		on a.codename = b.codename
 	</select>
 </mapper>

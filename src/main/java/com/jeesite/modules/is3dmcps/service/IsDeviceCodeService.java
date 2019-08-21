@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.service.TreeService;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
+import com.jeesite.modules.is3dmcps.entity.NewDevice;
 import com.jeesite.modules.is3dmcps.dao.IsDeviceCodeDao;
 
 /**
@@ -78,6 +79,9 @@ public class IsDeviceCodeService extends TreeService<IsDeviceCodeDao, IsDeviceCo
 	public List<IsDeviceCode> getDeviceTypeDetail() {
 		return this.dao.getDeviceTypeDetail();
 	}
+	public List<IsDeviceCode> getPartsTypeDetail(){
+		return this.dao.getPartsTypeDetail();
+	}
 	
 	/**
 	 * 根据ID（device_code_id）获取application的相关信息
@@ -103,5 +107,13 @@ public class IsDeviceCodeService extends TreeService<IsDeviceCodeDao, IsDeviceCo
 	
 	public List<IsDeviceCode> partOfPart(@Param("deviceNo")String deviceNo){
 		return this.dao.partOfPart(deviceNo);
+	}
+	
+	//解决映射bug
+	public List<NewDevice> getDevice(){
+		return this.dao.getDevice();
+	}
+	public List<NewDevice> getParts(){
+		return this.dao.getParts();
 	}
 }

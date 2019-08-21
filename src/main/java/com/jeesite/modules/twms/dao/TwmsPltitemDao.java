@@ -26,4 +26,6 @@ public interface TwmsPltitemDao extends CrudDao<TwmsPltitem> {
 	public List<BoxStatics> getContainLocation();
 	public int getRealCase();
 	public int getEmptyCase();
+	
+	public List<BoxStatics> filterNewBoxStatics(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
 }

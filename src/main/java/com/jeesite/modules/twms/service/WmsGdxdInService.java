@@ -5,12 +5,14 @@ package com.jeesite.modules.twms.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.twms.entity.WmsGdxdIn;
+import com.jeesite.modules.twms.entity.WmsGdxdOut;
 import com.jeesite.modules.twms.dao.WmsGdxdInDao;
 
 /**
@@ -147,5 +149,16 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	}
 	public List<WmsGdxdIn> getAllByClassTeamNull(){
 		return this.dao.getAllByClassTeamNull();
+	}
+	
+	public List<WmsGdxdIn> getBrands(){
+		return this.dao.getBrands();
+	}
+	public List<WmsGdxdIn> filterWorkOrderIn(@Param("inLine") String inLine, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterWorkOrderIn(inLine, brand, startTime, endTime, rangeStart, rangeEnd);
+	}
+
+	public List<WmsGdxdIn> filterByClassTeam(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterByClassTeam(teamCd, brand, startTime, endTime, rangeStart, rangeEnd);
 	}
 }

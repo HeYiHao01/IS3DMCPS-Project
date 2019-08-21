@@ -6,12 +6,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.jeesite.modules.is3dmcps.entity.*;
 import com.jeesite.modules.is3dmcps.service.*;
 import com.jeesite.modules.twms.entity.TwmsPltitem;
+import com.jeesite.modules.twms.entity.TwmsTransferlogg;
 import com.jeesite.modules.twms.entity.WmsGdxdIn;
+import com.jeesite.modules.twms.entity.WmsGdxdOut;
 import com.jeesite.modules.twms.service.TwmsPltitemService;
+import com.jeesite.modules.twms.service.TwmsTransferloggService;
 import com.jeesite.modules.twms.service.WmsGdxdInService;
+import com.jeesite.modules.twms.service.WmsGdxdOutService;
 import com.jeesite.utils.CompareDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -46,9 +52,15 @@ public class PageProductManController extends BaseController{
     @Autowired
     private IsFaultsService isFaultsService;
     @Autowired
+    private IsFaultsInfoService isFaultsInfoService;
+    @Autowired
     private TwmsPltitemService twmsPltitemService;
     @Autowired
     private WmsGdxdInService wmsGdxdInService;
+    @Autowired
+    private WmsGdxdOutService wmsGdxdOutService;
+    @Autowired
+    private TwmsTransferloggService twmsTransferloggService;
 
     /**
      * 设备运行数量；设备故障数量；维修设备数量；
@@ -260,15 +272,7 @@ public class PageProductManController extends BaseController{
     		int boxSum = wmsGdxdIn.getBoxtotalnum();
     		double finishWeight = batchTotalWeight * 0.8;
     		int finishBoxNumber = (int)(boxSum * 0.8);
-    		String workOrderStatus = wmsGdxdIn.getState();
-    		String endPoint = "";
-    		if (incomingLine.equals("1")) {
-				endPoint = "18巷道21行1层";
-			}else if (incomingLine.equals("2")) {
-				endPoint = "18巷道21行2层";
-			}else {
-				endPoint = "unknown";
-			}
+    		String workOrderStatus = wmsGdxdIn.getState();    		
     		map.put("incomingLine", incomingLine);
     		map.put("workOrderNumber", workOrderNumber);
     		map.put("batchNumber", batchNumber);
@@ -278,77 +282,112 @@ public class PageProductManController extends BaseController{
     		map.put("finishWeight", finishWeight);
     		map.put("finishBoxNumber", finishBoxNumber);
     		map.put("workOrderStatus", workOrderStatus);
-    		map.put("", endPoint);
     		mapList.add(map);
     	}
     	return mapList;
 	}
     
     /**
-     * 货箱入库时间，所属品牌相关数据
-     * Json:
-	 *[{"LINE":1,"LIE":13,"LAYER":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-59.194000244140625,"VPLTNUM":”64310”,"PLTNUM":”200084”,"CURRLOC":”OME01_00110401600100”,"ITEMDESC":”兰州(细支珍品)烟丝”,"LOTNUM":”YXZZP1801001”,"ENTERDATE":”2018-1-13 18:59:39”,}]
+     * 1.3.2.	入库生产线任务信息
+	Json：
+	[{"VPLTNUM":"XXXX","taskNumber":"XXXX","boxNo":"XXX","origin": XXX","destination": "XXX"},{"VPLTNUM":"XXXX","taskNumber":"XXXX","boxNo":"XXX","origin":"XXX","destination": "XXX"}]
+
      * @return
      */
-    /*@RequestMapping(value = {"boxStatics", ""})
-    public List<Map<String, Object>> boxStatics(){
+    @RequestMapping(value = "workOrderInTask")
+    public List<Map<String, Object>> workOrderInTask() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	int line = 1;
-    	int lie = 13;
-    	int layer = 1;
-    	double location_X = -1.2400000095367432;
-    	double location_Y = -0.41100001335144043;
-    	double location_Z = -59.194000244140625;
-    	String VPLTNUM = "64310";
-    	String PLTNUM = "200084";
-    	String CURRLOC = "OME01_00110401600100";
-    	String ITEMDESC = "兰州(细支珍品)烟丝";
-    	String LOTNUM = "YXZZP1801001";
-    	String ENTERDATE = "2018-1-13 18:59:39";
-    	Map<String, Object> map = MapUtils.newHashMap();
-    	map.put("line", line);
-    	map.put("lie", lie);
-    	map.put("layer", layer);
-    	map.put("location_X", location_X);
-    	map.put("location_X", location_Y);
-    	map.put("location_X", location_Z);
-    	map.put("VPLTNUM", VPLTNUM);
-    	map.put("PLTNUM", PLTNUM);
-    	map.put("CURRLOC", CURRLOC);
-    	map.put("ITEMDESC", ITEMDESC);
-    	map.put("LOTNUM", LOTNUM);
-    	map.put("ENTERDATE", ENTERDATE);
+    	String VPLTNUM = "";
+    	String taskNumber = "";
+    	String boxNo = "";
+    	String origin = "";
+    	String destination = "";
+    	int count = twmsTransferloggService.getCount();
+    	System.err.println(count);
+    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    		String batchNumber = wmsGdxdIn.getBatchNo();
+    		for(TwmsTransferlogg twmsTransferlogg:twmsTransferloggService.getByLotnum(batchNumber, count)){
+    			Map<String, Object> map = MapUtils.newHashMap();
+    			VPLTNUM = twmsTransferlogg.getVpltnum();
+    			taskNumber = String.valueOf(twmsTransferlogg.getLoggnum());
+    			boxNo = twmsTransferlogg.getPltnum();
+    			origin = CompareDate.formatCurrLoc(twmsTransferlogg.getSloc());
+    			destination = CompareDate.formatCurrLoc(twmsTransferlogg.getDloc());
+    			map.put("VPLTNUM", VPLTNUM);
+    			map.put("taskNumber", taskNumber);
+    			map.put("boxNo", boxNo);
+    			map.put("origin", origin);
+    			map.put("destination", destination);
+    			mapList.add(map);
+    		}
+    	}
     	return mapList;
-    }*/
+    }
     
     /**
-     * 货位状态数据
-     * Json:
-	 *	[{"locNum":1,"row":1,"col":13,"layer":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-59.194000244140625},{"locNum":19,"row":5,"col":13,"layer":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-53.07400131225586 },{"locNum":37,"row":10,"col":13,"layer":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-43.56800079345703}]
-	 *ID就是LOC
-	 *Is_Location表
+     * 1.4.	增加“出库生产信息” -12个喂丝机（显示工单号、批次号、品牌）
+     * Json：
+	[{"FedWireNumber":"XXXX","workorder":"XXXX","batch":"XXX","brand": XXX"},{"FedWireNumber":"XXXX","workorder":"XXXX","batch":"XXX","brand": XXX"}]
+
      * @return
      */
-    /*@RequestMapping(value = {"packingBox", ""})
-    public List<Map<String, Object>> packingBox(){
+    @RequestMapping(value = "workOrderOutList")
+    public List<Map<String, Object>> workOrderOutList() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-		int locNum = 1;
-		int row = 1;
-		int col = 13;
-		int layer = 1;
-		Double location_X = -1.2400000095367432;
-		Double location_Y = -0.41100001335144043;
-		Double location_Z = -59.194000244140625;
-    	Map<String, Object> map = MapUtils.newHashMap();
-    	map.put("locNum", locNum);
-    	map.put("row", row);
-    	map.put("col", col);
-    	map.put("layer", layer);
-    	map.put("location_X", location_X);
-    	map.put("location_Y", location_Y);
-    	map.put("location_Z", location_Z);
+    	for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewAllOut(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		String FedWireNumber = wmsGdxdOut.getEquId();
+    		String workorder = wmsGdxdOut.getWoNo();
+    		String batch = wmsGdxdOut.getBatchNo();
+    		String brand = wmsGdxdOut.getMatNm();
+    		map.put("FedWireNumber", FedWireNumber);
+    		map.put("workorder", workorder);
+    		map.put("batch", batch);
+    		map.put("brand", brand);
+    		mapList.add(map);
+    	}
     	return mapList;
-    }*/
+    }
+    
+    /**
+     * 1.5.	新增小车弹窗数据信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "carTransferPos")
+    public Map<String, Object> carTransferPos(HttpServletRequest request) {
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	String taskNumber = request.getParameter("taskNumber");
+		int count = twmsTransferloggService.getCount() / 1000;
+		TwmsTransferlogg transferlogg = twmsTransferloggService.getByLoggnum(taskNumber, count);
+		if (transferlogg != null && transferlogg.getVpltnum() != null) {
+			System.err.println(transferlogg.getSloc() + " " + transferlogg.getDloc());
+			String origin = CompareDate.formatCurrLoc(transferlogg.getSloc().trim());
+			String destination = CompareDate.formatCurrLoc(transferlogg.getDloc().trim());
+			map.put("origin", origin);
+			map.put("destination", destination);
+			return map;
+		}  	
+    	return map;
+    }
+    
+    /**
+     * 1.5
+     * post:faultCode
+	json:{"faultInfo":"行走不到位"}
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "carFaultsInfo")
+    public Map<String, Object> carFaultsInfo(HttpServletRequest request) {
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	String faultCode = request.getParameter("faultCode");
+    	IsFaultsInfo isFaultsInfo = isFaultsInfoService.getFaultsInfo(faultCode);
+    	if (isFaultsInfo != null) {
+			map.put("alarmInfo", isFaultsInfo.getInfo());
+		}
+    	return map;
+    }
     
     private String NoticeItemTypeToColor(String type)
     {

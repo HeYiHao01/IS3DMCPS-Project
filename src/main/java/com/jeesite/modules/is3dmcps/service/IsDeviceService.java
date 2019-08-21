@@ -12,6 +12,7 @@ import com.jeesite.common.entity.Page;
 import com.jeesite.common.service.CrudService;
 import com.jeesite.modules.is3dmcps.entity.Device;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
+import com.jeesite.modules.is3dmcps.entity.SpareParts;
 import com.jeesite.modules.is3dmcps.dao.IsDeviceDao;
 
 /**
@@ -123,5 +124,9 @@ public class IsDeviceService extends CrudService<IsDeviceDao, IsDevice> {
 	
 	public List<Device> sparePartsList(){
 		return this.dao.sparePartsList();
+	}
+	
+	public List<SpareParts> sparePartsCount(){
+		return this.dao.sparePartsCount();
 	}
 }

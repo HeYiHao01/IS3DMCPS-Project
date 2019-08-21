@@ -7,11 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CompareDate {
     public static int compare_date(String DATE1, String DATE2) {
-
-
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try {
             Date dt1 = df.parse(DATE1);
@@ -147,6 +149,26 @@ public class CompareDate {
 		return hour+":"+min+"";
 	}		
 	
+	public static String formatCurrLoc(String currLoc) { 
+		String loc = currLoc.trim();
+		String result = "";
+		int index = loc.indexOf("_");
+		if (loc != null && loc.length()>0) {
+			if ((index+5)>0 && (index+7)>0 && (index+10)>0 &&
+					(index+7)<loc.length() && (index+10)<loc.length() && (index+13)<loc.length()) {
+				String line = loc.substring(index+5, index+7);
+				String lie = loc.substring(index+7, index+10);
+				String layer = loc.substring(index+10, index+13);
+				result = line+"行"+lie+"列"+layer+"层";
+			}else {
+				result = loc;
+			}			
+		}else {
+			result = loc;
+		}
+		return result;
+	}
+	
 	/**
 	 * timestamp转为分钟
 	 * 08:26:25.820000 -》 506
@@ -185,6 +207,30 @@ public class CompareDate {
 		
 		//Date date = new Date("2019/03/13 02:03:16");		
 		//System.out.println(dateCount("2019.03.13 02:03:16"));
-		System.out.println(simplifyDate("2019.07.17"));
+		//System.out.println(simplifyDate("2019.07.17"));
+		System.out.println(formatCurrLoc("OME01_00111401500100"));
+	}
+	
+	/**
+	 * MapList去重
+	 */
+	public static List<Map<String, Object>> removeRepeatMapByKey(List<Map<String, Object>> list, String mapKey) {
+		if (list == null || list.isEmpty())
+			return null;
+		List<Map<String, Object>> listMap = new ArrayList<>();
+		Map<String, Map> msp = new HashMap<>();
+		for (int i = list.size() - 1; i >= 0; i--) {
+			Map map = list.get(i);
+			String id = (String) map.get(mapKey);
+			map.remove(mapKey);
+			msp.put(id, map);
+		}
+		Set<String> mspKey = msp.keySet();
+		for (String key : mspKey) {
+			Map newMap = msp.get(key);
+			newMap.put(mapKey, key);
+			listMap.add(newMap);
+		}
+		return listMap;
 	}
 }

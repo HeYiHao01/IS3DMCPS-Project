@@ -11,11 +11,14 @@
 		</where>
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
+	<select id="getPartsTypeDetail" resultType="IsDeviceCode">
+		select is_device_code.* from is_device_code where type = '1'
+	</select>
 	<select id="getDeviceTypeDetail" resultType="IsDeviceCode">
-		select * from is_device_code where type = '0'
+		select is_device_code.* from is_device_code where type = '0'
 	</select>
 	<select id="getPartApplicationById" resultType="IsDeviceCode" parameterType="String">
-		select * from is_device_code where ID = #{id}
+		select is_device_code.* from is_device_code where ID = #{id}
 	</select>
 	<select id="getPartByModel" resultType="IsDeviceCode" parameterType="String">
 		select * from is_device_code where model = #{model}
@@ -25,10 +28,24 @@
 		select is_device_code.name,is_device_code.model from is_device_code,is_device,is_patrol where is_device_code.id = is_device.device_code_id and is_patrol.device_id = is_device.id
 	</select>
 	
-	<select id="partOfDevice" resultType="IsDeviceCode">
+	<!-- <select id="partOfDevice" resultType="IsDeviceCode">
 		select is_device_code.name,is_device_code.id,is_device_code.life from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}
-	</select>
+	</select> 
 	<select id="partOfPart" resultType="IsDeviceCode">
 		select distinct is_device_code.name,is_device_code.id,is_device_code.life from (select is_device_code.name na,is_device_code.id cid from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}),is_device_code,is_device where is_device_code.parent_code = cid
+	</select>-->
+	<select id="partOfDevice" resultType="IsDeviceCode">
+		select is_device_code.* from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}
+	</select>
+	<select id="partOfPart" resultType="IsDeviceCode">
+		select distinct is_device_code.* from (select is_device_code.name na,is_device_code.id cid from is_device,is_device_code where is_device_code.parent_code = is_device.device_code_id and is_device.device_no = #{deviceNo}),is_device_code,is_device where is_device_code.parent_code = cid
+	</select>
+	
+	<!-- 解决映射bug -->
+	<select id="getParts" resultType="com.jeesite.modules.is3dmcps.entity.NewDevice">
+		select id,code,name,type,model,parameters,application,manufacturer,life,depreciation,parent_code,stock_warn from is_device_code where type = '1'
+	</select>
+	<select id="getDevice" resultType="com.jeesite.modules.is3dmcps.entity.NewDevice">
+		select id,code,name,type,model,parameters,application,manufacturer,life,depreciation,parent_code,stock_warn from is_device_code where type = '0'
 	</select>
 </mapper>

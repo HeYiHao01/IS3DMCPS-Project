@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.jeesite.common.dao.TreeDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
+import com.jeesite.modules.is3dmcps.entity.NewDevice;
 
 /**
  * 设备代码DAO接口
@@ -19,10 +20,14 @@ import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
 @MyBatisDao
 public interface IsDeviceCodeDao extends TreeDao<IsDeviceCode> {
 	public List<IsDeviceCode> getDeviceTypeDetail();
+	public List<IsDeviceCode> getPartsTypeDetail();
 	public IsDeviceCode getPartApplicationById(String id);
 	public List<IsDeviceCode> getPartByModel(String model);
 	public List<IsDeviceCode> getPatrolPoint();
 	
 	public List<IsDeviceCode> partOfDevice(@Param("deviceNo")String deviceNo);
 	public List<IsDeviceCode> partOfPart(@Param("deviceNo")String deviceNo);
+	
+	public List<NewDevice> getDevice();
+	public List<NewDevice> getParts();
 }

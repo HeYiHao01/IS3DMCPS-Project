@@ -126,4 +126,8 @@ public class TwmsPltitemService extends CrudService<TwmsPltitemDao, TwmsPltitem>
 	public int getEmptyCase() {
 		return this.dao.getEmptyCase();
 	}
+	
+	public List<BoxStatics> filterNewBoxStatics(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStatics(brand, rangeStart, rangeEnd);
+	}
 }

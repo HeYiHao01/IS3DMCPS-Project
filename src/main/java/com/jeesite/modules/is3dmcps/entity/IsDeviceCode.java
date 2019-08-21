@@ -4,8 +4,8 @@
 package com.jeesite.modules.is3dmcps.entity;
 
 import org.hibernate.validator.constraints.NotBlank;
-
 import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.NotNull;
 
 import com.jeesite.common.entity.DataEntity;
 import com.jeesite.common.entity.TreeEntity;
@@ -16,13 +16,13 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 设备代码Entity
  * @author xx
- * @version 2019-03-03
+ * @version 2019-08-16
  */
-@Table(name="Is_Device_Code", alias="a", columns={
-		@Column(name="id", attrName="id", label="ID", isPK=true),
+@Table(name="is_device_code", alias="a", columns={
+		@Column(name="id", attrName="id", label="设备代码ID", isPK=true),
 		@Column(name="code", attrName="code", label="设备代码"),
-		@Column(name="name", attrName="name", label="设备名称", queryType=QueryType.LIKE, isTreeName=true),
-		@Column(name="type", attrName="type", label="设备类别"),
+		@Column(name="name", attrName="name", label="设备名称", queryType=QueryType.LIKE),
+		@Column(name="type", attrName="type", label="类别"),
 		@Column(name="model", attrName="model", label="型号规格"),
 		@Column(name="parameters", attrName="parameters", label="设备参数"),
 		@Column(name="application", attrName="application", label="设备用途"),
@@ -30,8 +30,10 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(name="life", attrName="life", label="使用年限"),
 		@Column(name="depreciation", attrName="depreciation", label="年折旧率"),
 		@Column(name="model_url", attrName="modelUrl", label="三维模型"),
+		@Column(name="parent_code", attrName="parentCode", label="父级编号"),
+		@Column(name="stock_warn", attrName="stockWarn", label="库存预警参数"),
 		@Column(includeEntity=TreeEntity.class),
-		@Column(includeEntity=DataEntity.class),
+		@Column(includeEntity=DataEntity.class),		
 	}, orderBy="code"
 )
 public class IsDeviceCode extends TreeEntity<IsDeviceCode> {
@@ -39,7 +41,7 @@ public class IsDeviceCode extends TreeEntity<IsDeviceCode> {
 	private static final long serialVersionUID = 1L;
 	private String code;		// 设备代码
 	private String name;		// 设备名称
-	private String type;		// 设备类别
+	private String type;		// 类别
 	private String model;		// 型号规格
 	private String parameters;		// 设备参数
 	private String application;		// 设备用途
@@ -47,6 +49,8 @@ public class IsDeviceCode extends TreeEntity<IsDeviceCode> {
 	private String life;		// 使用年限
 	private String depreciation;		// 年折旧率
 	private String modelUrl;		// 三维模型
+	private String parentCode;      //父级编号
+	private Integer stockWarn;		// 库存预警参数
 	
 	public IsDeviceCode() {
 		this(null);
@@ -86,7 +90,7 @@ public class IsDeviceCode extends TreeEntity<IsDeviceCode> {
 		this.name = name;
 	}
 	
-	@Length(min=0, max=2, message="设备类别长度不能超过 2 个字符")
+	@Length(min=0, max=2, message="类别长度不能超过 2 个字符")
 	public String getType() {
 		return type;
 	}
@@ -158,4 +162,20 @@ public class IsDeviceCode extends TreeEntity<IsDeviceCode> {
 		this.modelUrl = modelUrl;
 	}
 	
+	@NotNull(message="库存预警参数不能为空")
+	public Integer getStockWarn() {
+		return stockWarn;
+	}
+
+	public void setStockWarn(Integer stockWarn) {
+		this.stockWarn = stockWarn;
+	}
+	
+	public String getParentCode() {
+		return parentCode;
+	}
+
+	public void setParentCode(String parentCode) {
+		this.parentCode = parentCode;
+	}
 }

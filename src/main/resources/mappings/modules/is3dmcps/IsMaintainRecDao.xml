@@ -30,7 +30,7 @@
 		select count(rec_status) from is_maintain_rec where rec_status=1 and to_char(maintain_time,'yyyy.mm.dd') = #{maintainTime}
 	</select>
 	<select id="filterMaintainRec" resultType="IsMaintainRec">
-		select * from is_maintain_rec where maintain_name = #{maintainName} and device_no = #{deviceNo} and plan_person = #{planPerson}
+		select * from is_maintain_rec where maintain_name = #{maintainName} and device_no = #{deviceNo} and plan_person = #{planPerson} and rec_status='0'
 	</select>
 	
 	<select id="getMaintainPersonAll" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
@@ -41,5 +41,11 @@
 	</select>
 	<select id="getMaintainPersonFinish" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
 		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='1' group by maintain_person
+	</select>
+	
+	<select id="filterMaintainRecPage" resultType="IsMaintainRec">
+		select alias.* from
+		(select t.*,ROWNUM as rowno from is_maintain_rec t where maintain_name = #{maintainName} and device_no = #{deviceNo} and plan_person = #{planPerson} and maintain_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd} and status= #{status}) alias
+		where alias.rowno &gt; #{rangeStart}
 	</select>
 </mapper>

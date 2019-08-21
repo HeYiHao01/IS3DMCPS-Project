@@ -233,6 +233,11 @@ public class PagePatrolManController extends BaseController{
     /**
      * （2）Post:
 	 * {"inspectionName":"xxx","inspectionPersonnel":"xxx","startTime":"xxx","endTime":"xxx"}
+	 * 
+	 * 4.2.1.	巡检日志
+	Post:   增加分页范围rangeStart、rangeEnd
+	{"inspectionName":"xxx","inspectionPersonnel":"xxx","startTime":"xxx","endTime":"xxx","rangeStart":1,"rangeEnd":500}
+
 	
 	 *Json:（根据条件请求筛选的数据）
 	 *[{"inspectionName": "拆码垛机保养","inspectionRecord": "加快检修","inspectionPersonnel": "兰州烟草","inspectionTime": "2019-05-2 00::00:00 "}]
@@ -247,18 +252,35 @@ public class PagePatrolManController extends BaseController{
     	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
     	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
     	System.err.println(startTime+" "+endTime);
-    	for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLog(inspectionName, inspectionPersonnel, startTime, endTime)){
-    		Map<String, Object> map = MapUtils.newHashMap();
-    		map.put("inspectionName", inspectionName);
-        	map.put("inspectionPersonnel", inspectionPersonnel);
-        	map.put("inspectionTime", CompareDate.simplifyDate(isPatrolRec.getPatrolTime()));
-        	if (isPatrolRec.getRecord() != null) {
-        		map.put("inspectionRecord", isPatrolRec.getRecord());
-			}else {
-				map.put("inspectionRecord", "null");
-			}
-    		mapList.add(map);
-    	}
+    	String rangeStart = request.getParameter("rangeStart");
+    	String rangeEnd = request.getParameter("rangeEnd");
+    	if (rangeEnd == null || rangeEnd.equals("")) {
+    		for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLog(inspectionName, inspectionPersonnel, startTime, endTime)){
+        		Map<String, Object> map = MapUtils.newHashMap();
+        		map.put("inspectionName", inspectionName);
+            	map.put("inspectionPersonnel", inspectionPersonnel);
+            	map.put("inspectionTime", CompareDate.simplifyDate(isPatrolRec.getPatrolTime()));
+            	if (isPatrolRec.getRecord() != null) {
+            		map.put("inspectionRecord", isPatrolRec.getRecord());
+    			}else {
+    				map.put("inspectionRecord", "null");
+    			}
+        		mapList.add(map);
+        	}
+		}else {
+			for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLogPage(inspectionName, inspectionPersonnel, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
+	    		Map<String, Object> map = MapUtils.newHashMap();
+	    		map.put("inspectionName", inspectionName);
+	        	map.put("inspectionPersonnel", inspectionPersonnel);
+	        	map.put("inspectionTime", CompareDate.simplifyDate(isPatrolRec.getPatrolTime()));
+	        	if (isPatrolRec.getRecord() != null) {
+	        		map.put("inspectionRecord", isPatrolRec.getRecord());
+				}else {
+					map.put("inspectionRecord", "null");
+				}
+	    		mapList.add(map);
+	    	}
+		}    	
     	return mapList;
     }
 }

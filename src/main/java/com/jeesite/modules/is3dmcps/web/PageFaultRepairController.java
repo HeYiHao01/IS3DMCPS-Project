@@ -348,17 +348,33 @@ public class PageFaultRepairController extends BaseController{
 		}
     	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
     	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
-    	for(IsFaults isFaults:isFaultsService.filterFaultsLog(faultName, deviceName, servicePersonnel, status, startTime, endTime)){
-    		Map<String, Object> map = MapUtils.newHashMap();
-    		map.put("faultName", faultName);
-    		map.put("deviceName", deviceName);
-    		map.put("deviceNumber", isFaults.getDeviceId());
-    		map.put("faultCode", isFaults.getFaultsCode());
-    		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
-    		map.put("servicePersonnel", servicePersonnel);
-    		map.put("status", request.getParameter("status"));
-    		mapList.add(map);
-    	}
+    	String rangeStart = request.getParameter("rangeStart");
+    	String rangeEnd = request.getParameter("rangeEnd");
+    	if (rangeEnd == null || rangeEnd.equals("")) {
+    		for(IsFaults isFaults:isFaultsService.filterFaultsLog(faultName, deviceName, servicePersonnel, status, startTime, endTime)){
+        		Map<String, Object> map = MapUtils.newHashMap();
+        		map.put("faultName", faultName);
+        		map.put("deviceName", deviceName);
+        		map.put("deviceNumber", isFaults.getDeviceId());
+        		map.put("faultCode", isFaults.getFaultsCode());
+        		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
+        		map.put("servicePersonnel", servicePersonnel);
+        		map.put("status", request.getParameter("status"));
+        		mapList.add(map);
+        	}
+    	}else {
+    		for(IsFaults isFaults:isFaultsService.filterFaultsLogPage(faultName, deviceName, servicePersonnel, status, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
+        		Map<String, Object> map = MapUtils.newHashMap();
+        		map.put("faultName", faultName);
+        		map.put("deviceName", deviceName);
+        		map.put("deviceNumber", isFaults.getDeviceId());
+        		map.put("faultCode", isFaults.getFaultsCode());
+        		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
+        		map.put("servicePersonnel", servicePersonnel);
+        		map.put("status", request.getParameter("status"));
+        		mapList.add(map);
+        	}
+		}
     	return mapList;
 	}
     
@@ -409,6 +425,14 @@ public class PageFaultRepairController extends BaseController{
 	 * {"faultName":"xxx","repairResults":"xxx","repairPersonnel":"xxx","startTime":"xxx","endTime":"xxx"}	
 	 * Json:（根据条件请求筛选的数据）
 	 * [{"faultName": "升降输送机故障","repairResults": "维修失败","repairPersonnel": "兰州烟草","repairTime": "2019-05-2 00::00:00 "}]
+	 * 
+	 * 4.3.2.	维修日志
+	Post: 		 增加分页范围rangeStart、rangeEnd
+	{"faultName":"xxx","repairResults":"xxx","repairPersonnel":"xxx","startTime":"xxx","endTime":"xxx","rangeStart":1,"rangeEnd":500}}
+	
+	Json:（根据条件请求筛选的数据）
+	[{"faultName": "升降输送机故障","repairResults": "维修失败","handlingMethod": "清洁","repairPersonnel": "兰州烟草","repairTime": "2019-05-2 00::00:00 "}]
+
      * @param request
      * @return
      */
@@ -437,14 +461,29 @@ public class PageFaultRepairController extends BaseController{
 		}
     	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
     	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
-    	for(IsRepairRec isRepairRec:isRepairRecService.filterRepairLog(faultName, repairPersonnel, repairResults, startTime, endTime)){
-    		Map<String, Object> map = MapUtils.newHashMap();
-    		map.put("faultName", faultName);    		
-    		map.put("repairResults", request.getParameter("repairResults"));
-    		map.put("repairPersonnel", repairPersonnel);
-    		map.put("repairTime", CompareDate.simplifyDate(isRepairRec.getRepairTime()));    		
-    		mapList.add(map);
-    	}
+    	String rangeStart = request.getParameter("rangeStart");
+    	String rangeEnd = request.getParameter("rangeEnd");
+    	if (rangeEnd == null || rangeEnd.equals("")) {
+    		for(IsRepairRec isRepairRec:isRepairRecService.filterRepairLog(faultName, repairPersonnel, repairResults, startTime, endTime)){
+        		Map<String, Object> map = MapUtils.newHashMap();
+        		map.put("faultName", faultName);    		
+        		map.put("repairResults", request.getParameter("repairResults"));
+        		map.put("repairPersonnel", repairPersonnel);
+        		map.put("handlingMethod", isRepairRec.getRecord());
+        		map.put("repairTime", CompareDate.simplifyDate(isRepairRec.getRepairTime()));    		
+        		mapList.add(map);
+        	}
+    	}else {
+    		for(IsRepairRec isRepairRec:isRepairRecService.filterRepairLogPage(faultName, repairPersonnel, repairResults, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
+        		Map<String, Object> map = MapUtils.newHashMap();
+        		map.put("faultName", faultName);    		
+        		map.put("repairResults", request.getParameter("repairResults"));
+        		map.put("repairPersonnel", repairPersonnel);
+        		map.put("handlingMethod", isRepairRec.getRecord());
+        		map.put("repairTime", CompareDate.simplifyDate(isRepairRec.getRepairTime()));    		
+        		mapList.add(map);
+        	}
+		}
     	return mapList;
 	}
 }

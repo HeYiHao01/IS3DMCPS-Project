@@ -9,6 +9,7 @@ import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.Device;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
+import com.jeesite.modules.is3dmcps.entity.SpareParts;
 
 /**
  * 设备DAO接口
@@ -26,4 +27,5 @@ public interface IsDeviceDao extends CrudDao<IsDevice> {
     public List<IsDevice> getDeviceByDeviceNo(String deviceNo);
     
     public List<Device> sparePartsList();
+    public List<SpareParts> sparePartsCount();
 }

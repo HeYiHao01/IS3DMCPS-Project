@@ -12,6 +12,7 @@ import com.jeesite.modules.twms.entity.TwmsTransferlogg;
 import com.jeesite.modules.twms.service.TwmsLocService;
 import com.jeesite.modules.twms.service.TwmsPltitemService;
 import com.jeesite.modules.twms.service.TwmsTransferloggService;
+import com.jeesite.utils.CompareDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -94,8 +97,7 @@ public class PagePackingBoxController extends BaseController{
 	 * Json:
 	 *[{“VPLTNUM”:”64581”,”CURRLOC”:”OME01_00112801100100”,"LINE":1,"LIE":13,"LAYER":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-59.194000244140625,}]
 	 */
-	@RequestMapping(value = {"containLocationStatic", ""})
-	public List<Map<String, Object>> containLocationStatic(){
+	/*public List<Map<String, Object>> containLocationStatic(){
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();
     	int line = 0;
     	int lie = 0;
@@ -126,6 +128,54 @@ public class PagePackingBoxController extends BaseController{
         	mapList.add(map);
     	}
     	return mapList;    	
+	}*/
+	/**
+	 * 1.1.	静态货箱刷新
+		空/实箱颜色标记区分，增加 ITEMDESC字段
+		CURRLOC的值需要解析为几行几列几层
+		Json:
+		[{“VPLTNUM”:”64581”,”CURRLOC”:”OME01_00112801100100”,”ITEMDESC”:”兰州(细支珍)烟丝”,"LINE":1,"LIE":13,"LAYER":1,"location_X":-1.2400000095367432,"location_Y":-0.41100001335144043,"location_Z":-59.194000244140625,}]
+
+	 * @return
+	 */
+	@RequestMapping(value = {"containLocationStatic", ""})
+	public List<Map<String, Object>> containLocationStatic(){
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	int line = 0;
+    	int lie = 0;
+    	int layer = 0;
+    	double location_X = 0.0;
+    	double location_Y = 0.0;
+    	double location_Z = 0.0;
+    	String VPLTNUM = "";
+    	String CURRLOC = "";
+    	String currloc = "";
+    	String ITEMDESC = "";
+    	for(BoxStatics boxStatics : twmsPltitemService.getContainLocation()){
+    		Map<String, Object> map = MapUtils.newHashMap();
+    		line = boxStatics.getLine();
+    		lie = boxStatics.getLie();
+    		layer = boxStatics.getLayer();
+    		location_X = boxStatics.getLocationX();
+    		location_Y = boxStatics.getLocationY();
+    		location_Z = boxStatics.getLocationZ();
+    		VPLTNUM = boxStatics.getVplnum();
+    		ITEMDESC = boxStatics.getItemdesc().trim();
+    		currloc = boxStatics.getCurrloc();
+    		CURRLOC = CompareDate.formatCurrLoc(currloc);
+    		map.put("line", line);
+        	map.put("lie", lie);
+        	map.put("layer", layer);
+        	map.put("location_X", location_X);
+        	map.put("location_Y", location_Y);
+        	map.put("location_Z", location_Z);
+        	map.put("VPLTNUM", VPLTNUM);
+        	map.put("currloc", currloc);
+        	map.put("CURRLOC", CURRLOC);
+        	map.put("ITEMDESC", ITEMDESC);
+        	mapList.add(map);
+    	}
+    	return mapList;    	
 	}
 	
 	/**
@@ -146,7 +196,8 @@ public class PagePackingBoxController extends BaseController{
 		String DLOC = "";
 		String STATUS = "";	
 		TwmsTransferlogg transferlogg = new TwmsTransferlogg();
-		for(int i = 0;i<200;i++){
+		int count = twmsTransferloggService.getCount()/1000;
+		for(int i = 0;i<=count;i++){
 			transferlogg = twmsTransferloggService.getByLoggnum(loggnum, i);
 			if (transferlogg != null && transferlogg.getVpltnum() != null) {
 				Map<String, Object> map = MapUtils.newHashMap();
@@ -187,6 +238,7 @@ public class PagePackingBoxController extends BaseController{
 	public List<Map<String, Object>> boxStatics(HttpServletRequest request){
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();    	
     	String CURRLOC = "";
+    	String currloc = "";
     	String ITEMDESC = "";
     	String LOTNUM = "";
     	String ENTERDATE = "";
@@ -196,7 +248,8 @@ public class PagePackingBoxController extends BaseController{
     	double downBoxWeight = 0.0;
     	for(BoxStatics boxStatics : twmsPltitemService.getNewBoxStatics(request.getParameter("vpltnum"))){
     		Map<String, Object> map = MapUtils.newHashMap();
-    		CURRLOC = boxStatics.getCurrloc();
+    		currloc = boxStatics.getCurrloc();
+    		CURRLOC = CompareDate.formatCurrLoc(currloc);
     		ITEMDESC = boxStatics.getItemdesc();
     		LOTNUM = boxStatics.getLotnum();
     		ENTERDATE = boxStatics.getEnterdate();
@@ -206,6 +259,7 @@ public class PagePackingBoxController extends BaseController{
 				if (downBoxNum.equals("") && downBoxWeight == 0) 
 					continue;
 				else {
+					map.put("currloc", currloc);
 					map.put("CURRLOC", CURRLOC);
 		        	map.put("ITEMDESC", ITEMDESC);
 		        	map.put("LOTNUM", LOTNUM);
@@ -221,6 +275,7 @@ public class PagePackingBoxController extends BaseController{
 				if (upBoxNum.equals("") && upBoxWeight == 0) 
 					continue;
 				else {
+					map.put("currloc", currloc);
 					map.put("CURRLOC", CURRLOC);
 		        	map.put("ITEMDESC", ITEMDESC);
 		        	map.put("LOTNUM", LOTNUM);
@@ -336,54 +391,168 @@ public class PagePackingBoxController extends BaseController{
 				}
 				mapList.add(map);
 			}
-			/*CURRLOC = boxStatics.getCurrloc();
-			ITEMDESC = boxStatics.getItemdesc();
-			LOTNUM = boxStatics.getLotnum();
-			ENTERDATE = boxStatics.getEnterdate();
-			System.err.println(boxStatics.getLineNum());
-			if (boxStatics.getLineNum() == 10) {
-				upBoxNum = boxStatics.getBoxNum();
-				upBoxWeight = boxStatics.getWeight();
-				if (downBoxNum.equals("") && downBoxWeight == 0)
-					continue;
-				else {
-					map.put("line", line);
-					map.put("lie", lie);
-					map.put("layer", layer);
-					map.put("VPLTNUM", VPLTNUM);
-					map.put("CURRLOC", CURRLOC);
-					map.put("ITEMDESC", ITEMDESC);
-					map.put("LOTNUM", LOTNUM);
-					map.put("ENTERDATE", ENTERDATE);
-					map.put("upBoxNum", upBoxNum);
-					map.put("downBoxNum", downBoxNum);
-					map.put("upBoxWeight", upBoxWeight);
-					map.put("downBoxWeight", downBoxWeight);
-				}
-			} else if (boxStatics.getLineNum() == 20) {
-				downBoxNum = boxStatics.getBoxNum();
-				downBoxWeight = boxStatics.getWeight();
-				if (upBoxNum.equals("") && upBoxWeight == 0)
-					continue;
-				else {
-					map.put("line", line);
-					map.put("lie", lie);
-					map.put("layer", layer);
-					map.put("VPLTNUM", VPLTNUM);
-					map.put("CURRLOC", CURRLOC);
-					map.put("ITEMDESC", ITEMDESC);
-					map.put("LOTNUM", LOTNUM);
-					map.put("ENTERDATE", ENTERDATE);
-					map.put("upBoxNum", upBoxNum);
-					map.put("downBoxNum", downBoxNum);
-					map.put("upBoxWeight", upBoxWeight);
-					map.put("downBoxWeight", downBoxWeight);
-				}
-			} else {
-				map.put("Error", "数据库缺少相关数据");
-			}*/
 			mapList.add(map);
 		}
-		return mapList;
-	}   
+		return CompareDate.removeRepeatMapByKey(mapList, "VPLTNUM");
+	}  
+    
+    
+    /**
+     * 1.2.1.	即时库存信息情况
+		每一个品牌总库存在所有品牌总库存的占比。
+		Json：
+	[{"brand":"xxx","sum":1500,"singleBrandTotalWeight":50.50,"allBrandTotalWeight": 100.5},{"brand":"xxx","sum":1500,"singleBrandTotalWeight": 50.50,"allBrandTotalWeight": 100.5}]
+
+     */
+    @RequestMapping(value = {"brandProportion",""})
+	public List<Map<String, Object>> brandProportion() {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();	
+		List<Map<String, Object>> mapListCount = ListUtils.newArrayList();	
+		String VPLTNUM = "";		
+		String ITEMDESC = "";		
+		String upBoxNum = "";
+		String downBoxNum = "";
+		double upBoxWeight = 0.0;
+		double downBoxWeight = 0.0;
+		for (BoxStatics boxStatics1 : twmsPltitemService.getContainLocation()) {
+			Map<String, Object> map = MapUtils.newHashMap();
+			VPLTNUM = boxStatics1.getVplnum();
+			for (BoxStatics boxStatics : twmsPltitemService.getNewBoxStatics(VPLTNUM)) {
+				ITEMDESC = boxStatics.getItemdesc().trim();
+				if (boxStatics.getLineNum() == 10) {
+					upBoxNum = boxStatics.getBoxNum();
+					upBoxWeight = boxStatics.getWeight();
+					if (downBoxNum.equals("") && downBoxWeight == 0)
+						continue;
+					else {
+						map.put("VPLTNUM", VPLTNUM);
+						map.put("ITEMDESC", ITEMDESC);
+						map.put("upBoxWeight", upBoxWeight);
+						map.put("downBoxWeight", downBoxWeight);
+					}
+				} else if (boxStatics.getLineNum() == 20) {
+					downBoxNum = boxStatics.getBoxNum();
+					downBoxWeight = boxStatics.getWeight();
+					if (upBoxNum.equals("") && upBoxWeight == 0)
+						continue;
+					else {
+						map.put("VPLTNUM", VPLTNUM);
+						map.put("ITEMDESC", ITEMDESC);
+						map.put("upBoxWeight", upBoxWeight);
+						map.put("downBoxWeight", downBoxWeight);
+					}
+				} else {
+					map.put("Error", "数据库缺少相关数据");
+				}
+				mapList.add(map);
+			}
+		}		
+		mapList = CompareDate.removeRepeatMapByKey(mapList, "VPLTNUM");		
+		List<String> list = new ArrayList<String>();		
+		for(Map<String, Object> map: mapList){
+			list.add(map.get("ITEMDESC").toString());
+		}
+		List<String> newList = new ArrayList<String>(new HashSet<>(list));
+		System.err.println(newList);
+		for(String brand: newList){
+			int sum = 0;	
+			double singleBrandTotalWeight = 0.0;
+			for(Map<String, Object> map: mapList){
+				if (map.get("ITEMDESC").equals(brand)) {
+					++sum;
+					singleBrandTotalWeight = (double) map.get("upBoxWeight") + (double) map.get("downBoxWeight");					
+				}
+			}
+			Map<String, Object> temp = MapUtils.newHashMap();
+			temp.put("brand", brand);
+			temp.put("sum", sum);
+			temp.put("singleBrandTotalWeight", singleBrandTotalWeight);
+			mapListCount.add(temp);
+		}
+		return mapListCount;
+    }
+    
+    /**
+     * 1.2.2.	筛选之后的列表信息（新增分页范围参数）
+	POST  rangeStart、rangeEnd
+	{"brand":"XXX","rangeStart":1,"rangeEnd":500}
+	Json:
+	[{"VPLTNUM":"64581","CURRLOC":"OME01_00112801100100","LINE":1,"LIE":13,"LAYER":1,"ITEMDESC":"兰州(细支珍)","LOTNUM":"YXZZP1801001","ENTERDATE":"2018-1-13 18:59:39","upBoxNum":"200714","downBoxNum":"200084","upBoxWeight":"200.20","downBoxWeight":"200.56"}]
+
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = {"goodsListFilter",""})
+	public List<Map<String, Object>> goodsListFilter(HttpServletRequest request) {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		int line = 0;
+		int lie = 0;
+		int layer = 0;
+		String VPLTNUM = "";
+		String CURRLOC = "";
+		String ITEMDESC = "";
+		String LOTNUM = "";
+		String ENTERDATE = "";
+		String upBoxNum = "";
+		String downBoxNum = "";
+		double upBoxWeight = 0.0;
+		double downBoxWeight = 0.0;
+		for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStatics(request.getParameter("brand"), Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+			Map<String, Object> map = MapUtils.newHashMap();
+			line = boxStatics1.getLine();
+			lie = boxStatics1.getLie();
+			layer = boxStatics1.getLayer();
+			VPLTNUM = boxStatics1.getVplnum();
+			for (BoxStatics boxStatics : twmsPltitemService.getNewBoxStatics(VPLTNUM)) {
+				CURRLOC = CompareDate.formatCurrLoc(boxStatics.getCurrloc());
+				ITEMDESC = boxStatics.getItemdesc();
+				LOTNUM = boxStatics.getLotnum();
+				ENTERDATE = boxStatics.getEnterdate();
+				if (boxStatics.getLineNum() == 10) {
+					upBoxNum = boxStatics.getBoxNum();
+					upBoxWeight = boxStatics.getWeight();
+					if (downBoxNum.equals("") && downBoxWeight == 0)
+						continue;
+					else {
+						map.put("line", line);
+						map.put("lie", lie);
+						map.put("layer", layer);
+						map.put("VPLTNUM", VPLTNUM);
+						map.put("CURRLOC", CURRLOC);
+						map.put("ITEMDESC", ITEMDESC);
+						map.put("LOTNUM", LOTNUM);
+						map.put("ENTERDATE", ENTERDATE);
+						map.put("upBoxNum", upBoxNum);
+						map.put("downBoxNum", downBoxNum);
+						map.put("upBoxWeight", upBoxWeight);
+						map.put("downBoxWeight", downBoxWeight);
+					}
+				} else if (boxStatics.getLineNum() == 20) {
+					downBoxNum = boxStatics.getBoxNum();
+					downBoxWeight = boxStatics.getWeight();
+					if (upBoxNum.equals("") && upBoxWeight == 0)
+						continue;
+					else {
+						map.put("line", line);
+						map.put("lie", lie);
+						map.put("layer", layer);
+						map.put("VPLTNUM", VPLTNUM);
+						map.put("CURRLOC", CURRLOC);
+						map.put("ITEMDESC", ITEMDESC);
+						map.put("LOTNUM", LOTNUM);
+						map.put("ENTERDATE", ENTERDATE);
+						map.put("upBoxNum", upBoxNum);
+						map.put("downBoxNum", downBoxNum);
+						map.put("upBoxWeight", upBoxWeight);
+						map.put("downBoxWeight", downBoxWeight);
+					}
+				} else {
+					map.put("Error", "数据库缺少相关数据");
+				}
+				mapList.add(map);
+			}
+			mapList.add(map);
+		}
+		return CompareDate.removeRepeatMapByKey(mapList, "VPLTNUM");
+	}  
 }

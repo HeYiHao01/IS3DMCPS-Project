@@ -5,6 +5,8 @@ package com.jeesite.modules.twms.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.twms.entity.WmsGdxdIn;
@@ -33,4 +35,9 @@ public interface WmsGdxdInDao extends CrudDao<WmsGdxdIn> {
 	public List<WmsGdxdIn> classTeamList();
 	public List<WmsGdxdIn> getAllByClassTeam(String teamCd);
 	public List<WmsGdxdIn> getAllByClassTeamNull();
+	
+	public List<WmsGdxdIn> getBrands();
+	public List<WmsGdxdIn> filterWorkOrderIn(@Param("inLine") String inLine, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
+	
+	public List<WmsGdxdIn> filterByClassTeam(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
 }

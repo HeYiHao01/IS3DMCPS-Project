@@ -11,7 +11,9 @@ import com.jeesite.modules.is3dmcps.entity.DeviceUse;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceProperties;
+import com.jeesite.modules.is3dmcps.entity.NewDevice;
 import com.jeesite.modules.is3dmcps.entity.PartsConsumption;
+import com.jeesite.modules.is3dmcps.entity.SpareParts;
 import com.jeesite.modules.is3dmcps.service.IsDeviceCodeService;
 import com.jeesite.modules.is3dmcps.service.IsDevicePropertiesService;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
@@ -534,5 +536,215 @@ public class PageDeviceManController extends BaseController{
     	}
     	return mapList;
 	}
+    
+    /**
+     * （2）备件基本信息列表
+	Post：deviceCategory
+	Json：
+	[{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":10},{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":5}]
+	此处的sparePartsID是is_device_code->deviceCode
+     */
+    @RequestMapping(value = "sparePartsInfoList")
+    public List<Map<String, Object>> sparePartsInfoList(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String deviceCategory = request.getParameter("deviceCategory");
+    	String deviceNo = "";
+    	String sparePartsID = "";
+    	String sparePartsName = "";
+    	String sparePartsType = "";
+    	int sparePartsNumber = 0;
+    	for(Device device:isDeviceService.sparePartsList()){
+    		if (device.getDeviceCodeName().equals(deviceCategory)) {
+				deviceNo = device.getDeviceNo();
+				sparePartsID = device.getCode();
+				sparePartsName = device.getDeviceCodeName();
+				sparePartsType = device.getModel();
+				sparePartsNumber++;
+			}
+    	}
+    	Map<String, Object> map = MapUtils.newHashMap();
+    	map.put("sparePartsID", sparePartsID);
+    	map.put("sparePartsName", sparePartsName);
+    	map.put("sparePartsType", sparePartsType);
+    	map.put("sparePartsNumber", sparePartsNumber);
+    	mapList.add(map);
+    	
+    	for(IsDeviceCode isDeviceCode:isDeviceCodeService.partOfDevice(deviceNo)){
+    		sparePartsNumber = 0;
+    		sparePartsID = isDeviceCode.getCode();
+			sparePartsName = isDeviceCode.getName();
+			sparePartsType = isDeviceCode.getModel();
+    		for(Device device:isDeviceService.sparePartsList()){
+        		if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {    				
+    				sparePartsNumber++;
+    			}
+        	}
+    		Map<String, Object> map1 = MapUtils.newHashMap();
+        	map1.put("sparePartsID", sparePartsID);
+        	map1.put("sparePartsName", sparePartsName);
+        	map1.put("sparePartsType", sparePartsType);
+        	map1.put("sparePartsNumber", sparePartsNumber);
+        	mapList.add(map1);
+    	}
+    	
+		for (IsDeviceCode isDeviceCode : isDeviceCodeService.partOfPart(deviceNo)) {
+			sparePartsNumber = 0;
+    		sparePartsID = isDeviceCode.getCode();
+			sparePartsName = isDeviceCode.getName();
+			sparePartsType = isDeviceCode.getModel();
+			for(Device device:isDeviceService.sparePartsList()){
+        		if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {
+    				sparePartsID = device.getCode();
+    				sparePartsName = device.getDeviceCodeName();
+    				sparePartsType = device.getModel();
+    				sparePartsNumber++;
+    			}
+        	}
+			Map<String, Object> map2 = MapUtils.newHashMap();
+	    	map2.put("sparePartsID", sparePartsID);
+	    	map2.put("sparePartsName", sparePartsName);
+	    	map2.put("sparePartsType", sparePartsType);
+	    	map2.put("sparePartsNumber", sparePartsNumber);
+	    	mapList.add(map2);
+		}
+    	
+    	return mapList;
+    }
+    
+    /**
+     * （2）备件基本信息列表(待修改，逻辑不正确)
+	Post：deviceCategory
+	Json：
+	[{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":10},{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":5}]
+	此处的sparePartsID是is_device->device_no
+     */
+    @RequestMapping(value = "sparePartsIdInfoList")
+    public List<Map<String, Object>> sparePartsIdInfoList(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String deviceCategory = request.getParameter("deviceCategory");
+    	String deviceNo = ""; 
+    	    	
+    	for(Device device:isDeviceService.sparePartsList()){ 
+    		int sparePartsNumber = 0;
+    		String sparePartsID = "";
+        	String sparePartsName = "";
+        	String sparePartsType = "";
+    		if (device.getDeviceCodeName().equals(deviceCategory)) {
+				deviceNo = device.getDeviceNo();
+				sparePartsID = device.getCode();
+				sparePartsName = device.getDeviceCodeName();
+				sparePartsType = device.getModel();
+				sparePartsNumber++;
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("sparePartsID", deviceNo);
+				map.put("sparePartsName", sparePartsName);
+				map.put("sparePartsType", sparePartsType);
+				map.put("sparePartsNumber", sparePartsNumber);
+				mapList.add(map);
+			}    		  		
+    	}    	    	
+    	
+		for (IsDeviceCode isDeviceCode : isDeviceCodeService.partOfDevice(deviceNo)) {
+			int sparePartsNumber = 0;
+			String sparePartsID = "";
+			String sparePartsName = "";
+			String sparePartsType = "";
+			for (Device device : isDeviceService.sparePartsList()) {
+				if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {
+					sparePartsID = device.getDeviceNo();
+					sparePartsName = device.getDeviceCodeName();
+					sparePartsType = device.getModel();
+					sparePartsNumber++;	
+					Map<String, Object> map2 = MapUtils.newHashMap();
+					map2.put("sparePartsID", sparePartsID);
+					map2.put("sparePartsName", sparePartsName);
+					map2.put("sparePartsType", sparePartsType);
+					map2.put("sparePartsNumber", sparePartsNumber);
+					mapList.add(map2);
+				} 				
+			}
+		}		    	
+    	
+		for (IsDeviceCode isDeviceCode : isDeviceCodeService.partOfPart(deviceNo)) {
+			int sparePartsNumber = 0;
+			String sparePartsID = "";
+			String sparePartsName = "";
+			String sparePartsType = "";
+			for (Device device : isDeviceService.sparePartsList()) {
+				if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {
+					sparePartsID = device.getDeviceNo();
+					sparePartsName = device.getDeviceCodeName();
+					sparePartsType = device.getModel();
+					sparePartsNumber++;	
+					Map<String, Object> map2 = MapUtils.newHashMap();
+					map2.put("sparePartsID", sparePartsID);
+					map2.put("sparePartsName", sparePartsName);
+					map2.put("sparePartsType", sparePartsType);
+					map2.put("sparePartsNumber", sparePartsNumber);
+					mapList.add(map2);
+				} 				
+			}
+		}	    	
+    	return mapList;
+    }
+    
+    /**
+     * 3.2.	备件库预警提示
+     * Json：
+	[{"sparePartsName":"xxx","sparePartsType":"xxx","affiliation":,"xxx","warningNumber":10,"currentNumber":8},{"sparePartsName":"xxx","sparePartsType":"xxx","affiliation":,"xxx","warningNumber":10,"currentNumber":8}]
+
+     * @return
+     */
+    @RequestMapping(value = "sparePartsAlertList")
+    public List<Map<String, Object>> sparePartsAlertList() {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+    	String sparePartsName = "";
+    	String sparePartsType = "";
+    	String affiliation = "";
+    	int warningNumber = 0;
+    	int currentNumber = 0;
+    	for(IsDeviceCode isDeviceCode:isDeviceCodeService.getDeviceTypeDetail()){
+    		for(SpareParts spareParts:isDeviceService.sparePartsCount()){
+    			if (isDeviceCode.getName().equals(spareParts.getCodeName()) && isDeviceCode.getModel().equals(spareParts.getModel())) {
+					if (isDeviceCode.getStockWarn() >= spareParts.getCounts()) {
+						Map<String, Object> map = MapUtils.newHashMap();				    	
+						sparePartsName = isDeviceCode.getName();
+						sparePartsType = isDeviceCode.getModel();
+						affiliation = "null";
+						warningNumber = isDeviceCode.getStockWarn();
+						currentNumber = spareParts.getCounts();						
+				    	map.put("sparePartsName", sparePartsName);
+				    	map.put("sparePartsType", sparePartsType);
+				    	map.put("affiliation", affiliation);
+				    	map.put("warningNumber", warningNumber);
+				    	map.put("currentNumber", currentNumber);
+				    	mapList.add(map);
+					}
+				}
+    		}
+    	}
+    	
+    	for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartsTypeDetail()){
+    		for(SpareParts spareParts:isDeviceService.sparePartsCount()){
+    			if (isDeviceCode.getName().equals(spareParts.getCodeName()) && isDeviceCode.getModel().equals(spareParts.getModel())) {
+					if (isDeviceCode.getStockWarn() >= spareParts.getCounts()) {
+						Map<String, Object> map = MapUtils.newHashMap();				    	
+						sparePartsName = isDeviceCode.getName();
+						sparePartsType = isDeviceCode.getModel();
+						affiliation = isDeviceCodeService.getPartApplicationById(isDeviceCode.getParentCode()).getName();
+						warningNumber = isDeviceCode.getStockWarn();
+						currentNumber = spareParts.getCounts();						
+				    	map.put("sparePartsName", sparePartsName);
+				    	map.put("sparePartsType", sparePartsType);
+				    	map.put("affiliation", affiliation);
+				    	map.put("warningNumber", warningNumber);
+				    	map.put("currentNumber", currentNumber);
+				    	mapList.add(map);
+					}
+				}
+    		}
+    	}    	
+    	return mapList;
+    }
 }
 		

@@ -131,4 +131,8 @@ public class IsMaintainRecService extends CrudService<IsMaintainRecDao, IsMainta
     public List<MaintainPersonInfo> getMaintainPersonFinish(){
     	return this.dao.getMaintainPersonFinish();
     }
+    
+    public List<IsMaintainRec> filterMaintainRecPage(@Param("maintainName")String maintainName, @Param("deviceNo")String deviceNo, @Param("planPerson")String planPerson, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime, @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd){
+    	return this.dao.filterMaintainRecPage(maintainName, deviceNo, planPerson, status, startTime, endTime, rangeStart, rangeEnd);
+    }
 }

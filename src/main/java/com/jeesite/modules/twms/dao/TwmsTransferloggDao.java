@@ -3,6 +3,8 @@
  */
 package com.jeesite.modules.twms.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 import com.jeesite.common.dao.CrudDao;
@@ -17,4 +19,7 @@ import com.jeesite.modules.twms.entity.TwmsTransferlogg;
 @MyBatisDao
 public interface TwmsTransferloggDao extends CrudDao<TwmsTransferlogg> {
 	public TwmsTransferlogg getByLoggnum(@Param("loggNum")String loggNum,@Param("count")int count);
+	
+	public int getCount();
+	public List<TwmsTransferlogg> getByLotnum(@Param("lotnum")String lotnum,@Param("count")int count);
 }

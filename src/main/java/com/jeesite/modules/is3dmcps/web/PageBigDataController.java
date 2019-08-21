@@ -653,6 +653,7 @@ public class PageBigDataController extends BaseController{
      * @return
      * Json:
      * {“runDistance”:11114582,”liftCount”: 255456,”veerCount”:3646863,”runFaultsCount”:2648,”liftFaultsCount”:687,”veerFaultsCount”:54,”allFaultsCount”:3389}
+     * 在之前的Json数据格式中内容增加“电池更换次数”字段batteryReplacementTimes
      */
     @RequestMapping(value = {"carRunStatus", ""})
     public List<Map<String, Object>> carRunStatus(HttpServletRequest request) {
@@ -664,6 +665,7 @@ public class PageBigDataController extends BaseController{
         int liftFaultsCount=0;
         int veerFaultsCount=0;
         int allFaultsCount=0;
+        int batteryReplacementTimes = 0;
         String deviceId = "";
         for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(request.getParameter("deviceName"))){
         	deviceId = isDevice.getId();
@@ -676,7 +678,8 @@ public class PageBigDataController extends BaseController{
             runFaultsCount+=isCarCount.getMoveerrCount();
             liftFaultsCount+=isCarCount.getUpdownerrCount();
             veerFaultsCount+=isCarCount.getTurnerrCount();
-            allFaultsCount+=isCarCount.getErrCount();           
+            allFaultsCount+=isCarCount.getErrCount();   
+            batteryReplacementTimes+=isCarCount.getRechangeCount();
         }  
         map.put("runDistance",runDistance);
         map.put("liftCount",liftCount);
@@ -685,6 +688,7 @@ public class PageBigDataController extends BaseController{
         map.put("liftFaultsCount",liftFaultsCount);
         map.put("veerFaultsCount",veerFaultsCount);
         map.put("allFaultsCount",allFaultsCount);
+        map.put("batteryReplacementTimes",batteryReplacementTimes);
         mapList.add(map);
         return mapList;
     }

@@ -33,4 +33,9 @@ public interface WmsGdxdOutDao extends CrudDao<WmsGdxdOut> {
 	
 	public List<WmsGdxdOut> getClassTeam();
 	public List<WmsGdxdOut> getAllByClassTeam(String teamCd);
+	
+	public List<WmsGdxdOut> getBrands();
+	public List<WmsGdxdOut> filterWorkOrderOut(@Param("equId") String equId, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
+
+	public List<WmsGdxdOut> filterByClassTeam(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
 }

@@ -13,6 +13,7 @@ import com.jeesite.common.collect.MapUtils;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
+import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
 import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainRecService;
@@ -228,7 +229,7 @@ public class PageMaintainController extends BaseController{
 		List<String> maintenanceName = new ArrayList<>();
 		List<String> deviceNumber = new ArrayList<>();
 		List<String> planners = new ArrayList<>();
-		for(IsMaintainRec isMaintainRec:isMaintainRecService.maintainList()){
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.need_maintain_details()){
 			maintenanceName.add(isMaintainRec.getMaintainName());
 			deviceNumber.add(isMaintainRec.getDeviceNo());
 			planners.add(isMaintainRec.getPlanPerson());
@@ -400,6 +401,84 @@ public class PageMaintainController extends BaseController{
 				mapList.add(map);
 				break;
 			}
+		}
+		return mapList;
+	}
+	
+	/**
+     * 维保记录条件筛选
+     * （1）Json：（默认给到所有的筛选条件）
+	{"maintenanceName": ["智能双向穿梭车保养", "提升机保养", "拆码垛机保养"],"deviceNumber": ["upaler001", "Car1", "cmd1"] ,"maintenancePersonnel": ["xxx", "xxx", "xxx"],"status": ["xxx", "xxx", "xxx"]}
+
+     * @return
+     */
+	@RequestMapping(value = "maintenanceRecNameList")
+	public Map<String, Object> maintenanceRecNameList() {
+		Map<String, Object> map = MapUtils.newHashMap();
+		List<String> maintenanceName = new ArrayList<>();
+		List<String> deviceNumber = new ArrayList<>();
+		List<String> maintenancePersonnel = new ArrayList<>();
+		List<String> status = new ArrayList<>();
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.maintainList()){
+			maintenanceName.add(isMaintainRec.getMaintainName());
+			deviceNumber.add(isMaintainRec.getDeviceNo());
+			maintenancePersonnel.add(isMaintainRec.getPlanPerson());
+			if (isMaintainRec.getStatus().equals("0")) {
+				status.add("维保计划");
+			}else if (isMaintainRec.getStatus().equals("1")) {
+				status.add("维保记录");
+			}else {
+				status.add("Unknown");
+			}			
+		}
+		List<String> maintenanceNameSet = new ArrayList<>(new HashSet<>(maintenanceName));
+		List<String> deviceNumberSet = new ArrayList<>(new HashSet<>(deviceNumber));
+		List<String> maintenancePersonnelSet = new ArrayList<>(new HashSet<>(maintenancePersonnel));
+		List<String> statusSet = new ArrayList<>(new HashSet<>(status));
+		map.put("maintenanceName", maintenanceNameSet);
+		map.put("deviceNumber", deviceNumberSet);
+		map.put("maintenancePersonnel", maintenancePersonnelSet);
+		map.put("status", statusSet);
+		return map;
+	}
+	
+	/**
+	 * 4.1.	(2)设备维保增加维保日志界面
+	 * Post：
+	{"maintenanceName":"xxx","deviceNumber":"xxx","maintenancePersonnel":"xxx",status="xxx","startTime":"xxx","endTime":"xxx","rangeStart":1,"rangeEnd":500}
+	Json:
+	[{"maintenanceName": "拆码垛机保养","deviceNumber": "cmd1","planners": "兰州烟草","plannedMaintenanceTime": "2019-05-2 00::00:00 ","maintenancePersonnel": "兰州烟草","maintenanceTime": "2019-05-21 01:00:00","status": "保养计划"}]
+
+	 */
+	@RequestMapping(value = "filterMaintainRecLog")
+	public List<Map<String, Object>> filterMaintainRecLog(HttpServletRequest request) {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		String status = "";
+		status = request.getParameter("status");
+		if (status.equals("维保计划")) {
+			status = "0";
+		}else if (status.equals("维保记录")) {
+			status = "1";
+		}else {
+			status = "Unknown";
+		}	
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.filterMaintainRecPage(request.getParameter("maintenanceName"), request.getParameter("deviceNumber"), request.getParameter("maintenancePersonnel"), status, request.getParameter("startTime"), request.getParameter("endTime"), Integer.valueOf(request.getParameter("rangeStart")), Integer.valueOf(request.getParameter("rangeEnd")))){
+			Map<String, Object> map = MapUtils.newHashMap();
+			String maintenanceName = isMaintainRec.getMaintainName();
+			String deviceNumber = isMaintainRec.getDeviceNo();
+			String planners = isMaintainRec.getPlanPerson();
+			String plannedMaintenanceTime = CompareDate.simplifyDate(isMaintainRec.getPlanDate());
+			String maintenancePersonnel = isMaintainRec.getMaintainPerson();
+			String maintenanceTime = CompareDate.simplifyDate(isMaintainRec.getMaintainTime());
+			String status1 = isMaintainRec.getStatus().equals("0")?"保养计划":"保养记录";
+			map.put("maintenanceName", maintenanceName);
+			map.put("deviceNumber", deviceNumber);
+			map.put("planners", planners);
+			map.put("plannedMaintenanceTime", plannedMaintenanceTime);
+			map.put("maintenancePersonnel", maintenancePersonnel);
+			map.put("maintenanceTime", maintenanceTime);
+			map.put("status", status1);
+			mapList.add(map);
 		}
 		return mapList;
 	}

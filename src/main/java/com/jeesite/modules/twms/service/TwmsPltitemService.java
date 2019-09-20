@@ -130,4 +130,77 @@ public class TwmsPltitemService extends CrudService<TwmsPltitemDao, TwmsPltitem>
 	public List<BoxStatics> filterNewBoxStatics(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
 		return this.dao.filterNewBoxStatics(brand, rangeStart, rangeEnd);
 	}
+	
+	/**
+	 * 行列层排序
+	 * @return
+	 */
+	public List<BoxStatics> filterNewBoxStaticsLineAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLineAsc(brand, rangeStart, rangeEnd);
+	}
+	public List<BoxStatics> filterNewBoxStaticsLineDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLineDesc(brand, rangeStart, rangeEnd);
+	}
+	public List<BoxStatics> filterNewBoxStaticsLieAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLieAsc(brand, rangeStart, rangeEnd);
+	}
+	public List<BoxStatics> filterNewBoxStaticsLieDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLieDesc(brand, rangeStart, rangeEnd);
+	}
+	public List<BoxStatics> filterNewBoxStaticsLayerAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLayerAsc(brand, rangeStart, rangeEnd);
+	}
+	public List<BoxStatics> filterNewBoxStaticsLayerDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd){
+		return this.dao.filterNewBoxStaticsLayerDesc(brand, rangeStart, rangeEnd);
+	}
+
+	//增加batch搜索
+	public List<BoxStatics> filterNewBoxStaticsLineBatchAsc(@Param("brand") String brand, @Param("batch") String batch,
+			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLineBatchAsc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	public List<BoxStatics> filterNewBoxStaticsLineBatchDesc(@Param("brand") String brand, @Param("batch") String batch,
+			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLineBatchDesc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	public List<BoxStatics> filterNewBoxStaticsLieBatchAsc(@Param("brand") String brand, @Param("batch") String batch,
+			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLieBatchAsc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	public List<BoxStatics> filterNewBoxStaticsLieBatchDesc(@Param("brand") String brand, @Param("batch") String batch,
+			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLieBatchDesc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	public List<BoxStatics> filterNewBoxStaticsLayerBatchAsc(@Param("brand") String brand, @Param("batch") String batch,
+			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLayerBatchAsc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	public List<BoxStatics> filterNewBoxStaticsLayerBatchDesc(@Param("brand") String brand,
+			@Param("batch") String batch, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterNewBoxStaticsLayerBatchDesc(brand, batch, rangeStart, rangeEnd);
+	}
+
+	/*public List<BoxStatics> getContainLocationLineAsc(){
+		return this.dao.getContainLocationLineAsc();
+	}
+	public List<BoxStatics> getContainLocationLineDesc(){
+		return this.dao.getContainLocationLineDesc();
+	}
+	public List<BoxStatics> getContainLocationLieAsc(){
+		return this.dao.getContainLocationLieAsc();
+	}
+	public List<BoxStatics> getContainLocationLieDesc(){
+		return this.dao.getContainLocationLieDesc();
+	}
+	public List<BoxStatics> getContainLocationLayerAsc(){
+		return this.dao.getContainLocationLayerAsc();
+	}
+	public List<BoxStatics> getContainLocationLayerDesc(){
+		return this.dao.getContainLocationLayerDesc();
+	}*/
 }

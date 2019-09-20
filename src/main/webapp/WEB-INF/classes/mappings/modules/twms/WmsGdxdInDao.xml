@@ -64,7 +64,7 @@
 		select alias.* from		
 			(select w.*,ROWNUM as rowno 
 			from wms_gdxd_in w
-			where w.in_line = #{inLine} and w.mat_nm = #{brand} and w.wo_start_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and w.wo_end_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
+			where (w.in_line = #{inLine} or #{inLine} is null) and (w.mat_nm = #{brand} or #{brand} is null) and w.wo_start_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and w.wo_end_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
 		where alias.rowno &gt; #{rangeStart}
 	</select>
 	
@@ -72,7 +72,21 @@
 		select alias.* from
 		    (select w.*,ROWNUM as rowno
 		    from wms_gdxd_in w
-		    where trim(team_cd) = #{teamCd} and w.mat_nm = #{brand} and w.wo_start_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and w.wo_end_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
+		    where (trim(team_cd) = #{teamCd} or #{teamCd} is null) and (w.mat_nm = #{brand} or #{brand} is null) and w.wo_start_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and w.wo_end_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
 		where alias.rowno &gt; #{rangeStart}
+	</select>
+	
+	<select id="getGdxdInLength" resultType="int">
+		select count(*) from wms_gdxd_in
+	</select>	
+	<select id="getByWoState" resultType="WmsGdxdIn">
+		select alias.* from	
+			(select w.*,ROWNUM as rowno
+		 	from wms_gdxd_in w 
+		 	where wo_state = #{woState} and ROWNUM &lt;= #{length}) alias
+	</select>
+	
+	<select id="brandBatchCountIn" resultType="WmsGdxdIn">
+		select mat_nm,count(batch_no) as boxtotalnum from wms_gdxd_in where trim(team_cd) = #{classTeam} group by mat_nm
 	</select>
 </mapper>

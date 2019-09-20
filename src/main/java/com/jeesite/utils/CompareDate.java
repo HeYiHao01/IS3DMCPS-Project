@@ -147,7 +147,15 @@ public class CompareDate {
 		int hour = Integer.parseInt(newTime.substring(index-2,index));
 		int min = Integer.parseInt(newTime.substring(index+1,index+3));
 		return hour+":"+min+"";
-	}		
+	}
+	public static String simplifyTime(Date time) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd.HH:mm:ss");
+		String newTime = format.format(time);
+		int index = newTime.indexOf(":");
+		int hour = Integer.parseInt(newTime.substring(index-2,index));
+		int min = Integer.parseInt(newTime.substring(index+1,index+3));
+		return hour+":"+min+"";
+	}
 	
 	public static String formatCurrLoc(String currLoc) { 
 		String loc = currLoc.trim();

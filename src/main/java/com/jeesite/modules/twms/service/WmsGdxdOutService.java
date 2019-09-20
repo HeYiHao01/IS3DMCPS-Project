@@ -145,4 +145,12 @@ public class WmsGdxdOutService extends CrudService<WmsGdxdOutDao, WmsGdxdOut> {
 	public List<WmsGdxdOut> filterByClassTeam(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
 		return this.dao.filterByClassTeam(teamCd, brand, startTime, endTime, rangeStart, rangeEnd);
 	}
+	
+	public int getGdxdOutLength()
+	{
+		return this.dao.getGdxdOutLength();
+	}
+	public List<WmsGdxdOut> getByWoState(@Param("woState") String woState, @Param("length") int length){
+		return this.dao.getByWoState(woState, length);
+	}
 }

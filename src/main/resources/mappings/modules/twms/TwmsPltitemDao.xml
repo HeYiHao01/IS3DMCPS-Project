@@ -76,7 +76,268 @@
 	                     line,
 	                     lie 
 	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart}
+	</select>
+	
+	<select id="filterNewBoxStaticsLineAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
 			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
-		where rowno &gt; #{rangeStart}
+		where rowno &gt; #{rangeStart} order by line
+	</select>
+	<select id="filterNewBoxStaticsLineDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
+		where rowno &gt; #{rangeStart} order by line desc
+	</select>
+	<select id="filterNewBoxStaticsLieAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
+		where rowno &gt; #{rangeStart} order by lie
+	</select>
+	<select id="filterNewBoxStaticsLieDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
+		where rowno &gt; #{rangeStart} order by lie desc
+	</select>
+	<select id="filterNewBoxStaticsLayerAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
+		where rowno &gt; #{rangeStart} order by layer
+	</select>
+	<select id="filterNewBoxStaticsLayerDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and ROWNUM &lt;= #{rangeEnd}) t 
+		where rowno &gt; #{rangeStart} order by layer desc
+	</select>
+	
+	<!-- <select	id="getContainLocationLineAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by line
+	</select>
+	<select	id="getContainLocationLineDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by line desc
+	</select>
+	<select	id="getContainLocationLieAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by lie
+	</select>
+	<select	id="getContainLocationLieDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by lie desc
+	</select>
+	<select	id="getContainLocationLayerAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by layer
+	</select>
+	<select	id="getContainLocationLayerDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate
+		from is_location,twms_plt,twms_pltitem,twms_loc,
+      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+       	from (select  lpad(lie,2,0) a_lie,
+                     lpad(line,2,0) a_line,
+                     layer,
+                     locnum,
+                     line,
+                     lie 
+             from twms_locc_just loc)) locc
+		where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum order by layer desc
+	</select> -->
+	
+	<select id="filterNewBoxStaticsLineBatchAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by line
+	</select>
+	<select id="filterNewBoxStaticsLineBatchDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by line desc
+	</select>
+	<select id="filterNewBoxStaticsLieBatchAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by lie
+	</select>
+	<select id="filterNewBoxStaticsLieBatchDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by lie desc
+	</select>
+	<select id="filterNewBoxStaticsLayerBatchAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by layer
+	</select>
+	<select id="filterNewBoxStaticsLayerBatchDesc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
+		select t.* from
+	    	(select twms_loc.line as line,twms_loc.lie as lie,twms_loc.layer as layer,location_x as locationX,location_y as locationY,location_z as locationZ,twms_plt.vpltnum as vplnum,pltnum,currloc,itemdesc,lotnum,twms_pltitem.enterdate as enterdate,twms_pltitem.linenum as lineNum,twms_pltitem.extattr1 as boxNum,twms_pltitem.weight as weight,ROWNUM as rowno
+			from is_location,twms_plt,twms_pltitem,twms_loc,
+	      	(select to_number(concat(concat(to_char(layer),to_char(a_line)),to_char(a_lie))) linelielayer,locnum ,line,lie,layer 
+	       	from (select  lpad(lie,2,0) a_lie,
+	                     lpad(line,2,0) a_line,
+	                     layer,
+	                     locnum,
+	                     line,
+	                     lie 
+	             from twms_locc_just loc)) locc
+			where locc.linelielayer=is_location.location_id and twms_plt.currloc=twms_loc.locnum and twms_plt.vpltnum=twms_pltitem.vpltnum and itemdesc=#{brand} and (twms_pltitem.lotnum=#{batch} or twms_pltitem.lotnum is null) and ROWNUM &lt; #{rangeEnd}) t 
+		where rowno &gt;= #{rangeStart} order by layer desc
 	</select>
 </mapper>

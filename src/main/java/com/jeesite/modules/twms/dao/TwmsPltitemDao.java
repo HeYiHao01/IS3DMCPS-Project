@@ -28,4 +28,20 @@ public interface TwmsPltitemDao extends CrudDao<TwmsPltitem> {
 	public int getEmptyCase();
 	
 	public List<BoxStatics> filterNewBoxStatics(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	
+	public List<BoxStatics> filterNewBoxStaticsLineAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLineDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLieAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLieDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLayerAsc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLayerDesc(@Param("brand") String brand,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	
+	//增加batch搜索
+	public List<BoxStatics> filterNewBoxStaticsLineBatchAsc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLineBatchDesc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLieBatchAsc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLieBatchDesc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLayerBatchAsc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	public List<BoxStatics> filterNewBoxStaticsLayerBatchDesc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
+	
 }

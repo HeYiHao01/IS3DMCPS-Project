@@ -48,6 +48,8 @@ public class PageNewBigData extends BaseController {
 	 *{“analysisType”:”InventoryInfo”,”timeCoordinate”:” Monthly”,” timeDomainYear”:2018}
 	 *或
 	 *{“analysisType”:”InventoryInfo”,”timeCoordinate”:”Daily”,”timeDomainYear”:2019,”timeDomainMonth”:5}
+	 *或
+	 *{“analysisType”:”DeliveryInfo”,”timeCoordinate”:”Yearly”}
 	 *Json:
 	 *[{“brand”:”兰州（细支珍品）烟丝”,“totalWeightThis”:25000,“totalWeightLast”:24000,”finishWeight”:23000,”timeVariable”:10},
 	 *{“brand”:”兰州（细支珍品）烟丝”,“totalWeightThis”:25000,“totalWeightLast”:24000,”finishWeight”:23000,”timeVariable”:11}]
@@ -541,8 +543,7 @@ public class PageNewBigData extends BaseController {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String timeDomainYear = request.getParameter("timeDomainYear");
         String timeDomainMonth = request.getParameter("timeDomainMonth");        
-        int timeVariable;
-        Double productionCapacity = 0.0;
+        int timeVariable;        
         for(int i=1;i<32;i++){
         	String date = timeDomainYear+".";
             if (Integer.parseInt(timeDomainMonth) < 10) {
@@ -558,6 +559,7 @@ public class PageNewBigData extends BaseController {
             Map<String, Object> map = MapUtils.newHashMap();
             String productionLineName;
             timeVariable = i;
+            Double productionCapacity = 0.0;
             for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(date)){
             	productionLineName = wmsGdxdIn.getInLine();
             	timeVariable=i;
@@ -675,6 +677,9 @@ public class PageNewBigData extends BaseController {
 		{“analysisType”:”DeliveryInfo”,”timeCoordinate”:” Monthly”,” timeDomainYear”:2018}
 		或
 		{“analysisType”:”DeliveryInfo”,”timeCoordinate”:”Daily”,”timeDomainYear”:2019,”timeDomainMonth”:5}
+		增加年筛选
+		或
+		{“analysisType”:”DeliveryInfo”,”timeCoordinate”:”Yearly”}
 	 *
 	 *Json：
 	 *品牌筛选使用以前的

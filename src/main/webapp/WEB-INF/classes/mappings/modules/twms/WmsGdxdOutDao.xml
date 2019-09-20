@@ -67,4 +67,18 @@
 		    where trim(team_cd) = #{teamCd} and w.mat_nm = #{brand} and w.wo_start_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and w.wo_end_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
 		where alias.rowno &gt; #{rangeStart}
 	</select>
+	
+	<select id="getGdxdOutLength" resultType="int">
+		select count(*) from wms_gdxd_out
+	</select>	
+	<select id="getByWoState" resultType="WmsGdxdOut">
+		select alias.* from	
+			(select w.*,ROWNUM as rowno
+		 	from wms_gdxd_out w 
+		 	where wo_state = #{woState} and ROWNUM &lt;= #{length}) alias
+	</select>
+	
+	<select id="brandBatchCountOut" resultType="WmsGdxdOut">
+		select mat_nm,count(batch_no) as boxtotalnum from wms_gdxd_out where trim(team_cd) = #{classTeam} group by mat_nm
+	</select>
 </mapper>

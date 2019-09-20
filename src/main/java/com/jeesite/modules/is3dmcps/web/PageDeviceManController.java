@@ -616,7 +616,8 @@ public class PageDeviceManController extends BaseController{
 	Post：deviceCategory
 	Json：
 	[{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":10},{"sparePartsID":"xxx","sparePartsName":"xxx","sparePartsType":"xxx","sparePartsNumber":5}]
-	此处的sparePartsID是is_device->device_no
+	此处的sparePartsID是is_device->device_no,--->修改为所属设备
+	sparePartsType--->改成deviceNo
      */
     @RequestMapping(value = "sparePartsIdInfoList")
     public List<Map<String, Object>> sparePartsIdInfoList(HttpServletRequest request) {
@@ -631,14 +632,15 @@ public class PageDeviceManController extends BaseController{
         	String sparePartsType = "";
     		if (device.getDeviceCodeName().equals(deviceCategory)) {
 				deviceNo = device.getDeviceNo();
-				sparePartsID = device.getCode();
+				//sparePartsID = device.getCode();
+				sparePartsID = "null";
 				sparePartsName = device.getDeviceCodeName();
 				sparePartsType = device.getModel();
 				sparePartsNumber++;
 				Map<String, Object> map = MapUtils.newHashMap();
-				map.put("sparePartsID", deviceNo);
+				map.put("sparePartsID", sparePartsID);
 				map.put("sparePartsName", sparePartsName);
-				map.put("sparePartsType", sparePartsType);
+				map.put("sparePartsType", deviceNo);
 				map.put("sparePartsNumber", sparePartsNumber);
 				mapList.add(map);
 			}    		  		
@@ -651,14 +653,15 @@ public class PageDeviceManController extends BaseController{
 			String sparePartsType = "";
 			for (Device device : isDeviceService.sparePartsList()) {
 				if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {
-					sparePartsID = device.getDeviceNo();
+					//sparePartsID = device.getDeviceNo();
+					sparePartsID = isDeviceCodeService.getPartApplicationById(isDeviceCode.getParentCode()).getName();
 					sparePartsName = device.getDeviceCodeName();
 					sparePartsType = device.getModel();
 					sparePartsNumber++;	
 					Map<String, Object> map2 = MapUtils.newHashMap();
 					map2.put("sparePartsID", sparePartsID);
 					map2.put("sparePartsName", sparePartsName);
-					map2.put("sparePartsType", sparePartsType);
+					map2.put("sparePartsType", device.getDeviceNo());
 					map2.put("sparePartsNumber", sparePartsNumber);
 					mapList.add(map2);
 				} 				
@@ -672,14 +675,15 @@ public class PageDeviceManController extends BaseController{
 			String sparePartsType = "";
 			for (Device device : isDeviceService.sparePartsList()) {
 				if (isDeviceCode.getName().equals(device.getDeviceCodeName())) {
-					sparePartsID = device.getDeviceNo();
+					//sparePartsID = device.getDeviceNo();
+					sparePartsID = isDeviceCodeService.getPartApplicationById(isDeviceCode.getParentCode()).getName();
 					sparePartsName = device.getDeviceCodeName();
 					sparePartsType = device.getModel();
 					sparePartsNumber++;	
 					Map<String, Object> map2 = MapUtils.newHashMap();
 					map2.put("sparePartsID", sparePartsID);
 					map2.put("sparePartsName", sparePartsName);
-					map2.put("sparePartsType", sparePartsType);
+					map2.put("sparePartsType", device.getDeviceNo());
 					map2.put("sparePartsNumber", sparePartsNumber);
 					mapList.add(map2);
 				} 				

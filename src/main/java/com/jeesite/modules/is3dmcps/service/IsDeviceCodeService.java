@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.jeesite.common.datasource.DataSourceHolder;
 import com.jeesite.common.service.TreeService;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
 import com.jeesite.modules.is3dmcps.entity.NewDevice;

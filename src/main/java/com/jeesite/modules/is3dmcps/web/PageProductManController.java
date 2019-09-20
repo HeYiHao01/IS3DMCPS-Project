@@ -226,7 +226,7 @@ public class PageProductManController extends BaseController{
      * [{“completionRatio”:25,”workOrderNumber”:”XXXXXXXXXX”,”startTimeHour”:”08”, ”startTimeMinute”:”56”},
      * {“completionRatio”:65,”workOrderNumber”:”XXXXXXXXXX” ,”startTimeHour”:”08”, ”startTimeMinute”:”56”}]
      */
-    @RequestMapping(value = {"workOrder", ""})
+    /*@RequestMapping(value = {"workOrder", ""})
     public List<Map<String, Object>> workOrder() {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();        
         int completionRatio;
@@ -251,10 +251,83 @@ public class PageProductManController extends BaseController{
             mapList.add(map);
         }                          
         return mapList;
+    }*/
+    
+    /**
+     * 即时生产信息拆分成一号装箱线、二号装箱线、出库信息三组，样式保持不变。
+     * 在一、二号装箱线中左边圆圈分别显示1和2，圆圈右边显示生产的品牌名称和批次以及开始时间；
+     * 出库信息中左边圆圈分别显示风力送丝机编号1~12（喂丝机），圆圈右边显示生产的牌号和批次以及开始时间
+     * json：
+     * [{“brand”:"XXXX",”batchNo”:”XXXXXXXXXX”,”startTimeHour”:”08”, ”startTimeMinute”:”56”,"type":"1/2/出库","fedWireNum":"XXXtype为出库时才有这个字段XXXX"},]
+     *
+     * @return
+     */
+    @RequestMapping(value = {"workOrder", ""})
+    public List<Map<String, Object>> workOrder() {
+        List<Map<String, Object>> mapList = ListUtils.newArrayList();        
+        String brand;
+        String batchNo;
+        String startTime; //回头格式化
+        String startTimeHour;
+        String startTimeMinute;  
+        String type;
+        String woState = "Doing";
+        int length = wmsGdxdInService.getGdxdInLength();
+        for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getByWoState(woState, length)){
+        	Map<String, Object> map = MapUtils.newHashMap();
+        	batchNo = wmsGdxdIn.getBatchNo();
+        	brand = wmsGdxdIn.getMatNm();
+        	startTime = CompareDate.simplifyTime(wmsGdxdIn.getWoStartTime());
+        	System.err.println(startTime);
+        	int index = startTime.indexOf(":");
+    		startTimeHour = startTime.substring(0,index);
+    		startTimeMinute = startTime.substring(index+1);
+    		if (wmsGdxdIn.getInLine().equals("1")) {
+				type = "1";
+				map.put("brand",brand);
+				map.put("batchNo",batchNo);
+	            map.put("startTimeHour",startTimeHour);
+	            map.put("startTimeMinute",startTimeMinute);
+	            map.put("type", type);
+			}else if (wmsGdxdIn.getInLine().equals("2")){
+				type = "2";
+				map.put("brand",brand);
+				map.put("batchNo",batchNo);
+	            map.put("startTimeHour",startTimeHour);
+	            map.put("startTimeMinute",startTimeMinute);
+	            map.put("type", type);
+			}else {				
+				map.put("error", "入库线错误");
+			}                        
+            mapList.add(map);
+        }     
+        int length2 = wmsGdxdOutService.getGdxdOutLength();
+        for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getByWoState(woState, length2)){
+        	Map<String, Object> map = MapUtils.newHashMap();
+        	batchNo = wmsGdxdOut.getBatchNo();
+        	brand = wmsGdxdOut.getMatNm();
+        	startTime = CompareDate.simplifyTime(wmsGdxdOut.getWoStartTime());
+        	System.err.println(startTime);
+        	int index = startTime.indexOf(":");
+    		startTimeHour = startTime.substring(0,index);
+    		startTimeMinute = startTime.substring(index+1);
+    		type = "出库";
+    		String fedWireNum = wmsGdxdOut.getEquId();
+    		if (!fedWireNum.equals("手工喂丝")) {
+    			map.put("brand",brand);
+    			map.put("batchNo",batchNo);
+                map.put("startTimeHour",startTimeHour);
+                map.put("startTimeMinute",startTimeMinute);
+                map.put("type", type);
+                map.put("fedWireNum", fedWireNum);
+                mapList.add(map);
+			}    		
+        }     
+        return mapList;
     }
     
     /**
-     * （当前正在执行的工单出入库信息）
+     * （当前正在执行的工单入库信息）
 	 * Json：
 	 * [{"incomingLine": "XXXX","workOrderNumber": "XXXX","batchNumber": "XXX","brand": "XXX","batchTotalWeight": "XXX","boxSum": "XXX","finishWeight": "XXX","finishBoxNumber,": "XXXX","workOrderStatus": "XXX"}]
      * @return
@@ -262,7 +335,8 @@ public class PageProductManController extends BaseController{
     @RequestMapping(value = "workOrderInList")
     public List<Map<String, Object>> workOrderInList() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    	int length = wmsGdxdInService.getGdxdInLength();
+    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getByWoState("Doing", length)){
     		Map<String, Object> map = MapUtils.newHashMap();
     		String incomingLine = wmsGdxdIn.getInLine();
     		String workOrderNumber = wmsGdxdIn.getWoNo();
@@ -272,7 +346,7 @@ public class PageProductManController extends BaseController{
     		int boxSum = wmsGdxdIn.getBoxtotalnum();
     		double finishWeight = batchTotalWeight * 0.8;
     		int finishBoxNumber = (int)(boxSum * 0.8);
-    		String workOrderStatus = wmsGdxdIn.getState();    		
+    		String workOrderStatus = wmsGdxdIn.getWoState();    		
     		map.put("incomingLine", incomingLine);
     		map.put("workOrderNumber", workOrderNumber);
     		map.put("batchNumber", batchNumber);
@@ -304,7 +378,8 @@ public class PageProductManController extends BaseController{
     	String destination = "";
     	int count = twmsTransferloggService.getCount();
     	System.err.println(count);
-    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    	int length = wmsGdxdInService.getGdxdInLength();
+    	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getByWoState("Doing", length)){
     		String batchNumber = wmsGdxdIn.getBatchNo();
     		for(TwmsTransferlogg twmsTransferlogg:twmsTransferloggService.getByLotnum(batchNumber, count)){
     			Map<String, Object> map = MapUtils.newHashMap();
@@ -334,7 +409,8 @@ public class PageProductManController extends BaseController{
     @RequestMapping(value = "workOrderOutList")
     public List<Map<String, Object>> workOrderOutList() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewAllOut(new SimpleDateFormat("yyyy").format(new Date())+"."+CompareDate.getPastDate(0))){
+    	int length = wmsGdxdInService.getGdxdInLength();
+    	for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getByWoState("Doing", length)){
     		Map<String, Object> map = MapUtils.newHashMap();
     		String FedWireNumber = wmsGdxdOut.getEquId();
     		String workorder = wmsGdxdOut.getWoNo();

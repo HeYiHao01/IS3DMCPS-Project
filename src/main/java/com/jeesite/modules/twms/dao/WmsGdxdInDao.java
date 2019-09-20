@@ -40,4 +40,7 @@ public interface WmsGdxdInDao extends CrudDao<WmsGdxdIn> {
 	public List<WmsGdxdIn> filterWorkOrderIn(@Param("inLine") String inLine, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
 	
 	public List<WmsGdxdIn> filterByClassTeam(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
+	
+	public int getGdxdInLength();
+	public List<WmsGdxdIn> getByWoState(@Param("woState") String woState, @Param("length") int length);
 }

@@ -137,4 +137,8 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
     public List<IsFaults> filterFaultsLogPage(@Param("faultName")String faultName, @Param("deviceName")String deviceName, @Param("operator")String operator, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime , @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd){
     	return this.dao.filterFaultsLogPage(faultName, deviceName, operator, status, startTime, endTime, rangeStart, rangeEnd);
     }
+    
+    public List<IsFaults> faultsPop(@Param("deviceName") String deviceName){
+    	return this.dao.faultsPop(deviceName);
+    }
 }

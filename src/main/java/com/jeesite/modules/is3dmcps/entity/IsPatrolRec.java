@@ -36,6 +36,7 @@ public class IsPatrolRec extends DataEntity<IsPatrolRec> {
 	private String record;		// 巡检记录
 	private String operator;		// 巡检人
 	private Date patrolTime;		// 巡检时间
+	private String remarks;			//备注			
 	public IsPatrolRec() {
 		this(null);
 	}
@@ -111,5 +112,14 @@ public class IsPatrolRec extends DataEntity<IsPatrolRec> {
 		this.record = record;
 		this.operator = operator;
 		this.patrolTime = patrolTime;
+	}
+
+	public IsPatrolRec(String patrolId, String patrolName, String record, String operator, Date patrolTime, String remark) {
+		this.patrolId = patrolId;
+		this.patrolName = patrolName;
+		this.record = record;
+		this.operator = operator;
+		this.patrolTime = patrolTime;
+		this.remarks = remark;
 	}
 }

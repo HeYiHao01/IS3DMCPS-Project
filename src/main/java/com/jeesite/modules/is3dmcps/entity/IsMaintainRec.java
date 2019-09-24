@@ -164,4 +164,17 @@ public class IsMaintainRec extends DataEntity<IsMaintainRec> {
 		this.maintainTime = maintainTime;
 		this.recStatus = recStatus;
 	}
+
+	public IsMaintainRec(String maintainId, String maintainName, String deviceNo, String planPerson, Date planDate, String record, String maintainPerson, Date maintainTime, String remark, String recStatus) {
+		this.maintainId = maintainId;
+		this.maintainName = maintainName;
+		this.deviceNo = deviceNo;
+		this.planPerson = planPerson;
+		this.planDate = planDate;
+		this.record = record;
+		this.maintainPerson = maintainPerson;
+		this.maintainTime = maintainTime;
+		this.remarks = remark;
+		this.recStatus = recStatus;
+	}
 }

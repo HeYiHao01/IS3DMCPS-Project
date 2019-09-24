@@ -5,6 +5,7 @@ package com.jeesite.modules.twms.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,5 +135,47 @@ public class WmsPrdOutDetlService extends CrudService<WmsPrdOutDetlDao, WmsPrdOu
 	}
 	public List<WmsPrdOutDetl> getClassWeightDaily(String day){
 		return this.dao.getClassWeightDaily(day);
+	}
+	
+	public List<WmsPrdOutDetl> getNewDetailYearly(String year){
+		return this.dao.getNewDetailYearly(year);
+	}
+	public List<WmsPrdOutDetl> getNewDetailDaily(String day){
+		return this.dao.getNewDetailDaily(day);
+	}
+	public List<WmsPrdOutDetl> getBatchWeightYearly(String year){
+		return this.dao.getBatchWeightYearly(year);
+	}
+	public List<WmsPrdOutDetl> getClassWeightYearly(String year){
+		return this.dao.getClassWeightYearly(year);
+	}
+	
+	public List<WmsPrdOutDetl> getBatchCountYearly(@Param("classTeam") String classTeam, @Param("year") String year){
+		return this.dao.getBatchCountYearly(classTeam, year);
+	}
+	public List<WmsPrdOutDetl> getBatchCountMonthly(@Param("classTeam") String classTeam, @Param("month") String month){
+		return this.dao.getBatchCountMonthly(classTeam, month);
+	}
+	public List<WmsPrdOutDetl> getBatchCountDaily(@Param("classTeam") String classTeam, @Param("day") String day){
+		return this.dao.getBatchCountDaily(classTeam, day);
+	}
+	
+	public List<WmsPrdOutDetl> getProductInfoCountBrandYearly(@Param("year") String year){
+		return this.dao.getProductInfoCountBrandYearly(year);
+	}
+	public List<WmsPrdOutDetl> getProductInfoCountBrandMonthly(@Param("month") String month){
+		return this.dao.getProductInfoCountBrandMonthly(month);
+	}
+	public List<WmsPrdOutDetl> getProductInfoCountBrandDaily(@Param("day") String day){
+		return this.dao.getProductInfoCountBrandDaily(day);
+	}
+	public List<WmsPrdOutDetl> getProductInfoCountClassYearly(@Param("year") String year){
+		return this.dao.getProductInfoCountClassYearly(year);
+	}
+	public List<WmsPrdOutDetl> getProductInfoCountClassMonthly(@Param("month") String month){
+		return this.dao.getProductInfoCountClassMonthly(month);
+	}
+	public List<WmsPrdOutDetl> getProductInfoCountClassDaily(@Param("day") String day){
+		return this.dao.getProductInfoCountClassDaily(day);
 	}
 }

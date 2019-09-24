@@ -35,6 +35,7 @@ import com.jeesite.common.mybatis.annotation.Table;
 		@Column(name="device_id", attrName="deviceId", label="所属设备ID"),
 		@Column(name="device_name", attrName="deviceName", label="所属设备名称"),
 		@Column(name="type", attrName="type", label="类别"),
+		@Column(name="assets_no", attrName="assetsNo", label="固定资产编号"),
 		@Column(includeEntity=DataEntity.class),
 /*		},  joinTable={
 				@JoinTable(type=Type.LEFT_JOIN, entity=IsDeviceCode.class, alias="c", 
@@ -63,6 +64,8 @@ public class IsDevice extends DataEntity<IsDevice> {
 	private String type;		// 设备类别
 	private String opcType;		// OPC类别
 	private String opcId;		// OPCID
+	private String assetsNo;	// 固定资产编号			
+	
 	public IsDevice() {
 		this(null);
 	}
@@ -222,6 +225,14 @@ public class IsDevice extends DataEntity<IsDevice> {
 
 	public void setOpcType(String opcType) {
 		this.opcType = opcType;
+	}
+
+	public String getAssetsNo() {
+		return assetsNo;
+	}
+
+	public void setAssetsNo(String assetsNo) {
+		this.assetsNo = assetsNo;
 	}
 	
 }

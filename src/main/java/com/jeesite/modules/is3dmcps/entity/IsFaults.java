@@ -151,4 +151,16 @@ public class IsFaults extends DataEntity<IsFaults> {
 		this.reason = reason;
 		this.knowledgeId = knowledgeId;
 	}
+
+	public IsFaults(String name, String deviceId, String deviceName, String faultsCode, Date faultsTime, String operator, String reason, String knowledgeId, String remark) {
+		this.name = name;
+		this.deviceId = deviceId;
+		this.deviceName = deviceName;
+		this.faultsCode = faultsCode;
+		this.faultsTime = faultsTime;
+		this.operator = operator;
+		this.reason = reason;
+		this.knowledgeId = knowledgeId;
+		this.remarks = remark;
+	}
 }

@@ -154,6 +154,9 @@ public class TwmsPltitemService extends CrudService<TwmsPltitemDao, TwmsPltitem>
 		return this.dao.filterNewBoxStaticsLayerDesc(brand, rangeStart, rangeEnd);
 	}
 
+	public TwmsPltitem brandWeightBatchCount(@Param("brand") String brand){
+		return this.dao.brandWeightBatchCount(brand);
+	}
 	//增加batch搜索
 	public List<BoxStatics> filterNewBoxStaticsLineBatchAsc(@Param("brand") String brand, @Param("batch") String batch,
 			@Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){

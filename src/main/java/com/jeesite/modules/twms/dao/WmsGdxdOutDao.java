@@ -41,4 +41,11 @@ public interface WmsGdxdOutDao extends CrudDao<WmsGdxdOut> {
 	
 	public int getGdxdOutLength();
 	public List<WmsGdxdOut> getByWoState(@Param("woState") String woState, @Param("length") int length);
+	
+	public List<WmsGdxdOut> getNewAllOutYearly(@Param("year") String year);
+	public List<WmsGdxdOut> getNewAllOutMonthly(@Param("month") String month);
+	
+	public List<WmsGdxdOut> filterWorkOrderOutBatch(@Param("equId") String equId, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
+	public List<WmsGdxdOut> filterByClassTeamBatch(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
+
 }

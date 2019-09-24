@@ -8,6 +8,7 @@ import com.jeesite.modules.is3dmcps.entity.IsLocation;
 import com.jeesite.modules.is3dmcps.entity.Position;
 import com.jeesite.modules.is3dmcps.service.*;
 import com.jeesite.modules.twms.entity.TwmsLoc;
+import com.jeesite.modules.twms.entity.TwmsPltitem;
 import com.jeesite.modules.twms.entity.TwmsTransferlogg;
 import com.jeesite.modules.twms.service.TwmsLocService;
 import com.jeesite.modules.twms.service.TwmsPltitemService;
@@ -917,4 +918,28 @@ public class PagePackingBoxController extends BaseController{
 		}
 		return CompareDate.removeRepeatMapByKey(mapList, "VPLTNUM");
 	}  
+    
+    /**
+     * 1.2.3.3.	某个品牌的库存统计（增加请求条件brand）
+	在下方能够添加所选品牌的统计数据总重量、箱数、批次数量
+	Post：brand
+	Json:  
+	{“totalWeight”:1,”boxNumber”:5000,batchNumber”:50}
+
+     * @param request
+     * @return
+     */
+    @RequestMapping("brandWeightBatchCount")
+    public Map<String, Object> brandWeightBatchCount(HttpServletRequest request) {
+		Map<String, Object> map =  MapUtils.newHashMap();
+		TwmsPltitem twmsPltitem = twmsPltitemService.brandWeightBatchCount(request.getParameter("brand"));
+		double totalWeight = twmsPltitem.getWeight();
+		int batchNumber = twmsPltitem.getLinenum();
+		double boxNumber = twmsPltitem.getItemqty();
+		map.put("totalWeight", totalWeight);
+		map.put("boxNumber", boxNumber);
+		map.put("batchNumber", batchNumber);
+		return map;
+	}
+        
 }

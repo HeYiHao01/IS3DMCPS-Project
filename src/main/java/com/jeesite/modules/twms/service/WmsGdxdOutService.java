@@ -153,4 +153,19 @@ public class WmsGdxdOutService extends CrudService<WmsGdxdOutDao, WmsGdxdOut> {
 	public List<WmsGdxdOut> getByWoState(@Param("woState") String woState, @Param("length") int length){
 		return this.dao.getByWoState(woState, length);
 	}
+	
+	public List<WmsGdxdOut> getNewAllOutYearly(@Param("year") String year){
+		return this.dao.getNewAllOutYearly(year);
+	}
+	public List<WmsGdxdOut> getNewAllOutMonthly(@Param("month") String month){
+		return this.dao.getNewAllOutMonthly(month);
+	}
+	
+	public List<WmsGdxdOut> filterWorkOrderOutBatch(@Param("equId") String equId, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterWorkOrderOutBatch(equId, brand, batch, startTime, endTime, rangeStart, rangeEnd);
+	}
+	public List<WmsGdxdOut> filterByClassTeamBatch(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
+		return this.dao.filterByClassTeamBatch(teamCd, brand, batch, startTime, endTime, rangeStart, rangeEnd);
+	}
+
 }

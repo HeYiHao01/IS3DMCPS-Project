@@ -216,7 +216,8 @@ public class CompareDate {
 		//Date date = new Date("2019/03/13 02:03:16");		
 		//System.out.println(dateCount("2019.03.13 02:03:16"));
 		//System.out.println(simplifyDate("2019.07.17"));
-		System.out.println(formatCurrLoc("OME01_00111401500100"));
+		//System.out.println(formatCurrLoc("OME01_00111401500100"));
+		//System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)-1));
 	}
 	
 	/**
@@ -229,7 +230,8 @@ public class CompareDate {
 		Map<String, Map> msp = new HashMap<>();
 		for (int i = list.size() - 1; i >= 0; i--) {
 			Map map = list.get(i);
-			String id = (String) map.get(mapKey);
+			//String id = (String) map.get(mapKey);
+			String id = String.valueOf(map.get(mapKey));
 			map.remove(mapKey);
 			msp.put(id, map);
 		}

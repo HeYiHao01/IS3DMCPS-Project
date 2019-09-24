@@ -34,6 +34,17 @@
 	<select id="getNewDetailMonthly" resultType="WmsPrdOutDetl" parameterType="String">
 		select mat_nm,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
 	</select>
+	<select id="getNewDetailDaily" resultType="WmsPrdOutDetl" parameterType="String">
+		select mat_nm,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
+	</select>
+	
+	<select id="getBatchWeightYearly" resultType="WmsPrdOutDetl" parameterType="String">
+		select batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy')=#{year} group by batch_no
+	</select>
+	<select id="getClassWeightYearly" resultType="WmsPrdOutDetl" parameterType="String">
+		select team_cd,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy')=#{year} group by team_cd
+	</select>
+	
 	<select id="getBatchWeightMonthly" resultType="WmsPrdOutDetl" parameterType="String">
 		select batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by batch_no
 	</select>
@@ -48,5 +59,34 @@
 	</select>
 	<select id="getClassWeightDaily" resultType="WmsPrdOutDetl" parameterType="String">
 		select team_cd,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
+	</select>
+	
+	<select id="getBatchCountYearly" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no from wms_prd_out_detl where team_cd = #{classTeam} and to_char(prod_time,'yyyy')=#{year} group by mat_nm
+	</select>
+	<select id="getBatchCountMonthly" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no from wms_prd_out_detl where team_cd = #{classTeam} and to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+	</select>
+	<select id="getBatchCountDaily" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no from wms_prd_out_detl where team_cd = #{classTeam} and to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
+	</select>
+	
+	<select id="getProductInfoCountBrandYearly" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy')=#{year} group by mat_nm
+	</select>
+	<select id="getProductInfoCountBrandMonthly" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+	</select>
+	<select id="getProductInfoCountBrandDaily" resultType="WmsPrdOutDetl">
+		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
+	</select>
+	<select id="getProductInfoCountClassYearly" resultType="WmsPrdOutDetl">
+		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy')=#{year} group by team_cd
+	</select>
+	<select id="getProductInfoCountClassMonthly" resultType="WmsPrdOutDetl">
+		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm')=#{month} group by team_cd
+	</select>
+	<select id="getProductInfoCountClassDaily" resultType="WmsPrdOutDetl">
+		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
 	</select>
 </mapper>

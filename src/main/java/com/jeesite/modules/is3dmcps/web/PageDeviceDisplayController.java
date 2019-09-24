@@ -153,5 +153,3 @@ public class PageDeviceDisplayController extends BaseController{
         return mapList;
     }
 }
-	
-	

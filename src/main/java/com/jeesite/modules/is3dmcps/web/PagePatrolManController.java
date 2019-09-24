@@ -79,6 +79,8 @@ public class PagePatrolManController extends BaseController{
      * @param request
      * Post(Put):
      * {“deviceName”:”xxx”,” patrolName”:”xxx”,” patrolPerson”:”xxx”,”state”:true,”remark”:”xxxxxxxxxxxx”}
+     * 修改
+     * {“deviceName”:”xxx”,” patrolName”:”xxx”,” patrolPerson”:”xxx”,”state”:true,”record”:”xxxxxxxxxxxx”,”remark”:”xxxxxxxxxxxx”}
      * @return
      */
     @RequestMapping(value = {"postPatrol", ""})
@@ -89,15 +91,16 @@ public class PagePatrolManController extends BaseController{
         String patrolName=request.getParameter("patrolName");
         String patrolPersion=request.getParameter("patrolPerson");
         String state=request.getParameter("state");
+        String record=request.getParameter("record");
         String remark=request.getParameter("remark");
-        System.out.println(deviceName+patrolName+patrolPersion+state+remark);
+        //System.out.println(deviceName+patrolName+patrolPersion+state+record);
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         try{
         	String patrolID = "";
         	for(IsPatrol isPatrol:isPatrolService.getPatrolByName(deviceName))
         		patrolID=isPatrol.getId();
-            IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,remark,patrolPersion,date);
+            IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,record,patrolPersion,date,remark);
             isPatrolRecService.save(isPatrolRec);
         }catch(Exception exception){
             map.put("result",exception.toString());
@@ -212,6 +215,8 @@ public class PagePatrolManController extends BaseController{
      * 巡检日志查询界面
      * （1）Json：
 	 * {"inspectionName": ["xxx", "xxx", "xxx"],"inspectionPersonnel": ["xxx", "xxx", "xxx"]}
+	 * 修改为
+	 * {"inspectionName":["xxx","xxx","xxx"],"inspectionPersonnel":["xxx", "xxx"],"inspectionRecord": ["xxx", "xxx"]}
      * @return
      */
     @RequestMapping(value = "patrolLogList")
@@ -219,14 +224,25 @@ public class PagePatrolManController extends BaseController{
 		Map<String, Object> map = MapUtils.newHashMap();
 		List<String> inspectionName = new ArrayList<>();
 		List<String> inspectionPersonnel = new ArrayList<>();
+		List<String> inspectionRecord = new ArrayList<>();
 		for(IsPatrolRec isPatrolRec:isPatrolRecService.patrolLogList()){
 			inspectionName.add(isPatrolRec.getPatrolName());
 			inspectionPersonnel.add(isPatrolRec.getOperator());
+			//String remarks = isPatrolRec.getRemarks();
+			String record = isPatrolRec.getRecord();
+			if (record != null) {
+				inspectionRecord.add(record);
+			}else {
+				inspectionRecord.add("null");
+			}
+			
 		}
 		List<String> inspectionNameSet = new ArrayList<>(new HashSet<>(inspectionName));
 		List<String> inspectionPersonnelSet = new ArrayList<>(new HashSet<>(inspectionPersonnel));
+		List<String> inspectionRecordSet = new ArrayList<>(new HashSet<>(inspectionRecord));
 		map.put("inspectionName", inspectionNameSet);
 		map.put("inspectionPersonnel", inspectionPersonnelSet);
+		map.put("inspectionRecord", inspectionRecordSet);
 		return map;
 	}
     
@@ -242,6 +258,12 @@ public class PagePatrolManController extends BaseController{
 	 *Json:（根据条件请求筛选的数据）
 	 *[{"inspectionName": "拆码垛机保养","inspectionRecord": "加快检修","inspectionPersonnel": "兰州烟草","inspectionTime": "2019-05-2 00::00:00 "}]
 
+	修改为：
+	Post:     {"inspectionName":"xxx","inspectionPersonnel":"xxx","inspectionRecord":"xxx","startTime":"xxx","endTime":"xxx","rangeStart":1,"rangeEnd":500}
+
+	Json:（根据条件请求筛选的数据）
+	[{"inspectionName": "拆码垛机保养","inspectionRecord": "加快检修","inspectionPersonnel": "兰州烟草","inspectionTime": "2019-05-2 00::00:00 ","remarks": "xxx"}]
+
      * @return
      */
     @RequestMapping(value = "filterPatrolLog")
@@ -249,9 +271,16 @@ public class PagePatrolManController extends BaseController{
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
     	String inspectionName = request.getParameter("inspectionName");
     	String inspectionPersonnel = request.getParameter("inspectionPersonnel");
-    	String startTime = CompareDate.formatDate(request.getParameter("startTime"));
-    	String endTime = CompareDate.formatDate(request.getParameter("endTime"));
-    	System.err.println(startTime+" "+endTime);
+    	String inspectionRecord = request.getParameter("inspectionRecord");
+    	String startTime = request.getParameter("startTime");
+    	String endTime = request.getParameter("endTime");
+    	if (startTime != null) {
+    		startTime = CompareDate.formatDate(request.getParameter("startTime"));
+		}  
+    	if (endTime != null) {
+    		endTime = CompareDate.formatDate(request.getParameter("endTime"));
+		}
+    	//System.err.println(startTime+" "+endTime);    	
     	String rangeStart = request.getParameter("rangeStart");
     	String rangeEnd = request.getParameter("rangeEnd");
     	if (rangeEnd == null || rangeEnd.equals("")) {
@@ -268,7 +297,7 @@ public class PagePatrolManController extends BaseController{
         		mapList.add(map);
         	}
 		}else {
-			for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLogPage(inspectionName, inspectionPersonnel, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
+			for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLogPageRemark(inspectionName, inspectionPersonnel,inspectionRecord, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
 	    		Map<String, Object> map = MapUtils.newHashMap();
 	    		map.put("inspectionName", inspectionName);
 	        	map.put("inspectionPersonnel", inspectionPersonnel);
@@ -278,11 +307,15 @@ public class PagePatrolManController extends BaseController{
 				}else {
 					map.put("inspectionRecord", "null");
 				}
+	        	if (isPatrolRec.getRemarks() != null) {
+	        		map.put("remarks", isPatrolRec.getRemarks());
+				}else {
+					map.put("remarks", "null");
+				}
 	    		mapList.add(map);
 	    	}
 		}    	
     	return mapList;
     }
 }
-	
-	
+		

@@ -106,6 +106,8 @@ public class PageDeviceManController extends BaseController{
      * {[”deviceID”:”xxx”,”deviceName”:”Car01”,”deviceCategoryName”:”智能双向小车”,”deviceTypeName”:”SFTA003” ,”runState”:”Run”],
      *  [”deviceID”:”xxx”,”deviceName”:”XXX”,”deviceCategoryName”:”XXX” ,”deviceTypeName”:”xxxx” ,”runState”:”Sleep”],
      *  [”deviceID”:”xxx”,”deviceName”:”XXX”,”deviceCategoryName”:”XXX” ,”deviceTypeName”:”xxxx” ,”runState”:”Fault”]}
+     *  
+     *  删去runstate，增加固定资产编号assetsNo
      */
     @RequestMapping(value = {"deviceList", ""})
     public List<Map<String, Object>> deviceList() {
@@ -114,20 +116,24 @@ public class PageDeviceManController extends BaseController{
         String deviceName;
         String deviceCategoryName;
         String deviceTypeName;
-        String runState;
+        //String runState;
         List<IsDevice> isDevices=isDeviceService.findList(new IsDevice());
         for(IsDevice isDevice:isDevices){
             deviceID= isDevice.getId();
             deviceName=isDevice.getDeviceNo();
             deviceCategoryName=isDevice.getDeviceCodeName();
             String device_code_id=isDevice.getDeviceCodeId();
+            String assetsNo = "";
             IsDeviceCode isDeviceCode=isDeviceCodeService.get(device_code_id);
             if(isDeviceCode!=null){
                 deviceTypeName=isDeviceCode.getModel();
             }else{
                 deviceTypeName="";
             }
-            runState=isDevice.getDeviceStatus();
+            if (isDevice.getAssetsNo() != null) {
+            	assetsNo = isDevice.getAssetsNo();
+			}
+            /*runState=isDevice.getDeviceStatus();
             System.out.println(runState);
             switch (runState){
                 case "0":
@@ -142,14 +148,15 @@ public class PageDeviceManController extends BaseController{
                 case "9":
                     runState="abandon";
                     break;
-            }
+            }*/
 
             Map<String, Object> map = MapUtils.newHashMap();
             map.put("deviceID",deviceID);
             map.put("deviceName",deviceName);
             map.put("deviceCategoryName",deviceCategoryName);
             map.put("deviceTypeName",deviceTypeName);
-            map.put("runState",runState);
+            map.put("assetsNo",assetsNo);
+            //map.put("runState",runState);
             mapList.add(map);
         }
 

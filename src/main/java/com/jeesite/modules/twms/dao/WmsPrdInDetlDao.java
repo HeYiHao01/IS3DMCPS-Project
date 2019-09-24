@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.twms.entity.WmsPrdInDetl;
+import com.jeesite.modules.twms.entity.WmsPrdOutDetl;
 
 /**
  * wms_prd_in_detlDAO接口
@@ -26,10 +27,26 @@ public interface WmsPrdInDetlDao extends CrudDao<WmsPrdInDetl> {
 	public List<WmsPrdInDetl> getNewDetailByBatchNo(String batchNo);	
 	public List<WmsPrdInDetl> getNewDetailByWN(String workNo);
 	
-	public List<WmsPrdInDetl> getNewDetailMonthly(String month);
+	public List<WmsPrdInDetl> getBatchWeightYearly(String year);
+	public List<WmsPrdInDetl> getClassWeightYearly(String year);
 	public List<WmsPrdInDetl> getBatchWeightMonthly(String month);
 	public List<WmsPrdInDetl> getClassWeightMonthly(String month);
 	public List<WmsPrdInDetl> getBrandDaily(String day);
 	public List<WmsPrdInDetl> getBatchWeightDaily(String day);
 	public List<WmsPrdInDetl> getClassWeightDaily(String day);
+	
+	public List<WmsPrdInDetl> getNewDetailYearly(String year);
+	public List<WmsPrdInDetl> getNewDetailMonthly(String month);
+	public List<WmsPrdInDetl> getNewDetailDaily(String day);
+	
+	public List<WmsPrdInDetl> getBatchCountYearly(@Param("classTeam") String classTeam, @Param("year") String year);
+	public List<WmsPrdInDetl> getBatchCountMonthly(@Param("classTeam") String classTeam, @Param("month") String month);
+	public List<WmsPrdInDetl> getBatchCountDaily(@Param("classTeam") String classTeam, @Param("day") String day);
+	
+	public List<WmsPrdInDetl> getProductInfoCountBrandYearly(@Param("year") String year);
+	public List<WmsPrdInDetl> getProductInfoCountBrandMonthly(@Param("month") String month);
+	public List<WmsPrdInDetl> getProductInfoCountBrandDaily(@Param("day") String day);
+	public List<WmsPrdInDetl> getProductInfoCountClassYearly(@Param("year") String year);
+	public List<WmsPrdInDetl> getProductInfoCountClassMonthly(@Param("month") String month);
+	public List<WmsPrdInDetl> getProductInfoCountClassDaily(@Param("day") String day);
 }

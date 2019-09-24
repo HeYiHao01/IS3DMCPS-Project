@@ -111,4 +111,8 @@ public class IsPatrolRecService extends CrudService<IsPatrolRecDao, IsPatrolRec>
 	public List<IsPatrolRec> filterPatrolLogPage(@Param("patrolName")String patrolName, @Param("operator")String operator, @Param("startTime")String startTime, @Param("endTime")String endTime,  @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd){
 		return this.dao.filterPatrolLogPage(patrolName, operator, startTime, endTime, rangeStart, rangeEnd);
 	}
+	
+	public List<IsPatrolRec> filterPatrolLogPageRemark(@Param("patrolName")String patrolName, @Param("operator")String operator, @Param("remarks")String remarks, @Param("startTime")String startTime, @Param("endTime")String endTime,  @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd){
+		return this.dao.filterPatrolLogPageRemark(patrolName, operator, remarks, startTime, endTime, rangeStart, rangeEnd);
+	}
 }

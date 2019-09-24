@@ -124,4 +124,14 @@ public class IsRepairRec extends DataEntity<IsRepairRec> {
 		this.operator = operator;
 		this.repairTime = repairTime;
 	}
+
+	public IsRepairRec(String faultsId, String faultsName, String record, String results, String operator, Date repairTime, String remark) {
+		this.faultsId = faultsId;
+		this.faultsName = faultsName;
+		this.record = record;
+		this.results = results;
+		this.operator = operator;
+		this.repairTime = repairTime;
+		this.remarks = remark;
+	}
 }

@@ -80,6 +80,8 @@ public class PageMaintainController extends BaseController{
      * 保养录入
      * Post(Put):
      * {“deviceID”:”xxx”,” maintainID”:”xxx”,”miantainPersion”:”xxx”,”state”:true,”remark”:”xxxxxxxxxxxx”}
+     * 修改
+     * {“deviceID”:”xxx”,” maintainID”:”xxx”,”miantainPersion”:”xxx”,”state”:true,”record”:”xxxxxxxxxxxx”,”remark”:”xxxxxxxxxxxx”}
      * @return
      */
     @RequestMapping(value = {"postMaintain", ""})
@@ -95,13 +97,15 @@ public class PageMaintainController extends BaseController{
 		}else{
         	state="0";
 		}
+        String record=request.getParameter("record");
         String remark=request.getParameter("remark");
-		System.out.println(deviceName+maintainName+maintainPersion+state+remark);
+		//System.out.println(deviceName+maintainName+maintainPersion+state+record);
         Date date=new Date();
 		Map<String,Object> map=new HashMap<>();
         try{
 			String maintainID=isMaintainService.getByName(maintainName).getId();
-			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,remark,maintainPersion,date,state);
+			//IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,state);
+			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,remark,state);
             isMaintainRecService.save(isMaintainRec);
         }catch(Exception exception){
 			map.put("result",exception.toString());
@@ -221,6 +225,8 @@ public class PageMaintainController extends BaseController{
 	 * （1）计划筛选
 		Json：（默认给到所有的筛选条件）
 		{"maintenanceName": ["xxx", "xxx", "xxx"],"deviceNumber": ["xxx", "xxx", "xxx"],"planners": ["xxx", "xxx", "xxx"]}
+		
+		planners改成MaintainPerson（执行人）
 	 * @return
 	 */
 	@RequestMapping(value = "maintenanceNameList")
@@ -232,7 +238,8 @@ public class PageMaintainController extends BaseController{
 		for(IsMaintainRec isMaintainRec:isMaintainRecService.need_maintain_details()){
 			maintenanceName.add(isMaintainRec.getMaintainName());
 			deviceNumber.add(isMaintainRec.getDeviceNo());
-			planners.add(isMaintainRec.getPlanPerson());
+			//planners.add(isMaintainRec.getPlanPerson());
+			planners.add(isMaintainRec.getMaintainPerson());
 		}
 		List<String> maintenanceNameSet = new ArrayList<>(new HashSet<>(maintenanceName));
 		List<String> deviceNumberSet = new ArrayList<>(new HashSet<>(deviceNumber));
@@ -258,7 +265,8 @@ public class PageMaintainController extends BaseController{
 			Map<String, Object> map = MapUtils.newHashMap();
 			String maintenanceName = isMaintainRec.getMaintainName();
 			String deviceNumber = isMaintainRec.getDeviceNo();
-			String planners = isMaintainRec.getPlanPerson();
+			//String planners = isMaintainRec.getPlanPerson();
+			String planners = isMaintainRec.getMaintainPerson();
 			String plannedMaintenanceTime = CompareDate.simplifyDate(isMaintainRec.getPlanDate());
 			map.put("maintenanceName", maintenanceName);
 			map.put("deviceNumber", deviceNumber);
@@ -315,7 +323,7 @@ public class PageMaintainController extends BaseController{
 						map.put("deviceTotalNumber", mapAll.get("deviceTotalNumber"));
 						map.put("maintenanceDeviceNumber", mapPlan.get("maintenanceDeviceNumber"));
 						map.put("maintenanceFinishNumber", mapFinish.get("maintenanceFinishNumber"));
-						map.put("score", (int)(Double.valueOf(String.valueOf(mapFinish.get("maintenanceFinishNumber")))/(Double.valueOf(String.valueOf(mapAll.get("deviceTotalNumber"))))*100));
+						//map.put("score", (int)(Double.valueOf(String.valueOf(mapFinish.get("maintenanceFinishNumber")))/(Double.valueOf(String.valueOf(mapAll.get("deviceTotalNumber"))))*100));
 						mapList.add(map);
 					}
 				}
@@ -453,15 +461,17 @@ public class PageMaintainController extends BaseController{
 	@RequestMapping(value = "filterMaintainRecLog")
 	public List<Map<String, Object>> filterMaintainRecLog(HttpServletRequest request) {
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();
-		String status = "";
+		String status;
 		status = request.getParameter("status");
-		if (status.equals("维保计划")) {
-			status = "0";
-		}else if (status.equals("维保记录")) {
-			status = "1";
-		}else {
-			status = "Unknown";
-		}	
+		if (status != null) {
+			if (status.equals("维保计划")) {
+				status = "0";
+			}else if (status.equals("维保记录")) {
+				status = "1";
+			}else {
+				status = null;
+			}	
+		}
 		for(IsMaintainRec isMaintainRec:isMaintainRecService.filterMaintainRecPage(request.getParameter("maintenanceName"), request.getParameter("deviceNumber"), request.getParameter("maintenancePersonnel"), status, request.getParameter("startTime"), request.getParameter("endTime"), Integer.valueOf(request.getParameter("rangeStart")), Integer.valueOf(request.getParameter("rangeEnd")))){
 			Map<String, Object> map = MapUtils.newHashMap();
 			String maintenanceName = isMaintainRec.getMaintainName();
@@ -471,6 +481,8 @@ public class PageMaintainController extends BaseController{
 			String maintenancePersonnel = isMaintainRec.getMaintainPerson();
 			String maintenanceTime = CompareDate.simplifyDate(isMaintainRec.getMaintainTime());
 			String status1 = isMaintainRec.getStatus().equals("0")?"保养计划":"保养记录";
+			String remarks = isMaintainRec.getRemarks();
+			String record = isMaintainRec.getRecord();
 			map.put("maintenanceName", maintenanceName);
 			map.put("deviceNumber", deviceNumber);
 			map.put("planners", planners);
@@ -478,10 +490,21 @@ public class PageMaintainController extends BaseController{
 			map.put("maintenancePersonnel", maintenancePersonnel);
 			map.put("maintenanceTime", maintenanceTime);
 			map.put("status", status1);
+			if (remarks != null) {
+				map.put("remarks", remarks);
+			}else {
+				map.put("remarks", "null");
+			}
+			if (record != null) {
+				map.put("record", record);
+			}else {
+				map.put("record", "null");
+			}
 			mapList.add(map);
 		}
 		return mapList;
 	}
+	
+	
 }
-	
-	
+		

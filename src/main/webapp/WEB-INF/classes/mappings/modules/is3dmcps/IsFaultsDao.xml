@@ -42,7 +42,13 @@
 	
 	<select id="filterFaultsLogPage" resultType="IsFaults">
 		select alias.* from 
-		(select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status,ROWNUM as rowno from is_faults,is_device where is_faults.device_id = is_device.id and is_faults.name = #{faultName} and is_device.device_code_name = #{deviceName} and is_faults.operator = #{operator} and is_faults.status = #{status} and is_faults.faults_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
+		(select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status,ROWNUM as rowno from is_faults,is_device where is_faults.device_id = is_device.id and (is_faults.name = #{faultName} or #{faultName} is null) and (is_device.device_code_name = #{deviceName} or #{deviceName} is null) and (is_faults.operator = #{operator} or #{operator} is null) and (is_faults.status = #{status} or #{status} is null) and is_faults.faults_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd}) alias
 		where alias.rowno &gt; #{rangeStart}
+	</select>
+	
+	<select id="faultsPop" resultType="IsFaults">
+		select is_faults.faults_code,count(is_faults.faults_code) as name from is_faults,is_faults_info,is_device 
+		where is_faults.device_id = is_device.id and is_faults.faults_code = is_faults_info.fault_code and is_device.device_no = #{deviceName}
+		GROUP by is_faults.faults_code
 	</select>
 </mapper>

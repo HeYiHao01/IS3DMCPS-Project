@@ -138,4 +138,47 @@ public class WmsPrdInDetlService extends CrudService<WmsPrdInDetlDao, WmsPrdInDe
 	public List<WmsPrdInDetl> getClassWeightDaily(String day){
 		return this.dao.getClassWeightDaily(day);
 	}
+	
+	public List<WmsPrdInDetl> getNewDetailYearly(String year){
+		return this.dao.getNewDetailYearly(year);
+	}
+	public List<WmsPrdInDetl> getNewDetailDaily(String day){
+		return this.dao.getNewDetailDaily(day);
+	}
+	
+	public List<WmsPrdInDetl> getBatchWeightYearly(String year){
+		return this.dao.getBatchWeightYearly(year);
+	}
+	public List<WmsPrdInDetl> getClassWeightYearly(String year){
+		return this.dao.getClassWeightYearly(year);
+	}
+	
+	public List<WmsPrdInDetl> getBatchCountYearly(@Param("classTeam") String classTeam, @Param("year") String year){
+		return this.dao.getBatchCountYearly(classTeam, year);
+	}
+	public List<WmsPrdInDetl> getBatchCountMonthly(@Param("classTeam") String classTeam, @Param("month") String month){
+		return this.dao.getBatchCountMonthly(classTeam, month);
+	}
+	public List<WmsPrdInDetl> getBatchCountDaily(@Param("classTeam") String classTeam, @Param("day") String day){
+		return this.dao.getBatchCountDaily(classTeam, day);
+	}
+
+	public List<WmsPrdInDetl> getProductInfoCountBrandYearly(@Param("year") String year){
+		return this.dao.getProductInfoCountBrandYearly(year);
+	}
+	public List<WmsPrdInDetl> getProductInfoCountBrandMonthly(@Param("month") String month){
+		return this.dao.getProductInfoCountBrandMonthly(month);
+	}
+	public List<WmsPrdInDetl> getProductInfoCountBrandDaily(@Param("day") String day){
+		return this.dao.getProductInfoCountBrandDaily(day);
+	}
+	public List<WmsPrdInDetl> getProductInfoCountClassYearly(@Param("year") String year){
+		return this.dao.getProductInfoCountClassYearly(year);
+	}
+	public List<WmsPrdInDetl> getProductInfoCountClassMonthly(@Param("month") String month){
+		return this.dao.getProductInfoCountClassMonthly(month);
+	}
+	public List<WmsPrdInDetl> getProductInfoCountClassDaily(@Param("day") String day){
+		return this.dao.getProductInfoCountClassDaily(day);
+	}
 }

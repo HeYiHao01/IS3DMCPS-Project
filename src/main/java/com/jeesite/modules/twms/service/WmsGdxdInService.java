@@ -176,6 +176,9 @@ public class WmsGdxdInService extends CrudService<WmsGdxdInDao, WmsGdxdIn> {
 	public List<WmsGdxdIn> getNewAllInMonthly(@Param("month") String month){
 		return this.dao.getNewAllInMonthly(month);
 	}
+	public List<WmsGdxdIn> getNewAllInDaily(@Param("day") String day){
+		return this.dao.getNewAllInDaily(day);
+	}
 	
 	public List<WmsGdxdIn> filterWorkOrderInBatch(@Param("inLine") String inLine, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
 		return this.dao.filterWorkOrderInBatch(inLine, brand, batch, startTime, endTime, rangeStart, rangeEnd);

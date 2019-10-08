@@ -48,4 +48,6 @@ public interface WmsPrdOutDetlDao extends CrudDao<WmsPrdOutDetl> {
 	public List<WmsPrdOutDetl> getProductInfoCountClassYearly(@Param("year") String year);
 	public List<WmsPrdOutDetl> getProductInfoCountClassMonthly(@Param("month") String month);
 	public List<WmsPrdOutDetl> getProductInfoCountClassDaily(@Param("day") String day);
+	
+	public List<WmsPrdOutDetl> getProductOutByEqu(@Param("day") String day);
 }

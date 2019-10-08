@@ -89,4 +89,11 @@
 	<select id="getProductInfoCountClassDaily" resultType="WmsPrdOutDetl">
 		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_out_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
 	</select>
+	
+	<select id="getProductOutByEqu" resultType="WmsPrdOutDetl">
+		select wms_gdxd_out.equ_id as equ_id,sum(wms_prd_out_detl.weight) as weight 
+		from wms_prd_out_detl,wms_gdxd_out 
+		where to_char(wms_prd_out_detl.prod_time,'yyyy.mm.dd')=#{day} and wms_prd_out_detl.batch_no = wms_gdxd_out.batch_no 
+		group by wms_gdxd_out.equ_id
+	</select>
 </mapper>

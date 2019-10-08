@@ -22,7 +22,7 @@
 	</select>
 	
 	<select id="repairLogList" resultType="IsRepairRec">
-		select faults_name,operator,repair_time,results from is_repair_rec order by repair_time
+		select faults_name,operator,repair_time,results，status from is_repair_rec order by repair_time
 	</select>
 	<select id="filterRepairLog" resultType="IsRepairRec">
 		select faults_name,operator,repair_time,results,record from is_repair_rec where faults_name = #{faultsName} and operator = #{operator} and results = #{results} and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') order by repair_time

@@ -46,6 +46,7 @@ public interface WmsGdxdInDao extends CrudDao<WmsGdxdIn> {
 	
 	public List<WmsGdxdIn> getNewAllInYearly(@Param("year") String year);
 	public List<WmsGdxdIn> getNewAllInMonthly(@Param("month") String month);
+	public List<WmsGdxdIn> getNewAllInDaily(@Param("day") String day);
 	
 	public List<WmsGdxdIn> filterWorkOrderInBatch(@Param("inLine") String inLine, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);
 	public List<WmsGdxdIn> filterByClassTeamBatch(@Param("teamCd") String teamCd, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd);	

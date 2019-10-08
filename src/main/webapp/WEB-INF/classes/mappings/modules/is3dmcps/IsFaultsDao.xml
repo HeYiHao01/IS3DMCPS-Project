@@ -51,4 +51,14 @@
 		where is_faults.device_id = is_device.id and is_faults.faults_code = is_faults_info.fault_code and is_device.device_no = #{deviceName}
 		GROUP by is_faults.faults_code
 	</select>
+	
+	<select id="faultsHistoryCount" resultType="IsFaults">
+		select is_device.device_no as name,count(is_faults.device_id) as device_name from is_device,is_faults where is_device.id = is_faults.device_id and is_faults.device_id = #{deviceId} group by is_faults.device_id, is_device.device_no
+	</select>
+	<select id="faultsCountDaily" resultType="IsFaults">
+		select count(is_faults.device_id) as device_name from is_device,is_faults where is_device.id = is_faults.device_id and is_faults.device_id = #{deviceId} and to_char(is_faults.faults_time,'yyyy.mm.dd') = #{day} group by is_faults.device_id
+	</select>
+	<select id="faultsCountMonthly" resultType="IsFaults">
+		select count(is_faults.device_id) as device_name from is_device,is_faults where is_device.id = is_faults.device_id and is_faults.device_id = #{deviceId} and to_char(is_faults.faults_time,'yyyy.mm') = #{month} group by is_faults.device_id
+	</select>
 </mapper>

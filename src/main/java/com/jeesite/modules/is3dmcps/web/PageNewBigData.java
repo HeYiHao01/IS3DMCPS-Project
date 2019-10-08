@@ -25,6 +25,7 @@ import com.jeesite.modules.twms.service.WmsGdxdOutService;
 import com.jeesite.modules.twms.service.WmsPrdInDetlService;
 import com.jeesite.modules.twms.service.WmsPrdOutDetlService;
 import com.jeesite.utils.CompareDate;
+import com.sun.mail.handlers.image_gif;
 
 /**
  * 新的服务器上的大数据相关接口
@@ -95,7 +96,7 @@ public class PageNewBigData extends BaseController {
 						for(Map<String, Object> mapT:mapListThis){
 							if (mapG.get("brand").equals(mapT.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
-								mapF.put("timeVariable", timeDomainYear);
+								mapF.put("timeVariable", Integer.parseInt(timeDomainYear));
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("finishWeight", mapG.get("finishWeight"));								
@@ -130,7 +131,7 @@ public class PageNewBigData extends BaseController {
 						for(Map<String, Object> mapT:mapListThis){
 							if (mapG.get("brand").equals(mapT.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
-								mapF.put("timeVariable", timeDomainYear);
+								mapF.put("timeVariable", Integer.parseInt(timeDomainYear));
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("finishWeight", mapG.get("finishWeight"));								
@@ -165,7 +166,7 @@ public class PageNewBigData extends BaseController {
 						for(Map<String, Object> mapT:mapListThis){
 							if (mapG.get("brand").equals(mapT.get("brand"))) {
 								Map<String, Object> mapF = MapUtils.newHashMap();
-								mapF.put("timeVariable", timeDomainYear);
+								mapF.put("timeVariable", Integer.parseInt(timeDomainYear));
 								mapF.put("brand", mapT.get("brand"));
 								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 								mapF.put("finishWeight", mapG.get("finishWeight"));								
@@ -225,13 +226,31 @@ public class PageNewBigData extends BaseController {
 						mapLast.put("brand", wmsPrdOutDetl.getMatNm());
 						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdOutDetl.getWeight()));
 						mapListLast.add(mapLast);
+					}	
+					List<Map<String, Object>> listTemp1 = CompareDate.listMerge(mapListGdxd, mapListThis);
+					List<Map<String, Object>> listTemp2 = CompareDate.listMerge(mapListGdxd, mapListLast);					
+					for(Map<String, Object> mapT1 : listTemp1){
+						for(Map<String, Object> mapT2 : listTemp2){
+							if (mapT1.get("brand").equals(mapT2.get("brand"))) {
+								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", j);
+								mapF.put("brand", mapT1.get("brand"));
+								mapF.put("totalWeightThis", mapT1.get("totalWeightThis"));
+								mapF.put("finishWeight", mapT1.get("finishWeight"));
+								if (mapT2.get("totalWeightLast") == null || mapT2.get("totalWeightLast").equals("")) {
+									mapF.put("totalWeightLast", 0.0);
+								}else {
+									mapF.put("totalWeightLast", mapT2.get("totalWeightLast"));
+								}								
+								mapList.add(mapF);
+							}
+						}
 					}
-					for(Map<String, Object> mapG:mapListGdxd){
+					/*for(Map<String, Object> mapG:mapListGdxd){
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
+									if (mapL.get("brand").equals(mapT.get("brand")) &&											
 											mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", j);
@@ -249,12 +268,12 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
 								}								
 							}
 						}
-					}
+					}*/
 				}
 				break;
 			case "IncomingInfo":
@@ -295,12 +314,30 @@ public class PageNewBigData extends BaseController {
 						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdInDetl.getWeight()));
 						mapListLast.add(mapLast);
 					}
-					for(Map<String, Object> mapG:mapListGdxd){
+					List<Map<String, Object>> listTemp1 = CompareDate.listMerge(mapListGdxd, mapListThis);
+					List<Map<String, Object>> listTemp2 = CompareDate.listMerge(mapListGdxd, mapListLast);					
+					for(Map<String, Object> mapT1 : listTemp1){
+						for(Map<String, Object> mapT2 : listTemp2){
+							if (mapT1.get("brand").equals(mapT2.get("brand"))) {
+								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", j);
+								mapF.put("brand", mapT1.get("brand"));
+								mapF.put("totalWeightThis", mapT1.get("totalWeightThis"));
+								mapF.put("finishWeight", mapT1.get("finishWeight"));
+								if (mapT2.get("totalWeightLast") == null || mapT2.get("totalWeightLast").equals("")) {
+									mapF.put("totalWeightLast", 0.0);
+								}else {
+									mapF.put("totalWeightLast", mapT2.get("totalWeightLast"));
+								}								
+								mapList.add(mapF);
+							}
+						}
+					}
+					/*for(Map<String, Object> mapG:mapListGdxd){
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
+									if (mapL.get("brand").equals(mapT.get("brand")) &&											
 											mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", j);
@@ -318,12 +355,12 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
 								}								
 							}
 						}
-					}
+					}*/
 				}
 				break;
 			case "ProductionInfo":
@@ -368,8 +405,7 @@ public class PageNewBigData extends BaseController {
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
+									if (mapL.get("brand").equals(mapT.get("brand")) &&											
 											mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", j);
@@ -387,7 +423,7 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
 								}								
 							}
@@ -431,7 +467,7 @@ public class PageNewBigData extends BaseController {
 					}
 					List<Map<String, Object>> mapListGdxd = ListUtils.newArrayList();
 					List<Map<String, Object>> mapListThis = ListUtils.newArrayList();
-					for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewAllOut(dateThis)){					
+					for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewAllOutDaily(dateThis)){					
 						Map<String, Object> mapGdxd = MapUtils.newHashMap();				        				       
 				        int finishWeight = 0;
 				        if(wmsGdxdOut.getBoxtotalnum() != null)
@@ -453,13 +489,58 @@ public class PageNewBigData extends BaseController {
 						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdOutDetl.getWeight()));
 						mapListLast.add(mapLast);
 					}
-					for(Map<String, Object> mapG:mapListGdxd){
+					List<Map<String, Object>> listTemp1 = CompareDate.listMerge(mapListGdxd, mapListThis);
+					List<Map<String, Object>> listTemp2 = CompareDate.listMerge(mapListGdxd, mapListLast);					
+					for(Map<String, Object> mapT1 : listTemp1){
+						for(Map<String, Object> mapT2 : listTemp2){
+							if (mapT1.get("brand").equals(mapT2.get("brand"))) {
+								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
+								mapF.put("brand", mapT1.get("brand"));
+								mapF.put("totalWeightThis", mapT1.get("totalWeightThis"));
+								mapF.put("finishWeight", mapT1.get("finishWeight"));
+								if (mapT2.get("totalWeightLast") == null || mapT2.get("totalWeightLast").equals("")) {
+									mapF.put("totalWeightLast", 0.0);
+								}else {
+									mapF.put("totalWeightLast", mapT2.get("totalWeightLast"));
+								}								
+								mapList.add(mapF);
+							}
+						}
+					}
+					/*if (mapListLast != null && !mapListLast.isEmpty()) {
+						for (Map<String, Object> mapT : listTemp){
+							for (Map<String, Object> mapL : mapListLast) {
+								if (mapL.get("brand").equals(mapT.get("brand"))) {
+									Map<String, Object> mapF = MapUtils.newHashMap();
+									mapF.put("timeVariable", i);
+									mapF.put("brand", mapT.get("brand"));
+									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
+									mapF.put("finishWeight", mapT.get("finishWeight"));
+									mapF.put("totalWeightLast", mapL.get("totalWeightLast"));
+									mapList.add(mapF);
+								}
+							}
+						}
+					} else {
+						for (Map<String, Object> mapT : listTemp){
+							if (mapT.get("brand").equals(mapT.get("brand"))) {
+								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
+								mapF.put("brand", mapT.get("brand"));
+								mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
+								mapF.put("finishWeight", mapT.get("finishWeight"));
+								mapF.put("totalWeightLast", 0.0);
+								mapList.add(mapF);
+							}
+						}
+					}*/
+					/*for (Map<String, Object> mapG : mapListGdxd) {
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
-											mapL.get("brand").equals(mapG.get("brand"))) {
+									if (mapL.get("brand").equals(mapT.get("brand"))
+											&& mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", i);
 										mapF.put("brand", mapT.get("brand"));
@@ -476,13 +557,13 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
-								}								
+								}
 							}
 						}
-					}
-				}				
+					}*/
+				}			
 				break;
 			case "IncomingInfo":
 				for(int i = 1;i<32;i++){
@@ -507,7 +588,7 @@ public class PageNewBigData extends BaseController {
 					}
 					List<Map<String, Object>> mapListGdxd = ListUtils.newArrayList();
 					List<Map<String, Object>> mapListThis = ListUtils.newArrayList();
-					for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(dateThis)){					
+					for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllInDaily(dateThis)){					
 						Map<String, Object> mapGdxd = MapUtils.newHashMap();				        				       
 				        int finishWeight = 0;
 				        if(wmsGdxdIn.getBoxtotalnum() != null)
@@ -529,12 +610,30 @@ public class PageNewBigData extends BaseController {
 						mapLast.put("totalWeightLast", Double.valueOf(wmsPrdInDetl.getWeight()));
 						mapListLast.add(mapLast);
 					}
-					for(Map<String, Object> mapG:mapListGdxd){
+					List<Map<String, Object>> listTemp1 = CompareDate.listMerge(mapListGdxd, mapListThis);
+					List<Map<String, Object>> listTemp2 = CompareDate.listMerge(mapListGdxd, mapListLast);					
+					for(Map<String, Object> mapT1 : listTemp1){
+						for(Map<String, Object> mapT2 : listTemp2){
+							if (mapT1.get("brand").equals(mapT2.get("brand"))) {
+								Map<String, Object> mapF = MapUtils.newHashMap();
+								mapF.put("timeVariable", i);
+								mapF.put("brand", mapT1.get("brand"));
+								mapF.put("totalWeightThis", mapT1.get("totalWeightThis"));
+								mapF.put("finishWeight", mapT1.get("finishWeight"));
+								if (mapT2.get("totalWeightLast") == null || mapT2.get("totalWeightLast").equals("")) {
+									mapF.put("totalWeightLast", 0.0);
+								}else {
+									mapF.put("totalWeightLast", mapT2.get("totalWeightLast"));
+								}								
+								mapList.add(mapF);
+							}
+						}
+					}
+					/*for(Map<String, Object> mapG:mapListGdxd){
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
+									if (mapL.get("brand").equals(mapT.get("brand")) &&											
 											mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", i);
@@ -552,12 +651,12 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
 								}								
 							}
 						}
-					}
+					}*/
 				}
 				break;
 			case "ProductionInfo":
@@ -609,8 +708,7 @@ public class PageNewBigData extends BaseController {
 						for (Map<String, Object> mapT : mapListThis) {
 							if (mapListLast != null && !mapListLast.isEmpty()) {
 								for (Map<String, Object> mapL : mapListLast) {
-									if (mapT.get("brand").equals(mapL.get("brand")) &&
-											mapT.get("brand").equals(mapG.get("brand")) &&
+									if (mapL.get("brand").equals(mapT.get("brand")) &&											
 											mapL.get("brand").equals(mapG.get("brand"))) {
 										Map<String, Object> mapF = MapUtils.newHashMap();
 										mapF.put("timeVariable", i);
@@ -628,7 +726,7 @@ public class PageNewBigData extends BaseController {
 									mapF.put("brand", mapT.get("brand"));
 									mapF.put("totalWeightThis", mapT.get("totalWeightThis"));
 									mapF.put("finishWeight", mapG.get("finishWeight"));
-									mapF.put("totalWeightLast", 0);
+									mapF.put("totalWeightLast", 0.0);
 									mapList.add(mapF);
 								}								
 							}
@@ -647,6 +745,7 @@ public class PageNewBigData extends BaseController {
 			map.put("Error", "timeCoordinate传参错误");
 			mapList.add(map);			
 		}		
+		//return CompareDate.removeRepeatMaps(mapList);
 		return mapList;
 	}
 	
@@ -656,89 +755,115 @@ public class PageNewBigData extends BaseController {
      * Json:
      *  [{“productionLineName”:”生产线一”,“timeVariable”:11,“productionCapacity”:22000},
      * {“productionLineName”:”生产线一”, “timeVariable”:12,“productionCapacity”:25000}]
+     * 
+     * 修改：
+     * timeCoordinate取值：”Daily”、”Monthly”，表示时间轴坐标为日或者月。
+	timeDomainYear（年选择）、timeDomainMonth（月选择）：在时间轴为月（Monthly）时只发送timeDomainYear，时间轴为日（Daily）时发送timeDomainYear和timeDomainMonth。
+	Post: 
+	{”timeCoordinate”:”Monthly”,”timeDomainYear”:2018}
+	或
+	{”timeCoordinate”:”Daily”,”timeDomainYear”:2018,”timeDomainMonth”:8}
+
      */
     @RequestMapping(value = {"newProductionLine", ""})
     public List<Map<String, Object>> newProductionLine(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String timeDomainYear = request.getParameter("timeDomainYear");
-        String timeDomainMonth = request.getParameter("timeDomainMonth");        
+        String timeDomainMonth = request.getParameter("timeDomainMonth");  
+        String timeCoordinate = request.getParameter("timeCoordinate");
         int timeVariable;        
-        for(int i=1;i<32;i++){
-        	String date = timeDomainYear+".";
-            if (Integer.parseInt(timeDomainMonth) < 10) {
-    			date += "0"+timeDomainMonth+".";			
-    		}else {
-    			date += timeDomainMonth+".";		
-    		}	
-        	if(i<10){
-				date += "0"+i; 				
+        if (timeCoordinate != null) {
+			if (timeCoordinate.equals("Monthly")) {
+				for (int j = 1; j < 13; j++) {
+					String date = new String();					
+					date += timeDomainYear + ".";					
+					if (j < 10) {
+						date += "0" + j + "";						
+					} else {
+						date += j + "";						
+					}
+					Double productionCapacity = 0.0;
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService
+							.getNewDetailMonthly(date))
+						productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", j);
+					map.put("productionCapacity", productionCapacity);
+					mapList.add(map);
+				}	            
+			}else if (timeCoordinate.equals("Daily")) {
+				for(int i=1;i<32;i++){
+		        	String date = timeDomainYear+".";
+		            if (Integer.parseInt(timeDomainMonth) < 10) {
+		    			date += "0"+timeDomainMonth+".";			
+		    		}else {
+		    			date += timeDomainMonth+".";		
+		    		}	
+		        	if(i<10){
+						date += "0"+i; 				
+					}else {
+						date += i+"";				
+					}
+		        	Double productionCapacity = 0.0;
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService
+							.getNewDetailDaily(date))
+						productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", i);
+					map.put("productionCapacity", productionCapacity);
+					mapList.add(map);                                
+		        }        
 			}else {
-				date += i+"";				
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("Error", "timeCoordinate参数错误");
+				mapList.add(map);
 			}
-            Map<String, Object> map = MapUtils.newHashMap();
-            String productionLineName;
-            timeVariable = i;
-            Double productionCapacity = 0.0;
-            for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(date)){
-            	productionLineName = wmsGdxdIn.getInLine();
-            	timeVariable=i;
-            	if (productionLineName.equals("1")) {
-            		productionLineName = "生产线一";
-            		for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getNewDetailByBatchNo(wmsGdxdIn.getBatchNo()))
-            				productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
-            		map.put("productionLineName",productionLineName);
-                    map.put("timeVariable",timeVariable);
-                    map.put("productionCapacity",productionCapacity);
-                    mapList.add(map);
-				}else if(productionLineName.equals("2")){
-					productionLineName = "生产线二";
-					for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getNewDetailByBatchNo(wmsGdxdIn.getBatchNo()))
-        				productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
-					map.put("productionLineName",productionLineName);
-		            map.put("timeVariable",timeVariable);
-		            map.put("productionCapacity",productionCapacity);
-		            mapList.add(map);
+		}else {
+			for(int i=1;i<32;i++){
+	        	String date = timeDomainYear+".";
+	            if (Integer.parseInt(timeDomainMonth) < 10) {
+	    			date += "0"+timeDomainMonth+".";			
+	    		}else {
+	    			date += timeDomainMonth+".";		
+	    		}	
+	        	if(i<10){
+					date += "0"+i; 				
 				}else {
-					productionLineName = "None";
-					map.put("productionLineName",productionLineName);
-		            mapList.add(map);
+					date += i+"";				
 				}
-            }                                   
-        }        
-        return CompareDate.removeRepeatMapByKey(mapList, "timeVariable");
-    }
-    
-    /**
-     * 新增出库能力分析
-     * @param request
-     * @return
-     */
-    @RequestMapping(value = {"newProductionFedWire", ""})
-    public List<Map<String, Object>> newProductionFedWire(HttpServletRequest request) {
-    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        String timeDomainYear = request.getParameter("timeDomainYear");
-        String timeDomainMonth = request.getParameter("timeDomainMonth");        
-        int timeVariable;
-        for(int i=1;i<32;i++){
-        	String date = timeDomainYear+".";
-            if (Integer.parseInt(timeDomainMonth) < 10) {
-    			date += "0"+timeDomainMonth+".";			
-    		}else {
-    			date += timeDomainMonth+".";		
-    		}	
-        	if(i<10){
-				date += "0"+i; 				
-			}else {
-				date += i+"";				
-			}
-            Map<String, Object> map = MapUtils.newHashMap();
-            String productionLineName;
-            timeVariable = i;
-            Double productionCapacity = 0.0;
-            
-        }
+	            Map<String, Object> map = MapUtils.newHashMap();
+	            String productionLineName;
+	            timeVariable = i;
+	            Double productionCapacity = 0.0;
+	            for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewAllIn(date)){
+	            	productionLineName = wmsGdxdIn.getInLine();
+	            	timeVariable=i;
+	            	if (productionLineName.equals("1")) {
+	            		productionLineName = "生产线一";
+	            		for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getNewDetailByBatchNo(wmsGdxdIn.getBatchNo()))
+	            				productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
+	            		map.put("productionLineName",productionLineName);
+	                    map.put("timeVariable",i);
+	                    map.put("productionCapacity",productionCapacity);
+	                    mapList.add(map);
+					}else if(productionLineName.equals("2")){
+						productionLineName = "生产线二";
+						for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getNewDetailByBatchNo(wmsGdxdIn.getBatchNo()))
+	        				productionCapacity += Double.valueOf(wmsPrdInDetl.getWeight());
+						map.put("productionLineName",productionLineName);
+			            map.put("timeVariable",i);
+			            map.put("productionCapacity",productionCapacity);
+			            mapList.add(map);
+					}else {
+						productionLineName = "None";
+						map.put("productionLineName",productionLineName);
+			            mapList.add(map);
+					}
+	            }                                   
+	        }        
+		}
         return mapList;
-    }
+    }        
 
     /**
      * 月批次出入库耗时情况表
@@ -927,7 +1052,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", j);
 							mapF.put("batch", mapT.get("batch"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -978,7 +1103,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", j);
 							mapF.put("batch", mapT.get("batch"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -1028,7 +1153,7 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getBatchWeightDaily(dateLast)){
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-						double totalWeightLast = 0;
+						double totalWeightLast = 0.0;
 						brandLast = wmsPrdOutDetl.getBatchNo();					
 						totalWeightLast = Double.valueOf(wmsPrdOutDetl.getWeight());						
 						mapLast.put("batch", brandLast);
@@ -1052,7 +1177,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", i);
 							mapF.put("batch", mapT.get("batch"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -1094,7 +1219,7 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getBatchWeightDaily(dateLast)){						
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-				        double totalWeightLast = 0;
+				        double totalWeightLast = 0.0;
 				        brandLast = wmsPrdInDetl.getBatchNo();				        
 				        totalWeightLast += Double.valueOf(wmsPrdInDetl.getWeight());				        
 				        mapLast.put("batch", brandLast);
@@ -1118,7 +1243,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", i);
 							mapF.put("batch", mapT.get("batch"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}				
@@ -1167,7 +1292,8 @@ public class PageNewBigData extends BaseController {
 					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getBatchCountYearly(classTeam, timeDomainYear)) {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapThis.put("timeVariable", timeDomainYear);
 						mapList.add(mapThis);
 					}
 				}
@@ -1179,6 +1305,7 @@ public class PageNewBigData extends BaseController {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("brand", wmsPrdInDetl.getMatNm());
 						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));
+						mapThis.put("timeVariable", timeDomainYear);
 						mapList.add(mapThis);
 					}
 				}
@@ -1193,42 +1320,36 @@ public class PageNewBigData extends BaseController {
 			switch (analysisType) {			
 			case "DeliveryInfo":
 				for (int j = 1; j < 13; j++) {
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear + ".";
-					dateLast += (Integer.parseInt(timeDomainYear) - 1) + ".";
+					String dateThis = new String();					
+					dateThis += timeDomainYear + ".";					
 					if (j < 10) {
-						dateThis += "0" + j + "";
-						dateLast += "0" + j + "";
+						dateThis += "0" + j + "";						
 					} else {
-						dateThis += j + "";
-						dateLast += j + "";
+						dateThis += j + "";					
 					}															
-					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getBatchCountYearly(classTeam, dateThis)) {
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getBatchCountMonthly(classTeam, dateThis)) {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapThis.put("timeVariable", dateThis);
 						mapList.add(mapThis);
 					}										
 				}
 				break;
 			case "IncomingInfo":
 				for (int j = 1; j < 13; j++) {
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear + ".";
-					dateLast += (Integer.parseInt(timeDomainYear) - 1) + ".";
+					String dateThis = new String();					
+					dateThis += timeDomainYear + ".";					
 					if (j < 10) {
-						dateThis += "0" + j + "";
-						dateLast += "0" + j + "";
+						dateThis += "0" + j + "";						
 					} else {
-						dateThis += j + "";
-						dateLast += j + "";
+						dateThis += j + "";						
 					}					
 					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getBatchCountMonthly(classTeam, dateThis)) {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("brand", wmsPrdInDetl.getMatNm());
-						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));
+						mapThis.put("timeVariable", dateThis);
 						mapList.add(mapThis);
 					}					
 				}
@@ -1265,7 +1386,8 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getBatchCountDaily(classTeam, dateThis)){
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("brand", wmsPrdOutDetl.getMatNm());
-						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));	
+						mapThis.put("timeVariable", dateThis);
 						mapList.add(mapThis);
 					}					
 				}				
@@ -1294,7 +1416,8 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getBatchCountDaily(classTeam, dateThis)){					
 						Map<String, Object> mapThis = MapUtils.newHashMap();										       
 				        mapThis.put("brand", wmsPrdInDetl.getMatNm());
-						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));	
+						mapThis.put("timeVariable", dateThis);
 						mapList.add(mapThis);
 					}					
 				}
@@ -1772,7 +1895,7 @@ public class PageNewBigData extends BaseController {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("classTeam", wmsPrdOutDetl.getTeamCd());
 						mapThis.put("totalWeightThis", Double.valueOf(wmsPrdOutDetl.getWeight()));
-						mapThis.put("timeVariable", timeDomainYear);
+						mapThis.put("timeVariable", Integer.parseInt(timeDomainYear));
 						mapList.add(mapThis);
 					}
 				}
@@ -1784,7 +1907,7 @@ public class PageNewBigData extends BaseController {
 						Map<String, Object> mapThis = MapUtils.newHashMap();
 						mapThis.put("classTeam", wmsPrdInDetl.getTeamCd());
 						mapThis.put("totalWeightThis", Double.valueOf(wmsPrdInDetl.getWeight()));
-						mapThis.put("timeVariable", timeDomainYear);
+						mapThis.put("timeVariable", Integer.parseInt(timeDomainYear));
 						mapList.add(mapThis);
 					}
 				}
@@ -1841,7 +1964,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", j);
 							mapF.put("classTeam", mapT.get("classTeam"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -1892,7 +2015,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", j);
 							mapF.put("classTeam", mapT.get("classTeam"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -1942,7 +2065,7 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getClassWeightDaily(dateLast)){
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-						double totalWeightLast = 0;
+						double totalWeightLast = 0.0;
 						brandLast = wmsPrdOutDetl.getTeamCd();					
 						totalWeightLast = Double.valueOf(wmsPrdOutDetl.getWeight());						
 						mapLast.put("classTeam", brandLast);
@@ -1966,7 +2089,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", i);
 							mapF.put("classTeam", mapT.get("classTeam"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}
@@ -2008,7 +2131,7 @@ public class PageNewBigData extends BaseController {
 					for(WmsPrdInDetl wmsPrdInDetl:wmsPrdInDetlService.getClassWeightDaily(dateLast)){						
 						Map<String, Object> mapLast = MapUtils.newHashMap();
 						String brandLast;
-				        double totalWeightLast = 0;
+				        double totalWeightLast = 0.0;
 				        brandLast = wmsPrdInDetl.getTeamCd();				        
 				        totalWeightLast += Double.valueOf(wmsPrdInDetl.getWeight());				        
 				        mapLast.put("classTeam", brandLast);
@@ -2032,7 +2155,7 @@ public class PageNewBigData extends BaseController {
 							mapF.put("timeVariable", i);
 							mapF.put("classTeam", mapT.get("classTeam"));
 							mapF.put("totalWeightThis", mapT.get("totalWeightThis"));							
-							mapF.put("totalWeightLast", 0);
+							mapF.put("totalWeightLast", 0.0);
 							mapList.add(mapF);
 						}
 					}				
@@ -2105,7 +2228,7 @@ public class PageNewBigData extends BaseController {
 						mapList.add(map1);
 						break;
 					}
-				}
+				}				
 			break;
 			case "IncomingInfo":
 				for(int i=0;i<20;i++){									
@@ -2140,80 +2263,57 @@ public class PageNewBigData extends BaseController {
 				mapList.add(map1);
 				break;
 			}
+			mapList = CompareDate.removeRepeatMapsForProductInfo(mapList);  //去重合并
 		}else if (timeCoordinate.equals("Monthly")) {
 			switch (analysisType) {			
-			case "DeliveryInfo":
-				for (int j = 1; j < 13; j++) {
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear + ".";
-					dateLast += (Integer.parseInt(timeDomainYear) - 1) + ".";
-					if (j < 10) {
-						dateThis += "0" + j + "";
-						dateLast += "0" + j + "";
-					} else {
-						dateThis += j + "";
-						dateLast += j + "";
-					}		
-					if (analysisModule.equals("Brand")) {
-						for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountBrandMonthly(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdOutDetl.getMatNm());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else if (analysisModule.equals("Class")) {
-						for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountClassMonthly(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdOutDetl.getTeamCd());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else {
-						Map<String, Object> map1 = MapUtils.newHashMap();
-						map1.put("Error", "analysisModule传参错误");
-						mapList.add(map1);
-						break;
+			case "DeliveryInfo":																	
+				if (analysisModule.equals("Brand")) {
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService
+							.getProductInfoCountBrandYearly(timeDomainYear)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdOutDetl.getMatNm());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapList.add(mapThis);
 					}
+				} else if (analysisModule.equals("Class")) {
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService
+							.getProductInfoCountClassYearly(timeDomainYear)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdOutDetl.getTeamCd());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapList.add(mapThis);
+					}
+				} else {
+					Map<String, Object> map1 = MapUtils.newHashMap();
+					map1.put("Error", "analysisModule传参错误");
+					mapList.add(map1);
+					break;
 				}
 				break;
 			case "IncomingInfo":
-				for (int j = 1; j < 13; j++) {
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear + ".";
-					dateLast += (Integer.parseInt(timeDomainYear) - 1) + ".";
-					if (j < 10) {
-						dateThis += "0" + j + "";
-						dateLast += "0" + j + "";
-					} else {
-						dateThis += j + "";
-						dateLast += j + "";
-					}					
-					if (analysisModule.equals("Brand")) {
-						for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountBrandMonthly(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdInDetl.getMatNm());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else if (analysisModule.equals("Class")) {
-						for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountClassMonthly(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdInDetl.getTeamCd());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else {
-						Map<String, Object> map1 = MapUtils.newHashMap();
-						map1.put("Error", "analysisModule传参错误");
-						mapList.add(map1);
-						break;
-					}					
+				if (analysisModule.equals("Brand")) {
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountBrandYearly(timeDomainYear)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdInDetl.getMatNm());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
+						mapList.add(mapThis);
+					}
+				}else if (analysisModule.equals("Class")) {
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountClassYearly(timeDomainYear)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdInDetl.getTeamCd());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
+						mapList.add(mapThis);
+					}
+				}else {
+					Map<String, Object> map1 = MapUtils.newHashMap();
+					map1.put("Error", "analysisModule传参错误");
+					mapList.add(map1);
+					break;
 				}
 				break;			
 			default:
@@ -2223,95 +2323,68 @@ public class PageNewBigData extends BaseController {
 				break;
 			}
 		}else if (timeCoordinate.equals("Daily")) {
+			String timeDomainMonth = request.getParameter("timeDomainMonth");
 			switch (analysisType) {				
 			case "DeliveryInfo":
-				for (int i = 1; i < 32; i++) {
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear + ".";
-					dateLast += timeDomainYear + ".";
-					String timeDomainMonth = request.getParameter("timeDomainMonth");
-					if (Integer.parseInt(timeDomainMonth) < 10) {
-						dateThis += "0" + timeDomainMonth + ".";
-						dateLast += "0" + (Integer.parseInt(timeDomainMonth) - 1) + ".";
-					} else {
-						dateThis += timeDomainMonth + ".";
-						dateLast += (Integer.parseInt(timeDomainMonth) - 1) + ".";
+				String dateThis = new String();
+				dateThis += timeDomainYear + ".";
+				if (Integer.parseInt(timeDomainMonth) < 10) {
+					dateThis += "0" + timeDomainMonth + "";
+				} else {
+					dateThis += timeDomainMonth + "";
+				}
+				if (analysisModule.equals("Brand")) {
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountBrandMonthly(dateThis)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdOutDetl.getMatNm());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapList.add(mapThis);
 					}
-					if (i < 10) {
-						dateThis += "0" + i;
-						dateLast += "0" + i;
-					} else {
-						dateThis += i + "";
-						dateLast += i + "";
-					}					
-					if (analysisModule.equals("Brand")) {
-						for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountBrandDaily(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdOutDetl.getMatNm());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else if (analysisModule.equals("Class")) {
-						for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountClassDaily(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdOutDetl.getTeamCd());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else {
-						Map<String, Object> map1 = MapUtils.newHashMap();
-						map1.put("Error", "analysisModule传参错误");
-						mapList.add(map1);
-						break;
-					}					
-				}				
+				} else if (analysisModule.equals("Class")) {
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService.getProductInfoCountClassMonthly(dateThis)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdOutDetl.getTeamCd());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdOutDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdOutDetl.getBatchNo()));
+						mapList.add(mapThis);
+					}
+				} else {
+					Map<String, Object> map1 = MapUtils.newHashMap();
+					map1.put("Error", "analysisModule传参错误");
+					mapList.add(map1);
+					break;
+				}
 				break;
 			case "IncomingInfo":
-				for(int i = 1;i<32;i++){
-					String dateThis = new String();
-					String dateLast = new String();
-					dateThis += timeDomainYear+".";
-					dateLast += timeDomainYear+".";
-					String timeDomainMonth = request.getParameter("timeDomainMonth");
-					if (Integer.parseInt(timeDomainMonth) < 10) {
-						dateThis += "0"+timeDomainMonth+".";
-						dateLast += "0"+(Integer.parseInt(timeDomainMonth)-1)+".";
-					}else {
-						dateThis += timeDomainMonth+".";
-						dateLast += (Integer.parseInt(timeDomainMonth)-1)+".";
-					}	
-					if(i<10){
-						dateThis += "0"+i; 
-						dateLast += "0"+i;
-					}else {
-						dateThis += i+"";
-						dateLast += i+"";
-					}					
-					if (analysisModule.equals("Brand")) {
-						for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountBrandDaily(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdInDetl.getMatNm());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else if (analysisModule.equals("Class")) {
-						for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountClassDaily(dateThis)) {
-							Map<String, Object> mapThis = MapUtils.newHashMap();
-							mapThis.put("selectedName", wmsPrdInDetl.getTeamCd());
-							mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));	
-							mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));						
-							mapList.add(mapThis);
-						}
-					}else {
-						Map<String, Object> map1 = MapUtils.newHashMap();
-						map1.put("Error", "analysisModule传参错误");
-						mapList.add(map1);
-						break;
-					}								
+				dateThis = "";
+				dateThis += timeDomainYear + ".";
+				if (Integer.parseInt(timeDomainMonth) < 10) {
+					dateThis += "0" + timeDomainMonth + "";
+				} else {
+					dateThis += timeDomainMonth + "";
+				}
+				if (analysisModule.equals("Brand")) {
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountBrandMonthly(dateThis)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdInDetl.getMatNm());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));
+						mapList.add(mapThis);
+					}
+				} else if (analysisModule.equals("Class")) {
+					for (WmsPrdInDetl wmsPrdInDetl : wmsPrdInDetlService.getProductInfoCountClassMonthly(dateThis)) {
+						Map<String, Object> mapThis = MapUtils.newHashMap();
+						mapThis.put("selectedName", wmsPrdInDetl.getTeamCd());
+						mapThis.put("brandWeight", Double.valueOf(wmsPrdInDetl.getWeight()));
+						mapThis.put("batchNumber", Integer.parseInt(wmsPrdInDetl.getBatchNo()));
+						mapList.add(mapThis);
+					}
+				} else {
+					Map<String, Object> map1 = MapUtils.newHashMap();
+					map1.put("Error", "analysisModule传参错误");
+					mapList.add(map1);
+					break;
 				}
 				break;			
 			default:
@@ -2343,62 +2416,109 @@ public class PageNewBigData extends BaseController {
     public List<Map<String, Object>> productOutAnalyse(HttpServletRequest request) {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
         String timeDomainYear = request.getParameter("timeDomainYear");
-        String timeDomainMonth = request.getParameter("timeDomainMonth");        
-        int timeVariable;        
-        for(int i=1;i<32;i++){
-        	String date = timeDomainYear+".";
-            if (Integer.parseInt(timeDomainMonth) < 10) {
-    			date += "0"+timeDomainMonth+".";			
-    		}else {
-    			date += timeDomainMonth+".";		
-    		}	
-        	if(i<10){
-				date += "0"+i; 				
-			}else {
-				date += i+"";				
-			}
-            Map<String, Object> map = MapUtils.newHashMap();
-            String equId;
-            String productionLineName;
-            timeVariable = i;
-            Double productionCapacity = 0.0;
-            for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewAllOut(date)){
-            	equId = wmsGdxdOut.getEquId();
-            	timeVariable=i;
-            	if (equId.equals("S01") || equId.equals("S02") ||
-            			equId.equals("S03") || equId.equals("S04")) {
-            		productionLineName = "一号翻箱机";
-            		for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getNewDetailByBatchNo(wmsGdxdOut.getBatchNo()))
-            				productionCapacity += Double.valueOf(wmsPrdOutDetl.getWeight());
-            		map.put("productionLineName",productionLineName);
-                    map.put("timeVariable",timeVariable);
-                    map.put("productionCapacity",productionCapacity);
-                    mapList.add(map);
-				}else if(equId.equals("S05") || equId.equals("S06") ||
-            			equId.equals("S07") || equId.equals("S08")){					
-					productionLineName = "二号翻箱机";
-            		for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getNewDetailByBatchNo(wmsGdxdOut.getBatchNo()))
-            				productionCapacity += Double.valueOf(wmsPrdOutDetl.getWeight());
-            		map.put("productionLineName",productionLineName);
-                    map.put("timeVariable",timeVariable);
-                    map.put("productionCapacity",productionCapacity);
-                    mapList.add(map);
-				}else if(equId.equals("S09") || equId.equals("S10") ||
-            			equId.equals("S11") || equId.equals("S12")){					
-					productionLineName = "三号翻箱机";
-            		for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getNewDetailByBatchNo(wmsGdxdOut.getBatchNo()))
-            				productionCapacity += Double.valueOf(wmsPrdOutDetl.getWeight());
-            		map.put("productionLineName",productionLineName);
-                    map.put("timeVariable",timeVariable);
-                    map.put("productionCapacity",productionCapacity);
-                    mapList.add(map);
-				}else {
-					productionLineName = "None";
-					map.put("productionLineName",productionLineName);
-		            mapList.add(map);
+        String timeDomainMonth = request.getParameter("timeDomainMonth");   
+        String timeCoordinate = request.getParameter("timeCoordinate");        
+        if (timeCoordinate != null) {
+        	if (timeCoordinate.equals("Monthly")) {
+				for (int j = 1; j < 13; j++) {
+					String date = new String();					
+					date += timeDomainYear + ".";					
+					if (j < 10) {
+						date += "0" + j + "";						
+					} else {
+						date += j + "";						
+					}
+					Double productionCapacity = 0.0;
+					for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService
+							.getNewDetailMonthly(date))
+						productionCapacity += Double.valueOf(wmsPrdOutDetl.getWeight());
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", j);
+					map.put("productionCapacity", productionCapacity);
+					mapList.add(map);
 				}
-            }                                   
-        }        
-        return CompareDate.removeRepeatMapByKey(mapList, "timeVariable");
+        	}else if (timeCoordinate.equals("Daily")) {
+        		for(int i=1;i<32;i++){
+        			String date = timeDomainYear+".";
+        			if (Integer.parseInt(timeDomainMonth) < 10) {
+        				date += "0"+timeDomainMonth+".";			
+        			}else {
+        				date += timeDomainMonth+".";		
+        			}	
+        			if(i<10){
+        				date += "0"+i; 				
+        			}else {
+        				date += i+"";				
+        			}
+        			Double productionCapacity = 0.0;
+        			for (WmsPrdOutDetl wmsPrdOutDetl : wmsPrdOutDetlService
+							.getNewDetailDaily(date))
+						productionCapacity += Double.valueOf(wmsPrdOutDetl.getWeight());
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", i);
+					map.put("productionCapacity", productionCapacity);
+					mapList.add(map);   
+        		}
+        	}
+        }else {
+        	List<Map<String, Object>> listRe = ListUtils.newArrayList();
+        	for(int i=1;i<32;i++){
+            	String date = timeDomainYear+".";
+                if (Integer.parseInt(timeDomainMonth) < 10) {
+        			date += "0"+timeDomainMonth+".";			
+        		}else {
+        			date += timeDomainMonth+".";		
+        		}	
+            	if(i<10){
+    				date += "0"+i; 				
+    			}else {
+    				date += i+"";				
+    			}                
+                String equId;
+                String productionLineName;                  
+                for(WmsPrdOutDetl wmsPrdOutDetl:wmsPrdOutDetlService.getProductOutByEqu(date)){
+                	Double productionCapacity = 0.0;   
+                	equId = wmsPrdOutDetl.getEquId();       
+                	System.err.println(equId);
+                	if (equId.equals("S01") || equId.equals("S02") ||
+                			equId.equals("S03") || equId.equals("S04")) {
+                		productionLineName = "一号翻箱机";
+                		productionCapacity = Double.valueOf(wmsPrdOutDetl.getWeight());
+                		Map<String, Object> map = MapUtils.newHashMap();
+                		map.put("productionLineName",productionLineName);
+                        map.put("timeVariable",i);
+                        map.put("productionCapacity",productionCapacity);
+                        listRe.add(map);
+    				}else if(equId.equals("S05") || equId.equals("S06") ||
+                			equId.equals("S07") || equId.equals("S08")){					
+    					productionLineName = "二号翻箱机";
+    					productionCapacity = Double.valueOf(wmsPrdOutDetl.getWeight());                		
+                		Map<String, Object> map = MapUtils.newHashMap();
+                		map.put("productionLineName",productionLineName);
+                        map.put("timeVariable",i);
+                        map.put("productionCapacity",productionCapacity);
+                        listRe.add(map);
+    				}else if(equId.equals("S09") || equId.equals("S10") ||
+                			equId.equals("S11") || equId.equals("S12")){					
+    					productionLineName = "三号翻箱机";
+    					productionCapacity = Double.valueOf(wmsPrdOutDetl.getWeight());
+                		Map<String, Object> map = MapUtils.newHashMap();
+                		map.put("productionLineName",productionLineName);
+                        map.put("timeVariable",i);
+                        map.put("productionCapacity",productionCapacity);
+                        listRe.add(map);
+    				}else {
+    					productionLineName = "None";
+    					Map<String, Object> map = MapUtils.newHashMap();
+    					map.put("timeVariable",i);
+    					map.put("productionLineName",productionLineName);
+    					map.put("productionCapacity",0.0);
+    					listRe.add(map);
+    				}
+                }                 
+        	}
+        	mapList = CompareDate.removeRepeatMapsForProductOut(listRe);        	
+		}                                                             
+        return mapList;
     }
 }

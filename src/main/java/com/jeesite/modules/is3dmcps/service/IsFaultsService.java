@@ -141,4 +141,15 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
     public List<IsFaults> faultsPop(@Param("deviceName") String deviceName){
     	return this.dao.faultsPop(deviceName);
     }
+    
+    public IsFaults faultsHistoryCount(@Param("deviceId") String deviceId){
+    	return this.dao.faultsHistoryCount(deviceId);
+    }
+    public IsFaults faultsCountDaily(@Param("deviceId") String deviceId, @Param("day") String day){
+    	return this.dao.faultsCountDaily(deviceId, day);
+    }
+    public IsFaults faultsCountMonthly(@Param("deviceId") String deviceId, @Param("month") String month){
+    	return this.dao.faultsCountMonthly(deviceId, month);
+    }
+
 }

@@ -32,4 +32,8 @@ public interface IsFaultsDao extends CrudDao<IsFaults> {
     public List<IsFaults> filterFaultsLogPage(@Param("faultName")String faultName, @Param("deviceName")String deviceName, @Param("operator")String operator, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime, @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd);
     
     public List<IsFaults> faultsPop(@Param("deviceName") String deviceName);
+    
+    public IsFaults faultsHistoryCount(@Param("deviceId") String deviceId);
+    public IsFaults faultsCountDaily(@Param("deviceId") String deviceId, @Param("day") String day);
+    public IsFaults faultsCountMonthly(@Param("deviceId") String deviceId, @Param("month") String month);
 }

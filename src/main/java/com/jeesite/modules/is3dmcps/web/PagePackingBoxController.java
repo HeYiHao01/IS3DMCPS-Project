@@ -932,13 +932,20 @@ public class PagePackingBoxController extends BaseController{
     @RequestMapping("brandWeightBatchCount")
     public Map<String, Object> brandWeightBatchCount(HttpServletRequest request) {
 		Map<String, Object> map =  MapUtils.newHashMap();
-		TwmsPltitem twmsPltitem = twmsPltitemService.brandWeightBatchCount(request.getParameter("brand"));
+		String brand = request.getParameter("brand");
+		TwmsPltitem twmsPltitem = twmsPltitemService.brandWeightBatchCount(brand);
 		double totalWeight = twmsPltitem.getWeight();
 		int batchNumber = twmsPltitem.getLinenum();
 		double boxNumber = twmsPltitem.getItemqty();
-		map.put("totalWeight", totalWeight);
-		map.put("boxNumber", boxNumber);
-		map.put("batchNumber", batchNumber);
+		if (brand.equals("空垛箱")) {
+			map.put("totalWeight", totalWeight);
+			map.put("boxNumber", boxNumber);
+			map.put("batchNumber", batchNumber-1);
+		}else {
+			map.put("totalWeight", totalWeight);
+			map.put("boxNumber", boxNumber);
+			map.put("batchNumber", batchNumber);
+		}
 		return map;
 	}
         

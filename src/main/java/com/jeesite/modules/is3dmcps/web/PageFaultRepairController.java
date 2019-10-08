@@ -154,7 +154,8 @@ public class PageFaultRepairController extends BaseController{
             }
             for(IsFaults isFaults:isFaultsService.getFaultsByName(faultResult)){
 	            String faultID=isFaults.getId();
-	            IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date,remark);
+	            //IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date,remark);
+	            IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date);
 	            try{
 	                isRepairRecService.save(isRepairRec);
 	            }catch(Exception exception){

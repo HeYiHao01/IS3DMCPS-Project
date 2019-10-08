@@ -16,8 +16,10 @@ import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.web.BaseController;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsDeviceCode;
+import com.jeesite.modules.is3dmcps.entity.IsFaults;
 import com.jeesite.modules.is3dmcps.service.IsDeviceCodeService;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
+import com.jeesite.modules.is3dmcps.service.IsFaultsService;
 import com.jeesite.modules.isopc.entity.CarCount;
 import com.jeesite.modules.isopc.entity.IsCarCount;
 import com.jeesite.modules.isopc.service.IsCarCountService;
@@ -53,7 +55,8 @@ public class PageBigDataController extends BaseController{
 	private WmsPrdOutDetlService wmsPrdOutDetlService;
 	@Autowired
 	private IsDeviceCodeService isDeviceCodeService;
-	
+	@Autowired
+	private IsFaultsService isFaultsService;
     /**
      * 生产信息分析界面
      * Post:
@@ -719,7 +722,136 @@ public class PageBigDataController extends BaseController{
 		}
 		return mapList;			
     }
+    
+    /**
+     * 其他设备历史故障
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = {"deviceHistoryFault", ""})
+    public List<Map<String, Object>> deviceHistoryFault(HttpServletRequest request) {
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();	
+    	String deviceName;		
+		for(IsDeviceCode isDeviceCode:isDeviceCodeService.getPartByModel(request.getParameter("deviceTypeName"))){
+			for(IsDevice isDevice:isDeviceService.getDeviceByCodeName(isDeviceCode.getName())){
+				Map<String, Object> map = MapUtils.newHashMap();
+				int allFaultsCount=0;
+				deviceName=isDevice.getDeviceNo();
+				IsFaults isFaults = isFaultsService.faultsHistoryCount(isDevice.getId());
+				if(isFaults!=null){					
+					allFaultsCount+=Integer.parseInt(isFaults.getDeviceName());					
+				}	
+				map.put("deviceName",deviceName);
+				map.put("allFaultsCount",allFaultsCount);		
+				mapList.add(map);
+			}
+		}
+		return mapList;			
+    }
 
+    /**
+     * 其他设备故障分析曲线
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = {"deviceRunStatics", ""})
+    public List<Map<String, Object>> deviceRunStatics(HttpServletRequest request) {
+        List<Map<String, Object>> mapList = ListUtils.newArrayList();
+        //String deviceID = request.getParameter("deviceID");
+        String deviceID = "";
+        String deviceName = request.getParameter("deviceName");
+        for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
+        	deviceID = isDevice.getId();
+        }
+        String timeCoordinate = request.getParameter("timeCoordinate");
+        String timeDomainYear = request.getParameter("timeDomainYear");
+        if (timeCoordinate.equals("Monthly")) {        										
+			for(int j = 1;j<13;j++ ){
+				int taskTimeCountThis = 0;
+				int taskTimeCountLast = 0;
+				for(int i = 1;i<32;i++){
+					String dateThis = new String();
+					String dateLast = new String();
+					dateThis += timeDomainYear+".";
+					dateLast += (Integer.parseInt(timeDomainYear)-1)+".";
+					if (j<10) {
+						dateThis += "0"+j+".";
+						dateLast += "0"+j+".";
+					}else {
+						dateThis += j+".";
+						dateLast += j+".";
+					}
+					if(i<10){
+						dateThis += "0"+i; 
+						dateLast += "0"+i;
+					}else {
+						dateThis += i+"";
+						dateLast += i+"";
+					}
+					IsFaults isFaultsThis = isFaultsService.faultsCountMonthly(deviceID, dateThis);
+					IsFaults isFaultsLast = isFaultsService.faultsCountMonthly(deviceID, dateLast);
+					if (isFaultsThis != null) {
+						taskTimeCountThis = Integer.parseInt(isFaultsThis.getName());						
+					}
+					if (isFaultsLast != null) {
+						taskTimeCountLast = Integer.parseInt(isFaultsLast.getName());
+					}
+				}
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("timeVariable", j);
+				map.put("taskTimeCountThis",taskTimeCountThis);
+				map.put("taskTimeCountLast",taskTimeCountLast);
+				mapList.add(map);
+			}
+		}else if (timeCoordinate.equals("Daily")) {						
+			for(int i = 1;i<32;i++){
+				String dateThis = new String();
+				String dateLast = new String();
+				dateThis += timeDomainYear+".";
+				dateLast += timeDomainYear+".";
+				String timeDomainMonth = request.getParameter("timeDomainMonth");
+				if (Integer.parseInt(timeDomainMonth) < 10) {
+					dateThis += "0"+timeDomainMonth+".";
+					dateLast += "0"+(Integer.parseInt(timeDomainMonth)-1)+".";
+				}else {
+					dateThis += timeDomainMonth+".";
+					dateLast += (Integer.parseInt(timeDomainMonth)-1)+".";
+				}	
+				if(i<10){
+					dateThis += "0"+i; 
+					dateLast += "0"+i;
+				}else {
+					dateThis += i+"";
+					dateLast += i+"";
+				}
+				IsFaults isFaultsThis = isFaultsService.faultsCountDaily(deviceID, dateThis);
+				IsFaults isFaultsLast = isFaultsService.faultsCountDaily(deviceID, dateLast);				
+				if (isFaultsThis != null) {	
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", i);
+					map.put("taskTimeCountThis",Integer.parseInt(isFaultsThis.getName()));
+					if (isFaultsLast != null) {
+						map.put("taskTimeCountLast",Integer.parseInt(isFaultsLast.getName()));
+					}else {
+						map.put("taskTimeCountLast",0);
+					}
+					mapList.add(map);
+				}else {
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("timeVariable", i);
+					map.put("taskTimeCountThis",0);
+					if (isFaultsLast != null) {
+						map.put("taskTimeCountLast",Integer.parseInt(isFaultsLast.getName()));
+					}else {
+						map.put("taskTimeCountLast",0);
+					}
+					mapList.add(map);
+				}			
+			}						
+		}
+        return mapList;
+    }
+    
     /**
      * 生产线平均生产能力表
      * @return

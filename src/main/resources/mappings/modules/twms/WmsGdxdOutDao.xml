@@ -22,7 +22,7 @@
 	</select>
 	
 	<select id="getNewAllOut" resultType="WmsGdxdOut" parameterType="String">
-		select * from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date}
+		select * from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{date} 
 	</select>
 	<select id="getNewByWN" resultType="WmsGdxdOut" parameterType="String">
 		select * from wms_gdxd_out where wo_no = #{woNo}
@@ -82,6 +82,9 @@
 		select mat_nm,count(batch_no) as boxtotalnum from wms_gdxd_out where trim(team_cd) = #{classTeam} group by mat_nm
 	</select>
 	
+	<select id="getNewAllOutDaily" resultType="WmsGdxdOut">		
+		select mat_nm,sum(boxtotalnum) as boxtotalnum from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm.dd') = #{day} GROUP by mat_nm
+	</select>
 	<select id="getNewAllOutMonthly" resultType="WmsGdxdOut">		
 		select mat_nm,sum(boxtotalnum) as boxtotalnum from wms_gdxd_out where to_char(wo_start_time,'yyyy.mm') = #{month} GROUP by mat_nm
 	</select>

@@ -251,7 +251,7 @@
 	</select> -->
 	
 	<select id="brandWeightBatchCount" resultType="TwmsPltitem">
-		select itemdesc,sum(weight) as weight,count(lotnum)as linenum,sum(itemqty) as itemqty from twms_pltitem where itemdesc=#{brand} group by itemdesc
+		select sum(weight) as weight,count(distinct lotnum) as linenum,sum(itemqty) as itemqty from twms_pltitem where itemdesc=#{brand}
 	</select>
 	<select id="filterNewBoxStaticsLineBatchAsc" resultType="com.jeesite.modules.is3dmcps.entity.BoxStatics">
 		select t.* from

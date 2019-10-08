@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CompareDate {
     public static int compare_date(String DATE1, String DATE2) {
@@ -242,5 +245,131 @@ public class CompareDate {
 			listMap.add(newMap);
 		}
 		return listMap;
+	}		
+	
+	/**
+	 * Maplist根据多个key去重map
+	 */
+	public static List<Map<String, Object>> removeRepeatMaps(List<Map<String, Object>> list) {
+		//新建set集合，利用set集合元素不能重复特点，找出重复数据
+    	Set<ProductInfoMap> keysSet = new HashSet<ProductInfoMap>();
+    	String brand;
+    	int finishWeight;
+    	int timeVariable;
+    	double totalWeightThis;
+    	double totalWeightLast;
+    	Iterator<Map<String, Object>> it=list.iterator();
+        while(it.hasNext()) {
+        	Map<String, Object> map=it.next();
+        	brand = (String)map.get("brand");
+        	finishWeight = (int)map.get("finishWeight");
+        	timeVariable = (int)map.get("timeVariable");
+        	totalWeightThis = (double)map.get("totalWeightThis");
+        	if (map.get("totalWeightLast") != null) {
+        		totalWeightLast = (double)map.get("totalWeightLast");
+			}else {
+				totalWeightLast = 0.0;
+			}
+        	
+        	ProductInfoMap productInfoMap = new ProductInfoMap();
+        	productInfoMap.setBrand(brand);
+        	productInfoMap.setFinishWeight(finishWeight);
+        	productInfoMap.setTimeVariable(timeVariable);
+        	productInfoMap.setTotalWeightLast(totalWeightLast);
+        	productInfoMap.setTotalWeightThis(totalWeightThis);
+        	
+        	int beforeSize = keysSet.size();
+            keysSet.add(productInfoMap);
+            int afterSize = keysSet.size();
+           //判断当前对象是否保存进set集合中（若未保存说明set集合已存在该数据，删除该条map数据）
+            if(afterSize != (beforeSize + 1)) {
+                it.remove();
+            }
+        }
+        return list;
+	}		
+	
+	public static List<Map<String, Object>> removeRepeatMapsForProductOut(List<Map<String, Object>> list) {
+		List<Map<String, Object>> countList = new ArrayList<Map<String,Object>>();  
+        for (int i = 0; i < list.size(); i++) {    
+            String productionLineName = String.valueOf(list.get(i).get("productionLineName"));    
+            String timeVariable = String.valueOf(list.get(i).get("timeVariable"));
+            
+            int flag = 0;//0为新增数据，1为增加count    
+            for (int j = 0; j < countList.size(); j++) {    
+                String newProductionLineName = String.valueOf(countList.get(j).get("productionLineName")); 
+                String newTimeVariable = String.valueOf(countList.get(j).get("timeVariable"));
+                if (newProductionLineName.equals(productionLineName) && newTimeVariable.equals(timeVariable)) {  
+                    //做累加的操作  
+                    double productionCapacity = Double.parseDouble(String.valueOf(list.get(i).get("productionCapacity"))) + Double.parseDouble(String.valueOf(countList.get(j).get("productionCapacity")));  
+                    countList.get(j).put("productionCapacity", productionCapacity);    
+                    flag = 1; 
+                    break;    
+                }    
+            }    
+            if (flag == 0) {    
+                countList.add(list.get(i));    
+            }    
+        }    
+        return countList;  		
+	}		
+	
+	public static List<Map<String, Object>> removeRepeatMapsForProductInfo(List<Map<String, Object>> list) {
+		List<Map<String, Object>> countList = new ArrayList<Map<String,Object>>();  
+        for (int i = 0; i < list.size(); i++) {    
+            String selectedName = String.valueOf(list.get(i).get("selectedName"));                
+            
+            int flag = 0;//0为新增数据，1为增加count    
+            for (int j = 0; j < countList.size(); j++) {    
+                String newSelectedName = String.valueOf(countList.get(j).get("selectedName"));                 
+                if (newSelectedName.equals(selectedName)) {  
+                    //做累加的操作  
+                    double brandWeight = Double.parseDouble(String.valueOf(list.get(i).get("brandWeight"))) + Double.parseDouble(String.valueOf(countList.get(j).get("brandWeight")));
+                    int batchNumber = Integer.parseInt(String.valueOf(list.get(i).get("batchNumber"))) + Integer.parseInt(String.valueOf(countList.get(j).get("batchNumber")));
+                    countList.get(j).put("brandWeight", brandWeight);
+                    countList.get(j).put("batchNumber", batchNumber);
+                    flag = 1; 
+                    break;    
+                }    
+            }    
+            if (flag == 0) {    
+                countList.add(list.get(i));    
+            }    
+        }    
+        return countList;  		
+	}	
+	
+	/**
+	 * List合并
+	 * @param m1
+	 * @param m2
+	 * @return
+	 */
+	public static List<Map<String, Object>> listMerge(List<Map<String, Object>> m1, List<Map<String, Object>> m2){
+        
+	    m1.addAll(m2);
+	    
+	    Set<String> set = new HashSet<>();
+	    
+	    return m1.stream()
+	            .collect(Collectors.groupingBy(o->{
+	                //暂存所有key
+	                set.addAll(o.keySet());
+	                //按brand分组
+	                return o.get("brand");
+	            })).entrySet().stream().map(o->{
+	                
+	                //合并
+	                Map<String, Object> map = o.getValue().stream().flatMap(m->{
+	                    return m.entrySet().stream();
+	                }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (a,b)->b));
+	                
+	                //为没有的key赋值0
+	                set.stream().forEach(k->{
+	                    if(!map.containsKey(k)) map.put(k, 0);
+	                });
+	                
+	                return map;
+	            }).collect(Collectors.toList());
 	}
 }

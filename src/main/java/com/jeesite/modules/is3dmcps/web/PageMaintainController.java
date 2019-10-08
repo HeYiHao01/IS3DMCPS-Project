@@ -18,6 +18,7 @@ import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainRecService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainService;
+import com.jeesite.modules.sys.service.EmployeeService;
 import com.jeesite.utils.CompareDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,8 @@ public class PageMaintainController extends BaseController{
 	IsMaintainService isMaintainService;
     @Autowired
     IsDeviceService isDeviceService;
+    @Autowired
+    EmployeeService employeeService;
 	/**
 	 * 保养弹窗
 	 * @return
@@ -320,6 +323,7 @@ public class PageMaintainController extends BaseController{
 							mapPlan.get("name").equals(mapFinish.get("name"))) {
 						Map<String, Object> map = MapUtils.newHashMap();
 						map.put("name", mapAll.get("name"));
+						map.put("jobNumber", employeeService.getEmployeeByName(String.valueOf(mapAll.get("name"))).getEmpCode());
 						map.put("deviceTotalNumber", mapAll.get("deviceTotalNumber"));
 						map.put("maintenanceDeviceNumber", mapPlan.get("maintenanceDeviceNumber"));
 						map.put("maintenanceFinishNumber", mapFinish.get("maintenanceFinishNumber"));

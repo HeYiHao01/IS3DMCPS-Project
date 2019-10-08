@@ -178,4 +178,8 @@ public class WmsPrdOutDetlService extends CrudService<WmsPrdOutDetlDao, WmsPrdOu
 	public List<WmsPrdOutDetl> getProductInfoCountClassDaily(@Param("day") String day){
 		return this.dao.getProductInfoCountClassDaily(day);
 	}
+	
+	public List<WmsPrdOutDetl> getProductOutByEqu(@Param("day") String day){
+		return this.dao.getProductOutByEqu(day);
+	}
 }

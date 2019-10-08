@@ -160,6 +160,9 @@ public class WmsGdxdOutService extends CrudService<WmsGdxdOutDao, WmsGdxdOut> {
 	public List<WmsGdxdOut> getNewAllOutMonthly(@Param("month") String month){
 		return this.dao.getNewAllOutMonthly(month);
 	}
+	public List<WmsGdxdOut> getNewAllOutDaily(@Param("day") String day){
+		return this.dao.getNewAllOutDaily(day);
+	}
 	
 	public List<WmsGdxdOut> filterWorkOrderOutBatch(@Param("equId") String equId, @Param("brand") String brand, @Param("batch") String batch, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("rangeStart") int rangeStart, @Param("rangeEnd") int rangeEnd){
 		return this.dao.filterWorkOrderOutBatch(equId, brand, batch, startTime, endTime, rangeStart, rangeEnd);

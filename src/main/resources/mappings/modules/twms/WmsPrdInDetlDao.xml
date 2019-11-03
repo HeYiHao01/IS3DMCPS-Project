@@ -74,21 +74,21 @@
 	</select>
 	
 	<select id="getProductInfoCountBrandYearly" resultType="WmsPrdInDetl">
-		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy')=#{year} group by mat_nm
+		select mat_nm,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy')=#{year} group by mat_nm
 	</select>
 	<select id="getProductInfoCountBrandMonthly" resultType="WmsPrdInDetl">
-		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
+		select mat_nm,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm')=#{month} group by mat_nm
 	</select>
 	<select id="getProductInfoCountBrandDaily" resultType="WmsPrdInDetl">
-		select mat_nm,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
+		select mat_nm,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by mat_nm
 	</select>
 	<select id="getProductInfoCountClassYearly" resultType="WmsPrdInDetl">
-		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy')=#{year} group by team_cd
+		select team_cd,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy')=#{year} group by team_cd
 	</select>
 	<select id="getProductInfoCountClassMonthly" resultType="WmsPrdInDetl">
-		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm')=#{month} group by team_cd
+		select team_cd,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm')=#{month} group by team_cd
 	</select>
 	<select id="getProductInfoCountClassDaily" resultType="WmsPrdInDetl">
-		select team_cd,count(batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
+		select team_cd,count(distinct batch_no) as batch_no,sum(weight) as weight from wms_prd_in_detl where to_char(prod_time,'yyyy.mm.dd')=#{day} group by team_cd
 	</select>
 </mapper>

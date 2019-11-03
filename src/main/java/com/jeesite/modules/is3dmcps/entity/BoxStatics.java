@@ -106,4 +106,18 @@ public class BoxStatics {
 	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof BoxStatics) {
+			BoxStatics boxStatics = (BoxStatics) obj;
+			if (line == boxStatics.getLine() && lie == boxStatics.getLie() && layer == boxStatics.getLayer()
+					&& locationX == boxStatics.getLocationX() && locationY == boxStatics.getLocationY()
+					&& locationZ == boxStatics.getLocationZ() && lotnum.equals(boxStatics.getLotnum())
+					&& vplnum.equals(boxStatics.getVplnum()) && itemdesc.equals(boxStatics.getItemdesc())
+					&& currloc.equals(boxStatics.getCurrloc()) && enterdate.equals(boxStatics.getEnterdate())) {
+				return true;
+			}
+		}
+		return false;
+	}		
 }

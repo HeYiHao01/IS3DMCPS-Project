@@ -16,9 +16,11 @@
 		(SELECT t.*,ROWNUM AS rowno
 		FROM twms_transferlogg t         
 		where ROWNUM &lt;= 1000*(#{count}+1)) table_alias
-		where table_alias.loggnum = #{loggNum}			
+		where (table_alias.loggnum = #{loggNum} or #{loggNum} is null) 			
 	</select>
-	
+	<select id="getByLoggnumByIndex" resultType="TwmsTransferlogg">
+		SELECT * FROM twms_transferlogg where loggnum = #{loggNum}				
+	</select>
 	<select id="getCount" resultType="int">
 		select count(*) from twms_transferlogg
 	</select>
@@ -27,6 +29,6 @@
 		(SELECT t.*,ROWNUM AS rowno
 		FROM twms_transferlogg t         
 		where ROWNUM &lt;= 1000*(#{count}+1)) table_alias
-		where table_alias.lotnum = #{lotnum}			
+		where (table_alias.lotnum = #{lotnum} or #{lotnum} is null)			
 	</select>
 </mapper>

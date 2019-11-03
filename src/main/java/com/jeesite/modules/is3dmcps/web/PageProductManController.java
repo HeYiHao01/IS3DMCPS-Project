@@ -208,7 +208,7 @@ public class PageProductManController extends BaseController{
         List<Map<String, Object>> mapList = ListUtils.newArrayList();        
         String brand;
         double count;
-        for(TwmsPltitem twmsPltitem:twmsPltitemService.getBrandCount()){
+        for(TwmsPltitem twmsPltitem:twmsPltitemService.getNewBrandCount()){
         	Map<String, Object> map = MapUtils.newHashMap();
         	brand=twmsPltitem.getItemdesc();
             count=twmsPltitem.getWeight();

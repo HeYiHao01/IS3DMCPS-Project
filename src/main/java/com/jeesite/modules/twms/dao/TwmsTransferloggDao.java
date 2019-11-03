@@ -22,4 +22,6 @@ public interface TwmsTransferloggDao extends CrudDao<TwmsTransferlogg> {
 	
 	public int getCount();
 	public List<TwmsTransferlogg> getByLotnum(@Param("lotnum")String lotnum,@Param("count")int count);
+	
+	public TwmsTransferlogg getByLoggnumByIndex(@Param("loggNum")String loggNum);
 }

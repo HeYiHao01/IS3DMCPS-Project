@@ -38,6 +38,7 @@ public interface TwmsPltitemDao extends CrudDao<TwmsPltitem> {
 	
 	public TwmsPltitem brandWeightBatchCount(@Param("brand") String brand);
 	//增加batch搜索
+	public List<BoxStatics> filterNewBoxStaticsBatch(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
 	public List<BoxStatics> filterNewBoxStaticsLineBatchAsc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
 	public List<BoxStatics> filterNewBoxStaticsLineBatchDesc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);
 	public List<BoxStatics> filterNewBoxStaticsLieBatchAsc(@Param("brand") String brand,@Param("batch") String batch,@Param("rangeStart")  int rangeStart,@Param("rangeEnd")  int rangeEnd);

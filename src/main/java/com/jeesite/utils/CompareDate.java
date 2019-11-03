@@ -1,5 +1,6 @@
 package com.jeesite.utils;
 
+import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,6 +15,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.jeesite.common.codec.Md5Utils;
+import com.jeesite.common.collect.ListUtils;
+import com.jeesite.common.collect.MapUtils;
 
 public class CompareDate {
     public static int compare_date(String DATE1, String DATE2) {
@@ -221,6 +226,18 @@ public class CompareDate {
 		//System.out.println(simplifyDate("2019.07.17"));
 		//System.out.println(formatCurrLoc("OME01_00111401500100"));
 		//System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)-1));
+		
+		//测试Md5加密解密
+		String password = "admin";
+		String md5Str1 = Md5Utils.md5(password);
+		String md5Str2 = string2MD5(password);
+		String md5Str3 = convertMD5(password);
+		System.out.println(md5Str1);
+		System.out.println(md5Str2);
+		System.out.println(md5Str3);
+		System.out.println(convertMD5(md5Str1));
+		System.out.println(convertMD5(md5Str2));
+		System.out.println(convertMD5(md5Str3));
 	}
 	
 	/**
@@ -287,7 +304,36 @@ public class CompareDate {
             }
         }
         return list;
-	}		
+	}	
+	
+	public static List<Map<String, Object>> removeRepeatMapsForBatchTime(List<Map<String, Object>> list) {
+		//新建set集合，利用set集合元素不能重复特点，找出重复数据
+    	Set<BatchTimeMap> keysSet = new HashSet<BatchTimeMap>();
+    	String batch;    	    	
+    	double weight;
+    	int timeCost;
+    	Iterator<Map<String, Object>> it=list.iterator();
+        while(it.hasNext()) {
+        	Map<String, Object> map=it.next();
+        	batch = (String)map.get("batch");
+        	weight = (double)map.get("weight");
+        	timeCost = (int)map.get("timeCost");        	
+        	
+        	BatchTimeMap batchTimeMap = new BatchTimeMap();
+        	batchTimeMap.setBatch(batch);
+        	batchTimeMap.setWeight(weight);
+        	batchTimeMap.setTimeCost(timeCost);        	
+        	
+        	int beforeSize = keysSet.size();
+            keysSet.add(batchTimeMap);
+            int afterSize = keysSet.size();
+           //判断当前对象是否保存进set集合中（若未保存说明set集合已存在该数据，删除该条map数据）
+            if(afterSize != (beforeSize + 1)) {
+                it.remove();
+            }
+        }
+        return list;
+	}	
 	
 	public static List<Map<String, Object>> removeRepeatMapsForProductOut(List<Map<String, Object>> list) {
 		List<Map<String, Object>> countList = new ArrayList<Map<String,Object>>();  
@@ -371,5 +417,98 @@ public class CompareDate {
 	                
 	                return map;
 	            }).collect(Collectors.toList());
+	}
+	
+	/*** 
+     * MD5加码 生成32位md5码 
+     */  
+    public static String string2MD5(String inStr){  
+        MessageDigest md5 = null;  
+        try{
+           //引用  java.security.MessageDigest公共类
+           // getInstance("MD5")方法 设置加密格式
+            md5 = MessageDigest.getInstance("MD5");  //此句是核心
+        }catch (Exception e){  
+            System.out.println(e.toString());  
+            e.printStackTrace();  
+            return "";  
+        }  
+        char[] charArray = inStr.toCharArray();  
+        byte[] byteArray = new byte[charArray.length];  
+  
+        for (int i = 0; i < charArray.length; i++)  
+            byteArray[i] = (byte) charArray[i];  
+        byte[] md5Bytes = md5.digest(byteArray);  
+        StringBuffer hexValue = new StringBuffer();  
+        for (int i = 0; i < md5Bytes.length; i++){  
+            int val = ((int) md5Bytes[i]) & 0xff;  
+            if (val < 16)  
+                hexValue.append("0");  
+            hexValue.append(Integer.toHexString(val));  
+        }  
+        return hexValue.toString();  
+  
+    }  
+  
+    /** 
+     * 加密解密算法[可逆] 执行一次加密，执行两次解密 
+     */   
+    public static String convertMD5(String inStr){  
+  
+        char[] a = inStr.toCharArray();  
+        for (int i = 0; i < a.length; i++){  
+            a[i] = (char) (a[i] ^ 't');  
+        }  
+        String s = new String(a);  
+        return s;  
+    } 
+    
+    /**
+     * goodsListFilter合并
+     */
+    public static List<Map<String, Object>> goodsListMerge(List<Map<String, Object>> listUp, List<Map<String, Object>> listDown){
+    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		for(Map<String, Object> mapUp:listUp){
+			for(Map<String, Object> mapDown:listDown){				
+				int line = Integer.parseInt(String.valueOf(mapUp.get("line")));
+				int lie = Integer.parseInt(String.valueOf(mapUp.get("lie")));
+				int layer = Integer.parseInt(String.valueOf(mapUp.get("layer")));												
+				String vplnum = String.valueOf(mapUp.get("VPLTNUM"));				
+				String currloc = String.valueOf(mapUp.get("CURRLOC"));
+				String itemdesc = String.valueOf(mapUp.get("ITEMDESC"));
+				String lotnum = String.valueOf(mapUp.get("LOTNUM"));
+				String enterdate = String.valueOf(mapUp.get("ENTERDATE"));
+				
+				String boxNumUp = String.valueOf(mapUp.get("upBoxNum"));
+				Double weightUp = Double.valueOf(String.valueOf(mapUp.get("upBoxWeight")));
+				String boxNumDown = String.valueOf(mapDown.get("downBoxNum"));
+				Double weightDown = Double.valueOf(String.valueOf(mapDown.get("downBoxWeight")));
+				
+				if (line == Integer.parseInt(String.valueOf(mapDown.get("line"))) 
+						&& lie == Integer.parseInt(String.valueOf(mapDown.get("lie")))
+						&& layer == Integer.parseInt(String.valueOf(mapDown.get("layer")))
+						&& lotnum.equals(String.valueOf(mapDown.get("LOTNUM")))
+						&& vplnum.equals(String.valueOf(mapDown.get("VPLTNUM"))) 
+						&& itemdesc.equals(String.valueOf(mapDown.get("ITEMDESC")))
+						&& currloc.equals(String.valueOf(mapDown.get("CURRLOC"))) 
+						&& enterdate.equals(String.valueOf(mapDown.get("ENTERDATE")))) {
+					Map<String, Object> map = MapUtils.newHashMap();
+					map.put("line", line);
+					map.put("lie", lie);
+					map.put("layer", layer);
+					map.put("VPLTNUM", vplnum);
+					map.put("CURRLOC", currloc);
+					map.put("ITEMDESC", itemdesc);
+					map.put("LOTNUM", lotnum);
+					map.put("ENTERDATE", enterdate);
+					map.put("upBoxNum", boxNumUp);
+					map.put("upBoxWeight", weightUp);
+					map.put("downBoxNum", boxNumDown);						
+					map.put("downBoxWeight", weightDown);
+					mapList.add(map);
+				}
+			}
+		}
+		return mapList;
 	}
 }

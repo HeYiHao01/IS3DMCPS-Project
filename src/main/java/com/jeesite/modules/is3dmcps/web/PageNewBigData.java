@@ -893,12 +893,12 @@ public class PageNewBigData extends BaseController {
 			}else {
 				date += i+"";				
 			}
-        	if (type.equals("In")) {
-        		Map<String, Object> map = MapUtils.newHashMap();
-                String batch;
-                double weight = 0.0;
-                double timeCost;
+        	if (type.equals("In")) {        		
                 for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getNewBatchAndTime(date)){
+                	Map<String, Object> map = MapUtils.newHashMap();
+                    String batch;
+                    double weight = 0.0;
+                    int timeCost = 0;
                 	batch = wmsGdxdIn.getBatchNo();
                 	if(wmsGdxdIn.getBoxtotalnum() != null)
                 		timeCost=wmsGdxdIn.getBoxtotalnum();
@@ -912,12 +912,12 @@ public class PageNewBigData extends BaseController {
                     map.put("timeCost",timeCost);
                     mapList.add(map);
                 }                          
-			}else if (type.equals("Out")) {
-				Map<String, Object> map = MapUtils.newHashMap();
-                String batch;
-                double weight = 0.0;
-                int timeCost;
+			}else if (type.equals("Out")) {				
                 for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getNewBatchAndTime(date)){
+                	Map<String, Object> map = MapUtils.newHashMap();
+                    String batch;
+                    double weight = 0.0;
+                    int timeCost = 0;
                 	batch = wmsGdxdOut.getBatchNo();   
                 	if(wmsGdxdOut.getBoxtotalnum() != null)
                 		timeCost=wmsGdxdOut.getBoxtotalnum();
@@ -936,7 +936,8 @@ public class PageNewBigData extends BaseController {
 				map.put("Error", "type参数错误");
 				mapList.add(map);
 			}        	
-        }
+        }   
+        mapList = CompareDate.removeRepeatMapsForBatchTime(mapList);
         return mapList;       
     }
     
@@ -1487,137 +1488,73 @@ public class PageNewBigData extends BaseController {
     @RequestMapping(value = {"filterByPackingLine",""})
     public List<Map<String, Object>> filterByPackingLine(HttpServletRequest request) {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
-    	String packingLine = request.getParameter("packingLine");
-    	String brand = request.getParameter("brand");
-    	if (brand == null || brand.equals("")) {
-    		for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getAllByPackingLine(packingLine)){
-        		Map<String, Object> map = MapUtils.newHashMap();
-        		String workOrderNumber = wmsGdxdIn.getWoNo();
-        		String batchNumber = wmsGdxdIn.getBatchNo();
-        		String processCoding = wmsGdxdIn.getTechSectionCd();
-        		String workOrderStatus = wmsGdxdIn.getWoState();
-        		String brandClassificationName = wmsGdxdIn.getMatClassNm();
-        		String brandName = wmsGdxdIn.getMatNm();
-        		Double Stocking = wmsGdxdIn.getPlanAmount();
-        		/*System.err.println(wmsGdxdIn.getWoSendTime());
-        		System.err.println(wmsGdxdIn.getWoStartTime());
-        		System.err.println(wmsGdxdIn.getWoEndTime());*/
-        		String sendTime = CompareDate.simplifyDate(wmsGdxdIn.getWoSendTime());
-        		String state = wmsGdxdIn.getState();
-        		String startTime = CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime());    		    		   		
-        		String endTime = CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime());
-        		int boxTotalNum = wmsGdxdIn.getBoxtotalnum();
-        		String inStation = "";
-        		if (wmsGdxdIn.getStation() != null) {
-    				inStation = wmsGdxdIn.getStation();
-    			}
-        		double batchWeight = 0;
-        		if (wmsGdxdIn.getBatchweight() != null) {
-    				batchWeight = wmsGdxdIn.getBatchweight();
-    			}
-        		double boxLoadWeight = 0;
-        		if (wmsGdxdIn.getBoxloadweight() != null) {
-    				boxLoadWeight = wmsGdxdIn.getBoxloadweight();
-    			}
-        		String classShift = "null";
-        		if (wmsGdxdIn.getShiftCd() != null) {
-    				classShift = wmsGdxdIn.getShiftCd();
-    			}
-        		String classTeam = "null";
-        		if (wmsGdxdIn.getTeamCd() != null) {
-    				classTeam = wmsGdxdIn.getTeamCd();
-    			}
-        		double inTotalWeight = 0;
-        		if (wmsGdxdIn.getTotalweightIn() != null) {
-    				inTotalWeight = wmsGdxdIn.getTotalweightIn();
-    			}
-        		map.put("workOrderNumber", workOrderNumber);
-        		map.put("batchNumber", batchNumber);
-        		map.put("processCoding", processCoding);
-        		map.put("workOrderStatus", workOrderStatus);
-        		map.put("brandClassificationName", brandClassificationName);
-        		map.put("brandName", brandName);
-        		map.put("Stocking", Stocking);
-        		map.put("state", state);
-        		map.put("startTime", startTime);
-        		map.put("endTime", endTime);
-        		map.put("sendTime", sendTime);
-        		map.put("boxTotalNum", boxTotalNum);
-        		map.put("inStation", inStation);
-        		map.put("batchWeight", batchWeight);
-        		map.put("boxLoadWeight", boxLoadWeight);
-        		map.put("classShift", classShift);
-        		map.put("classTeam", classTeam);
-        		map.put("inTotalWeight", inTotalWeight);
-        		
-        		mapList.add(map);
-        	}
-		}else {
-			String sTime = request.getParameter("startTime");
-			String eTime = request.getParameter("endTime");
-			int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
-			int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
-			String batch = request.getParameter("batch");
-			for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.filterWorkOrderInBatch(packingLine, brand, batch, sTime, eTime, rangeStart, rangeEnd)){
-        		Map<String, Object> map = MapUtils.newHashMap();
-        		String workOrderNumber = wmsGdxdIn.getWoNo();
-        		String batchNumber = wmsGdxdIn.getBatchNo();
-        		String processCoding = wmsGdxdIn.getTechSectionCd();
-        		String workOrderStatus = wmsGdxdIn.getWoState();
-        		String brandClassificationName = wmsGdxdIn.getMatClassNm();
-        		String brandName = wmsGdxdIn.getMatNm();
-        		Double Stocking = wmsGdxdIn.getPlanAmount();
-        		String sendTime = CompareDate.simplifyDate(wmsGdxdIn.getWoSendTime());
-        		String state = wmsGdxdIn.getState();
-        		String startTime = CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime());    		    		   		
-        		String endTime = CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime());
-        		int boxTotalNum = wmsGdxdIn.getBoxtotalnum();
-        		String inStation = "";
-        		if (wmsGdxdIn.getStation() != null) {
-    				inStation = wmsGdxdIn.getStation();
-    			}
-        		double batchWeight = 0;
-        		if (wmsGdxdIn.getBatchweight() != null) {
-    				batchWeight = wmsGdxdIn.getBatchweight();
-    			}
-        		double boxLoadWeight = 0;
-        		if (wmsGdxdIn.getBoxloadweight() != null) {
-    				boxLoadWeight = wmsGdxdIn.getBoxloadweight();
-    			}
-        		String classShift = "null";
-        		if (wmsGdxdIn.getShiftCd() != null) {
-    				classShift = wmsGdxdIn.getShiftCd();
-    			}
-        		String classTeam = "null";
-        		if (wmsGdxdIn.getTeamCd() != null) {
-    				classTeam = wmsGdxdIn.getTeamCd();
-    			}
-        		double inTotalWeight = 0;
-        		if (wmsGdxdIn.getTotalweightIn() != null) {
-    				inTotalWeight = wmsGdxdIn.getTotalweightIn();
-    			}
-        		map.put("workOrderNumber", workOrderNumber);
-        		map.put("batchNumber", batchNumber);
-        		map.put("processCoding", processCoding);
-        		map.put("workOrderStatus", workOrderStatus);
-        		map.put("brandClassificationName", brandClassificationName);
-        		map.put("brandName", brandName);
-        		map.put("Stocking", Stocking);
-        		map.put("state", state);
-        		map.put("startTime", startTime);
-        		map.put("endTime", endTime);
-        		map.put("sendTime", sendTime);
-        		map.put("boxTotalNum", boxTotalNum);
-        		map.put("inStation", inStation);
-        		map.put("batchWeight", batchWeight);
-        		map.put("boxLoadWeight", boxLoadWeight);
-        		map.put("classShift", classShift);
-        		map.put("classTeam", classTeam);
-        		map.put("inTotalWeight", inTotalWeight);        		
-        		mapList.add(map);
-        	}
-		}    	
-    	return mapList;
+		String packingLine = request.getParameter("packingLine");
+		String brand = request.getParameter("brand");
+		String sTime = request.getParameter("startTime");
+		String eTime = request.getParameter("endTime");
+		int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
+		int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
+		String batch = request.getParameter("batch");
+		for (WmsGdxdIn wmsGdxdIn : wmsGdxdInService.filterWorkOrderInBatch(packingLine, brand, batch, sTime, eTime,
+				rangeStart, rangeEnd)) {
+			Map<String, Object> map = MapUtils.newHashMap();
+			String workOrderNumber = wmsGdxdIn.getWoNo();
+			String batchNumber = wmsGdxdIn.getBatchNo();
+			String processCoding = wmsGdxdIn.getTechSectionCd();
+			String workOrderStatus = wmsGdxdIn.getWoState();
+			String brandClassificationName = wmsGdxdIn.getMatClassNm();
+			String brandName = wmsGdxdIn.getMatNm();
+			Double Stocking = wmsGdxdIn.getPlanAmount();
+			String sendTime = CompareDate.simplifyDate(wmsGdxdIn.getWoSendTime());
+			String state = wmsGdxdIn.getState();
+			String startTime = CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime());
+			String endTime = CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime());
+			int boxTotalNum = wmsGdxdIn.getBoxtotalnum();
+			String inStation = "";
+			if (wmsGdxdIn.getStation() != null) {
+				inStation = wmsGdxdIn.getStation();
+			}
+			double batchWeight = 0;
+			if (wmsGdxdIn.getBatchweight() != null) {
+				batchWeight = wmsGdxdIn.getBatchweight();
+			}
+			double boxLoadWeight = 0;
+			if (wmsGdxdIn.getBoxloadweight() != null) {
+				boxLoadWeight = wmsGdxdIn.getBoxloadweight();
+			}
+			String classShift = "null";
+			if (wmsGdxdIn.getShiftCd() != null) {
+				classShift = wmsGdxdIn.getShiftCd();
+			}
+			String classTeam = "null";
+			if (wmsGdxdIn.getTeamCd() != null) {
+				classTeam = wmsGdxdIn.getTeamCd();
+			}
+			double inTotalWeight = 0;
+			if (wmsGdxdIn.getTotalweightIn() != null) {
+				inTotalWeight = wmsGdxdIn.getTotalweightIn();
+			}
+			map.put("workOrderNumber", workOrderNumber);
+			map.put("batchNumber", batchNumber);
+			map.put("processCoding", processCoding);
+			map.put("workOrderStatus", workOrderStatus);
+			map.put("brandClassificationName", brandClassificationName);
+			map.put("brandName", brandName);
+			map.put("Stocking", Stocking);
+			map.put("state", state);
+			map.put("startTime", startTime);
+			map.put("endTime", endTime);
+			map.put("sendTime", sendTime);
+			map.put("boxTotalNum", boxTotalNum);
+			map.put("inStation", inStation);
+			map.put("batchWeight", batchWeight);
+			map.put("boxLoadWeight", boxLoadWeight);
+			map.put("classShift", classShift);
+			map.put("classTeam", classTeam);
+			map.put("inTotalWeight", inTotalWeight);
+			mapList.add(map);
+		}
+		return mapList;
 	}
     
     /**
@@ -1662,74 +1599,43 @@ public class PageNewBigData extends BaseController {
      */
     @RequestMapping(value = "filterByWireFeeder")
     public List<Map<String, Object>> filterByWireFeeder(HttpServletRequest request) {
-    	List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
 		String equId = request.getParameter("wireFeederNum");
 		String brand = request.getParameter("brand");
-		if (brand == null || brand.equals("")) {
-			for (WmsGdxdOut wmsGdxdOut : wmsGdxdOutService.getAllByEquId(equId, 9)) {
-				Map<String, Object> map = MapUtils.newHashMap();
-				String workOrderNumber = wmsGdxdOut.getWoNo();
-				String batchNumber = wmsGdxdOut.getBatchNo();
-				String outStation = wmsGdxdOut.getOutstation();
-				String workOrderStatus = wmsGdxdOut.getWoState();
-				String brandName = wmsGdxdOut.getMatNm();
-				double planAmount = wmsGdxdOut.getPlanAmount();
-				String sendTime = CompareDate.simplifyDate(wmsGdxdOut.getWoSendTime());
-				String endTime = CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime());
-				String startTime = CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime());
-				int boxTotalNum = wmsGdxdOut.getBoxtotalnum();
-				String classShift = wmsGdxdOut.getShiftCd();
-				String classTeam = wmsGdxdOut.getTeamCd();
+		String sTime = request.getParameter("startTime");
+		String eTime = request.getParameter("endTime");
+		int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
+		int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
+		String batch = request.getParameter("batch");
+		for (WmsGdxdOut wmsGdxdOut : wmsGdxdOutService.filterWorkOrderOutBatch(equId, brand, batch, sTime, eTime,
+				rangeStart, rangeEnd)) {
+			Map<String, Object> map = MapUtils.newHashMap();
+			String workOrderNumber = wmsGdxdOut.getWoNo();
+			String batchNumber = wmsGdxdOut.getBatchNo();
+			String outStation = wmsGdxdOut.getOutstation();
+			String workOrderStatus = wmsGdxdOut.getWoState();
+			String brandName = wmsGdxdOut.getMatNm();
+			double planAmount = wmsGdxdOut.getPlanAmount();
+			String sendTime = CompareDate.simplifyDate(wmsGdxdOut.getWoSendTime());
+			String endTime = CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime());
+			String startTime = CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime());
+			int boxTotalNum = wmsGdxdOut.getBoxtotalnum();
+			String classShift = wmsGdxdOut.getShiftCd();
+			String classTeam = wmsGdxdOut.getTeamCd();
 
-				map.put("workOrderNumber", workOrderNumber);
-				map.put("batchNumber", batchNumber);
-				map.put("outStation", outStation);
-				map.put("brandName", brandName);
-				map.put("workOrderStatus", workOrderStatus);
-				map.put("planAmount", planAmount);
-				map.put("sendTime", sendTime);
-				map.put("endTime", endTime);
-				map.put("boxTotalNum", boxTotalNum);
-				map.put("classShift", classShift);
-				map.put("startTime", startTime);
-				map.put("classTeam", classTeam);
-				mapList.add(map);
-			}
-		}else {
-			String sTime = request.getParameter("startTime");
-			String eTime = request.getParameter("endTime");
-			int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
-			int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
-			String batch = request.getParameter("batch");
-			for (WmsGdxdOut wmsGdxdOut : wmsGdxdOutService.filterWorkOrderOutBatch(equId, brand, batch, sTime, eTime, rangeStart, rangeEnd)) {
-				Map<String, Object> map = MapUtils.newHashMap();
-				String workOrderNumber = wmsGdxdOut.getWoNo();
-				String batchNumber = wmsGdxdOut.getBatchNo();
-				String outStation = wmsGdxdOut.getOutstation();
-				String workOrderStatus = wmsGdxdOut.getWoState();
-				String brandName = wmsGdxdOut.getMatNm();
-				double planAmount = wmsGdxdOut.getPlanAmount();
-				String sendTime = CompareDate.simplifyDate(wmsGdxdOut.getWoSendTime());
-				String endTime = CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime());
-				String startTime = CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime());
-				int boxTotalNum = wmsGdxdOut.getBoxtotalnum();
-				String classShift = wmsGdxdOut.getShiftCd();
-				String classTeam = wmsGdxdOut.getTeamCd();
-
-				map.put("workOrderNumber", workOrderNumber);
-				map.put("batchNumber", batchNumber);
-				map.put("outStation", outStation);
-				map.put("brandName", brandName);
-				map.put("workOrderStatus", workOrderStatus);
-				map.put("planAmount", planAmount);
-				map.put("sendTime", sendTime);
-				map.put("endTime", endTime);
-				map.put("boxTotalNum", boxTotalNum);
-				map.put("classShift", classShift);
-				map.put("startTime", startTime);
-				map.put("classTeam", classTeam);
-				mapList.add(map);
-			}
+			map.put("workOrderNumber", workOrderNumber);
+			map.put("batchNumber", batchNumber);
+			map.put("outStation", outStation);
+			map.put("brandName", brandName);
+			map.put("workOrderStatus", workOrderStatus);
+			map.put("planAmount", planAmount);
+			map.put("sendTime", sendTime);
+			map.put("endTime", endTime);
+			map.put("boxTotalNum", boxTotalNum);
+			map.put("classShift", classShift);
+			map.put("startTime", startTime);
+			map.put("classTeam", classTeam);
+			mapList.add(map);
 		}
 		return mapList;
 	}
@@ -1796,84 +1702,47 @@ public class PageNewBigData extends BaseController {
 		List<Map<String, Object>> mapList = ListUtils.newArrayList();
 		String classTeam = request.getParameter("classTeam");
 		String brand = request.getParameter("brand");
-		if (brand == null || brand.equals("")) {
-			if (classTeam.equals("null")) {
-				for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getAllByClassTeamNull()){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdIn.getBatchNo());
-					map.put("brand", wmsGdxdIn.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
-					long diff = wmsGdxdIn.getWoEndTime().getTime()-wmsGdxdIn.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "入库");
-					mapList.add(map);
-				}
-			}else {
-				for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getAllByClassTeam(classTeam)){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdIn.getBatchNo());
-					map.put("brand", wmsGdxdIn.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
-					long diff = wmsGdxdIn.getWoEndTime().getTime()-wmsGdxdIn.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "入库");
-					mapList.add(map);
-				}
-				for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.getAllByClassTeam(classTeam)){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdOut.getBatchNo());
-					map.put("brand", wmsGdxdOut.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime()));
-					long diff = wmsGdxdOut.getWoEndTime().getTime()-wmsGdxdOut.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "出库");
-					mapList.add(map);
-				}
+		String sTime = request.getParameter("startTime");
+		String eTime = request.getParameter("endTime");
+		int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
+		int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
+		String batch = request.getParameter("batch");
+		if (classTeam != null && classTeam.equals("null")) {
+			for (WmsGdxdIn wmsGdxdIn : wmsGdxdInService.getAllByClassTeamNull()) {
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("batch", wmsGdxdIn.getBatchNo());
+				map.put("brand", wmsGdxdIn.getMatNm());
+				map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
+				map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
+				long diff = wmsGdxdIn.getWoEndTime().getTime() - wmsGdxdIn.getWoStartTime().getTime();
+				map.put("useTime", (diff / (1000 * 60)));
+				map.put("type", "入库");
+				mapList.add(map);
 			}
-		}else {  //改进后的接口
-			String sTime = request.getParameter("startTime");
-			String eTime = request.getParameter("endTime");
-			int rangeStart = Integer.valueOf(request.getParameter("rangeStart"));
-			int rangeEnd = Integer.valueOf(request.getParameter("rangeEnd"));
-			String batch = request.getParameter("batch");
-			if (classTeam.equals("null")) {
-				for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getAllByClassTeamNull()){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdIn.getBatchNo());
-					map.put("brand", wmsGdxdIn.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
-					long diff = wmsGdxdIn.getWoEndTime().getTime()-wmsGdxdIn.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "入库");
-					mapList.add(map);
-				}
-			}else {
-				for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.filterByClassTeamBatch(classTeam, brand, batch, sTime, eTime, rangeStart, rangeEnd)){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdIn.getBatchNo());
-					map.put("brand", wmsGdxdIn.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
-					long diff = wmsGdxdIn.getWoEndTime().getTime()-wmsGdxdIn.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "入库");
-					mapList.add(map);
-				}
-				for(WmsGdxdOut wmsGdxdOut:wmsGdxdOutService.filterByClassTeamBatch(classTeam, brand, batch, sTime, eTime, rangeStart, rangeEnd)){
-					Map<String, Object> map = MapUtils.newHashMap();
-					map.put("batch", wmsGdxdOut.getBatchNo());
-					map.put("brand", wmsGdxdOut.getMatNm());
-					map.put("startTime", CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime()));
-					map.put("finishTime", CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime()));
-					long diff = wmsGdxdOut.getWoEndTime().getTime()-wmsGdxdOut.getWoStartTime().getTime();
-					map.put("useTime", (diff/(1000*60)));
-					map.put("type", "出库");
-					mapList.add(map);
-				}
+		} else {
+			for (WmsGdxdIn wmsGdxdIn : wmsGdxdInService.filterByClassTeamBatch(classTeam, brand, batch, sTime, eTime,
+					rangeStart, rangeEnd)) {
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("batch", wmsGdxdIn.getBatchNo());
+				map.put("brand", wmsGdxdIn.getMatNm());
+				map.put("startTime", CompareDate.simplifyDate(wmsGdxdIn.getWoStartTime()));
+				map.put("finishTime", CompareDate.simplifyDate(wmsGdxdIn.getWoEndTime()));
+				long diff = wmsGdxdIn.getWoEndTime().getTime() - wmsGdxdIn.getWoStartTime().getTime();
+				map.put("useTime", (diff / (1000 * 60)));
+				map.put("type", "入库");
+				mapList.add(map);
+			}
+			for (WmsGdxdOut wmsGdxdOut : wmsGdxdOutService.filterByClassTeamBatch(classTeam, brand, batch, sTime, eTime,
+					rangeStart, rangeEnd)) {
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("batch", wmsGdxdOut.getBatchNo());
+				map.put("brand", wmsGdxdOut.getMatNm());
+				map.put("startTime", CompareDate.simplifyDate(wmsGdxdOut.getWoStartTime()));
+				map.put("finishTime", CompareDate.simplifyDate(wmsGdxdOut.getWoEndTime()));
+				long diff = wmsGdxdOut.getWoEndTime().getTime() - wmsGdxdOut.getWoStartTime().getTime();
+				map.put("useTime", (diff / (1000 * 60)));
+				map.put("type", "出库");
+				mapList.add(map);
 			}
 		}
 		return mapList;

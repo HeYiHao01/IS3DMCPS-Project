@@ -32,6 +32,7 @@ import com.jeesite.modules.is3dmcps.service.IsMaintainService;
 public class testController extends BaseController {
 	@Autowired
 	private IsMaintainRecService isMaintainRecService;
+	
 	@RequestMapping(value = {"maintainRecList", ""})
 	public List<Map<String, Object>> maintainRecList() {
 		List<IsMaintainRec> list = isMaintainRecService.findList(new IsMaintainRec());
@@ -60,8 +61,5 @@ public class testController extends BaseController {
 		}
 		return mapList;
 	}
-	@RequestMapping(value = {"maintainRecList"})
-	public List<Map<String, Object>> maintainRecAdd(HttpServletRequest request) {
-		return null;
-	}
+	
 }

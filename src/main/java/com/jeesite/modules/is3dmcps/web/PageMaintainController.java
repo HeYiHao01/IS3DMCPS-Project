@@ -83,8 +83,6 @@ public class PageMaintainController extends BaseController{
      * 保养录入
      * Post(Put):
      * {“deviceID”:”xxx”,” maintainID”:”xxx”,”miantainPersion”:”xxx”,”state”:true,”remark”:”xxxxxxxxxxxx”}
-     * 修改
-     * {“deviceID”:”xxx”,” maintainID”:”xxx”,”miantainPersion”:”xxx”,”state”:true,”record”:”xxxxxxxxxxxx”,”remark”:”xxxxxxxxxxxx”}
      * @return
      */
     @RequestMapping(value = {"postMaintain", ""})
@@ -100,15 +98,15 @@ public class PageMaintainController extends BaseController{
 		}else{
         	state="0";
 		}
-        String record=request.getParameter("record");
+        //String record=request.getParameter("record");
         String remark=request.getParameter("remark");
 		//System.out.println(deviceName+maintainName+maintainPersion+state+record);
         Date date=new Date();
 		Map<String,Object> map=new HashMap<>();
         try{
 			String maintainID=isMaintainService.getByName(maintainName).getId();
-			//IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,state);
-			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,remark,state);
+			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,remark,maintainPersion,date,state);
+			//IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,remark,state);
             isMaintainRecService.save(isMaintainRec);
         }catch(Exception exception){
 			map.put("result",exception.toString());

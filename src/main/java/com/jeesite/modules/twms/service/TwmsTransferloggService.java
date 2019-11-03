@@ -91,4 +91,8 @@ public class TwmsTransferloggService extends CrudService<TwmsTransferloggDao, Tw
 	public List<TwmsTransferlogg> getByLotnum(@Param("lotnum")String lotnum,@Param("count")int count){
 		return this.dao.getByLotnum(lotnum, count);
 	}
+	
+	public TwmsTransferlogg getByLoggnumByIndex(@Param("loggNum")String loggNum){
+		return this.dao.getByLoggnumByIndex(loggNum);
+	}
 }

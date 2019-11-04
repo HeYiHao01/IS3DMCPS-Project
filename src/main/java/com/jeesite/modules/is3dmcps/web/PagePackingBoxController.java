@@ -602,7 +602,7 @@ public class PagePackingBoxController extends BaseController{
 			if (order.equals("descend")) {
 				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLineBatchDesc(
 						request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")),
-						Integer.parseInt(request.getParameter("rangeEnd")))) {
+						Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();
@@ -647,7 +647,7 @@ public class PagePackingBoxController extends BaseController{
 					}
 				}				
 			}else {
-				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLineBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLineBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();
@@ -695,7 +695,7 @@ public class PagePackingBoxController extends BaseController{
 			mapList = CompareDate.goodsListMerge(mapListUp, mapListDown);
 		}else if (column.equals("lie")) { //列排序
 			if (order.equals("descend")) {
-				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLieBatchDesc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLieBatchDesc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();
@@ -740,7 +740,7 @@ public class PagePackingBoxController extends BaseController{
 					}					
 				}
 			}else {
-				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLieBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLieBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();
@@ -788,7 +788,7 @@ public class PagePackingBoxController extends BaseController{
 			mapList = CompareDate.goodsListMerge(mapListUp, mapListDown);
 		}else if (column.equals("layer")) { //层排序
 			if (order.equals("descend")) {
-				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLayerBatchDesc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLayerBatchDesc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();
@@ -833,7 +833,7 @@ public class PagePackingBoxController extends BaseController{
 					}					
 				}
 			}else {
-				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLayerBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd")))) {
+				for (BoxStatics boxStatics1 : twmsPltitemService.filterNewBoxStaticsLayerBatchAsc(request.getParameter("brand"), batch, Integer.parseInt(request.getParameter("rangeStart")), Integer.parseInt(request.getParameter("rangeEnd"))*2)) {
 					Map<String, Object> map = MapUtils.newHashMap();
 					line = boxStatics1.getLine();
 					lie = boxStatics1.getLie();

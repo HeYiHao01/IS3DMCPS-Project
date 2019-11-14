@@ -126,12 +126,10 @@ public class PageFaultRepairController extends BaseController{
         String deviceName=request.getParameter("deviceName");
         String persion=request.getParameter("person");
         String faultResult=request.getParameter("faultResult");
-        String recommendedSolution=request.getParameter("recommendedSolution");
-        //String faultID=request.getParameter("faultID");       
+        String recommendedSolution=request.getParameter("recommendedSolution");              
         String state=request.getParameter("state");
         String content=request.getParameter("content");
-        String remark = request.getParameter("remark");
-        //System.out.println(deviceID+deviceName+persion+state+content);
+        String remark = request.getParameter("remark");        
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         if(state==null){
@@ -153,8 +151,7 @@ public class PageFaultRepairController extends BaseController{
                 state="0";
             }
             for(IsFaults isFaults:isFaultsService.getFaultsByName(faultResult)){
-	            String faultID=isFaults.getId();
-	            //IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date,remark);
+	            String faultID=isFaults.getId();	            
 	            IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date);
 	            try{
 	                isRepairRecService.save(isRepairRec);

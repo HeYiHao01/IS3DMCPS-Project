@@ -91,7 +91,7 @@ public class PagePatrolManController extends BaseController{
         String patrolName=request.getParameter("patrolName");
         String patrolPersion=request.getParameter("patrolPerson");
         String state=request.getParameter("state");
-        String record=request.getParameter("record");
+        //String record=request.getParameter("record");
         String remark=request.getParameter("remark");
         //System.out.println(deviceName+patrolName+patrolPersion+state+record);
         Date date=new Date();
@@ -99,8 +99,8 @@ public class PagePatrolManController extends BaseController{
         try{
         	String patrolID = "";
         	for(IsPatrol isPatrol:isPatrolService.getPatrolByName(deviceName))
-        		patrolID=isPatrol.getId();
-            IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,record,patrolPersion,date,remark);
+        		patrolID=isPatrol.getId();            
+        	IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,remark,patrolPersion,date);
             isPatrolRecService.save(isPatrolRec);
         }catch(Exception exception){
             map.put("result",exception.toString());

@@ -19,5 +19,6 @@ public interface IsMaintainDao extends CrudDao<IsMaintain> {
 	public List<IsMaintain> getMaintainPopContent(String deviceCodeId);
 	public IsMaintain getByName(String name);
 	public IsMaintain getById(String id);
+	public IsMaintain getByCodeId(String deviceCodeId);
 	public List<IsMaintain> maintainTypeCount();
 }

@@ -118,14 +118,15 @@ public class CompareDate {
 	public static String formatDate(String date) {
 		Date dt = new Date(date);
 		DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-		return df.format(dt);
+		Calendar c = Calendar.getInstance();  
+        c.setTime(dt);  
+        c.add(Calendar.DAY_OF_MONTH, 1); 
+        date = df.format(c.getTime());
+        return date;
 	}
 	
 	public static int dateCount(Date date) {
-		Date now = new Date();
-//		DateFormat df = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-//		Date dt = new Date(df.format(date));
-//		long diff = now.getTime() - dt.getTime();		
+		Date now = new Date();		
 		long diff = now.getTime() - date.getTime();
 		long days = diff / (1000 * 60 * 60 * 24);
 		return (int)days;
@@ -228,16 +229,17 @@ public class CompareDate {
 		//System.out.println(String.valueOf(Calendar.getInstance().get(Calendar.YEAR)-1));
 		
 		//测试Md5加密解密
-		String password = "admin";
-		String md5Str1 = Md5Utils.md5(password);
-		String md5Str2 = string2MD5(password);
-		String md5Str3 = convertMD5(password);
-		System.out.println(md5Str1);
-		System.out.println(md5Str2);
-		System.out.println(md5Str3);
-		System.out.println(convertMD5(md5Str1));
-		System.out.println(convertMD5(md5Str2));
-		System.out.println(convertMD5(md5Str3));
+//		String password = "admin";
+//		String md5Str1 = Md5Utils.md5(password);
+//		String md5Str2 = string2MD5(password);
+//		String md5Str3 = convertMD5(password);
+//		System.out.println(md5Str1);
+//		System.out.println(md5Str2);
+//		System.out.println(md5Str3);
+//		System.out.println(convertMD5(md5Str1));
+//		System.out.println(convertMD5(md5Str2));
+//		System.out.println(convertMD5(md5Str3));
+		//System.out.println(formatDate("2019/12/31"));
 	}
 	
 	/**

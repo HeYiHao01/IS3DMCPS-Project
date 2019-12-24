@@ -30,20 +30,20 @@ jdbc:
 #      testSql: SELECT 1
 
 # Oracle 数据库配置 昆明
-# type: oracle
-# driver: oracle.jdbc.driver.OracleDriver
-# url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
-# username: LZOME
-# password: ONLYonly1
-# testSql: SELECT 1 FROM DUAL
-
-# Oracle 数据库配置 苏州
  type: oracle
  driver: oracle.jdbc.driver.OracleDriver
  url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
- username: c##is3dmp
- password: root
+ username: LZOME
+ password: ONLYonly1
  testSql: SELECT 1 FROM DUAL
+
+# Oracle 数据库配置 苏州
+# type: oracle
+# driver: oracle.jdbc.driver.OracleDriver
+# url: jdbc:oracle:thin:@127.0.0.1:1521/orcl
+# username: c##is3dmp
+# password: root
+# testSql: SELECT 1 FROM DUAL
 
 #  # 数据库连接池配置
 #  pool:

@@ -92,6 +92,10 @@ public class IsMaintainService extends CrudService<IsMaintainDao, IsMaintain> {
 		return this.dao.getById(id);
 	}
 	
+	public IsMaintain getByCodeId(String deviceCodeId){
+		return this.dao.getByCodeId(deviceCodeId);
+	}
+	
 	/**
 	 * 根据维保种类统计
 	 * @return

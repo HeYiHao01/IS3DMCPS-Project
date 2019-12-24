@@ -5,6 +5,7 @@ package com.jeesite.modules.is3dmcps.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -85,5 +86,9 @@ public class IsKnowledgeService extends CrudService<IsKnowledgeDao, IsKnowledge>
 	 */
 	public List<IsKnowledge> getKnowledgeById(String knowledgeId){
 		return this.dao.getKnowledgeById(knowledgeId);
+	}
+	
+	public IsKnowledge getKnowledgeByTitle(@Param("title") String title){
+		return this.dao.getKnowledgeByTitle(title);
 	}
 }

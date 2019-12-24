@@ -85,22 +85,28 @@ public class PagePatrolManController extends BaseController{
      */
     @RequestMapping(value = {"postPatrol", ""})
     public Map<String,Object> postPatrol(HttpServletRequest request){
-        //String deviceID=request.getParameter("deviceID");
         String deviceName  = request.getParameter("deviceName");
-        //String patrolID=request.getParameter("patrolID");
-        String patrolName=request.getParameter("patrolName");
         String patrolPersion=request.getParameter("patrolPerson");
         String state=request.getParameter("state");
-        //String record=request.getParameter("record");
         String remark=request.getParameter("remark");
-        //System.out.println(deviceName+patrolName+patrolPersion+state+record);
         Date date=new Date();
+        if (state.equals("true")) {
+			state = "正常";
+		}else if (state.equals("false")){
+			state = "异常";
+		}
         Map<String,Object> map=new HashMap<>();
         try{
+        	String deviceId = ""; 
         	String patrolID = "";
-        	for(IsPatrol isPatrol:isPatrolService.getPatrolByName(deviceName))
-        		patrolID=isPatrol.getId();            
-        	IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,remark,patrolPersion,date);
+        	String patrolName= "";
+        	for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+        		deviceId = isDevice.getId();
+        	for(IsPatrol isPatrol: isPatrolService.getPatrolByDeviceId(deviceId)){
+        		patrolID = isPatrol.getId();
+        		patrolName = isPatrol.getName();
+        	}        	
+        	IsPatrolRec isPatrolRec=new IsPatrolRec(patrolID,patrolName,state,patrolPersion,date,remark);
             isPatrolRecService.save(isPatrolRec);
         }catch(Exception exception){
             map.put("result",exception.toString());
@@ -286,8 +292,8 @@ public class PagePatrolManController extends BaseController{
     	if (rangeEnd == null || rangeEnd.equals("")) {
     		for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLog(inspectionName, inspectionPersonnel, startTime, endTime)){
         		Map<String, Object> map = MapUtils.newHashMap();
-        		map.put("inspectionName", inspectionName);
-            	map.put("inspectionPersonnel", inspectionPersonnel);
+        		map.put("inspectionName", isPatrolRec.getPatrolName());
+            	map.put("inspectionPersonnel", isPatrolRec.getOperator());
             	map.put("inspectionTime", CompareDate.simplifyDate(isPatrolRec.getPatrolTime()));
             	if (isPatrolRec.getRecord() != null) {
             		map.put("inspectionRecord", isPatrolRec.getRecord());
@@ -299,8 +305,8 @@ public class PagePatrolManController extends BaseController{
 		}else {
 			for(IsPatrolRec isPatrolRec:isPatrolRecService.filterPatrolLogPageRemark(inspectionName, inspectionPersonnel,inspectionRecord, startTime, endTime, Integer.valueOf(rangeStart), Integer.valueOf(rangeEnd))){
 	    		Map<String, Object> map = MapUtils.newHashMap();
-	    		map.put("inspectionName", inspectionName);
-	        	map.put("inspectionPersonnel", inspectionPersonnel);
+	    		map.put("inspectionName", isPatrolRec.getPatrolName());
+            	map.put("inspectionPersonnel", isPatrolRec.getOperator());
 	        	map.put("inspectionTime", CompareDate.simplifyDate(isPatrolRec.getPatrolTime()));
 	        	if (isPatrolRec.getRecord() != null) {
 	        		map.put("inspectionRecord", isPatrolRec.getRecord());

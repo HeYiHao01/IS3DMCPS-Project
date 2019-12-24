@@ -5,6 +5,8 @@ package com.jeesite.modules.is3dmcps.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jeesite.common.dao.CrudDao;
 import com.jeesite.common.mybatis.annotation.MyBatisDao;
 import com.jeesite.modules.is3dmcps.entity.IsKnowledge;
@@ -18,4 +20,5 @@ import com.jeesite.modules.is3dmcps.entity.IsKnowledge;
 public interface IsKnowledgeDao extends CrudDao<IsKnowledge> {
 	public List<IsKnowledge> getAll();
 	public List<IsKnowledge> getKnowledgeById(String knowledgeId);
+	public IsKnowledge getKnowledgeByTitle(@Param("title") String title);
 }

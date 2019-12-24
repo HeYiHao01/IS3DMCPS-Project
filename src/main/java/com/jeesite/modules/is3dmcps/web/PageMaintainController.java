@@ -47,6 +47,8 @@ public class PageMaintainController extends BaseController{
     @Autowired
     IsDeviceService isDeviceService;
     @Autowired
+    IsDeviceService isDeviceCodeService;
+    @Autowired
     EmployeeService employeeService;
 	/**
 	 * 保养弹窗
@@ -54,8 +56,7 @@ public class PageMaintainController extends BaseController{
 	 */
 	@RequestMapping(value = {"maintainPop", ""})
 	public List<Map<String, Object>> maintainPop(HttpServletRequest request) {
-		List<Map<String, Object>> mapList = ListUtils.newArrayList();		
-		//String deviceId  = request.getParameter("deviceID");
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();				
 		String deviceName  = request.getParameter("deviceName");
 		String maintainID;
 		String maintainName;
@@ -68,8 +69,7 @@ public class PageMaintainController extends BaseController{
 					maintainContent = isMaintainService.getById(maintainRec.getMaintainId()).getContent();
 				else
 					maintainContent = "";
-				maintainName = maintainRec.getMaintainName();
-				//System.out.println(maintain.getId()+" "+maintain.getName()+" "+maintain.getContent());
+				maintainName = maintainRec.getMaintainName();				
 				map.put("maintainID", maintainID);
 				map.put("maintainName", maintainName);
 				map.put("maintainContent", maintainContent);
@@ -86,27 +86,25 @@ public class PageMaintainController extends BaseController{
      * @return
      */
     @RequestMapping(value = {"postMaintain", ""})
-    public Map<String,Object> postMaintain(HttpServletRequest request){
-        //String deviceID=request.getParameter("deviceID");
+    public Map<String,Object> postMaintain(HttpServletRequest request){        
     	String deviceName  = request.getParameter("deviceName");
-        //String maintainID=request.getParameter("maintainID");
-    	String maintainName=request.getParameter("maintainName");
         String maintainPersion=request.getParameter("maintainPerson");
         String state=request.getParameter("state");
         if(state.equals("true")){
         	state="1";
 		}else{
         	state="0";
-		}
-        //String record=request.getParameter("record");
-        String remark=request.getParameter("remark");
-		//System.out.println(deviceName+maintainName+maintainPersion+state+record);
+		}        
+        String remark=request.getParameter("remark");		
         Date date=new Date();
 		Map<String,Object> map=new HashMap<>();
         try{
-			String maintainID=isMaintainService.getByName(maintainName).getId();
-			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,remark,maintainPersion,date,state);
-			//IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,record,maintainPersion,date,remark,state);
+        	String deviceCodeId = "";
+        	for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+        		deviceCodeId = isDevice.getDeviceCodeId();        	
+			String maintainID=isMaintainService.getByCodeId(deviceCodeId).getId();
+			String maintainName = isMaintainService.getByCodeId(deviceCodeId).getName();
+			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,remark,maintainPersion,date,state);			
             isMaintainRecService.save(isMaintainRec);
         }catch(Exception exception){
 			map.put("result",exception.toString());

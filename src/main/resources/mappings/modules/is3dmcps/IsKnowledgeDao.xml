@@ -14,6 +14,9 @@
 	<select id="getKnowledgeById" resultType="IsKnowledge" parameterType="String">
 		select * from is_knowledge where ID = #{knowledgeId} 
 	</select>
+	<select id="getKnowledgeByTitle" resultType="IsKnowledge" parameterType="String">
+		select * from is_knowledge where title = #{title}
+	</select>
 	<select id="getAll" resultType="IsKnowledge">
 		select * from is_knowledge
 	</select>

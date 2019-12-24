@@ -25,7 +25,7 @@
 		select faults_name,operator,repair_time,results，status from is_repair_rec order by repair_time
 	</select>
 	<select id="filterRepairLog" resultType="IsRepairRec">
-		select faults_name,operator,repair_time,results,record from is_repair_rec where faults_name = #{faultsName} and operator = #{operator} and results = #{results} and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') order by repair_time
+		select * from is_repair_rec where (faults_name = #{faultsName} or #{faultsName} is null) and (operator = #{operator} or #{operator} is null) and (results = #{results} or #{results} is null) and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') order by repair_time
 	</select>
 	
 	<select id="partsConsumptionList" resultType="com.jeesite.modules.is3dmcps.entity.PartsConsumption">
@@ -34,7 +34,7 @@
 	
 	<select id="filterRepairLogPage" resultType="IsRepairRec">
 		select alias.* from 
-		(select faults_name,operator,repair_time,results,record,ROWNUM as rowno from is_repair_rec where faults_name = #{faultsName} and operator = #{operator} and results = #{results} and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt;= #{rangeEnd} order by repair_time) alias
-		where alias.rowno &gt; #{rangeStart}
+		(select faults_name,operator,repair_time,results,record,status,ROWNUM as rowno from is_repair_rec where (faults_name = #{faultsName} or #{faultsName} is null) and (operator = #{operator} or #{operator} is null) and (results = #{results} or #{results} is null) and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd} order by repair_time) alias
+		where alias.rowno &gt;= #{rangeStart}
 	</select>
 </mapper>

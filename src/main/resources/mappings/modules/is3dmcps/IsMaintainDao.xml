@@ -20,6 +20,9 @@
 	<select id="getById" resultType="IsMaintain" parameterType="String">
 		select * from is_maintain where ID=#{id}
 	</select>
+	<select id="getByCodeId" resultType="IsMaintain" parameterType="String">
+		select * from is_maintain where device_code_id=#{codeId}
+	</select>
 	<select id="maintainTypeCount" resultType="IsMaintain">
 		select type,count(type) as interval from is_maintain group by type
 	</select>

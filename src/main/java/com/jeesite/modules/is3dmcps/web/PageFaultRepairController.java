@@ -161,7 +161,7 @@ public class PageFaultRepairController extends BaseController{
     					return map;
     				}
     				//更新故障表和维修表
-    				isRepairRecService.updateRepairRec(faultID, "2");
+    				isRepairRecService.updateRepairRec(faultID, "2", "2");
     				isFaultsService.updateIsFaults(deviceId, "3");
     				map.put("result", "ok");
     			}else {

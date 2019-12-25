@@ -30,5 +30,5 @@ public interface IsRepairRecDao extends CrudDao<IsRepairRec> {
 	
 	public List<IsRepairRec> filterRepairLogPage(@Param("faultsName")String faultsName,@Param("operator")String operator,@Param("results")String results,@Param("startTime")String startTime,@Param("endTime")String endTime, @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd);
 	
-	public int updateRepairRec(@Param("faultsId") String faultsId, @Param("results") String results);
+	public int updateRepairRec(@Param("faultsId") String faultsId, @Param("results") String results, @Param("status") String status);
 }

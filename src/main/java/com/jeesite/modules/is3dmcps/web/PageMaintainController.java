@@ -13,11 +13,11 @@ import com.jeesite.common.collect.MapUtils;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
 import com.jeesite.modules.is3dmcps.entity.IsMaintain;
 import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
-import com.jeesite.modules.is3dmcps.entity.IsPatrolRec;
 import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainRecService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainService;
+import com.jeesite.modules.is3dmcps.service.SelfDefEmployeeService;
 import com.jeesite.modules.sys.service.EmployeeService;
 import com.jeesite.utils.CompareDate;
 
@@ -49,7 +49,7 @@ public class PageMaintainController extends BaseController{
     @Autowired
     IsDeviceService isDeviceCodeService;
     @Autowired
-    EmployeeService employeeService;
+    SelfDefEmployeeService selfDefEmployeeService;
 	/**
 	 * 保养弹窗
 	 * @return
@@ -319,7 +319,7 @@ public class PageMaintainController extends BaseController{
 							mapPlan.get("name").equals(mapFinish.get("name"))) {
 						Map<String, Object> map = MapUtils.newHashMap();
 						map.put("name", mapAll.get("name"));
-						map.put("jobNumber", employeeService.getEmployeeByName(String.valueOf(mapAll.get("name"))).getEmpCode());
+						map.put("jobNumber", selfDefEmployeeService.getEmployeeByName(String.valueOf(mapAll.get("name"))).getEmpCode());
 						map.put("deviceTotalNumber", mapAll.get("deviceTotalNumber"));
 						map.put("maintenanceDeviceNumber", mapPlan.get("maintenanceDeviceNumber"));
 						map.put("maintenanceFinishNumber", mapFinish.get("maintenanceFinishNumber"));
@@ -472,7 +472,9 @@ public class PageMaintainController extends BaseController{
 				status = null;
 			}	
 		}
-		for(IsMaintainRec isMaintainRec:isMaintainRecService.filterMaintainRecPage(request.getParameter("maintenanceName"), request.getParameter("deviceNumber"), request.getParameter("maintenancePersonnel"), status, request.getParameter("startTime"), request.getParameter("endTime"), Integer.valueOf(request.getParameter("rangeStart")), Integer.valueOf(request.getParameter("rangeEnd")))){
+		String startTime = CompareDate.formatDate(request.getParameter("startTime"), false);
+		String endTime = CompareDate.formatDate(request.getParameter("endTime"), true);
+		for(IsMaintainRec isMaintainRec:isMaintainRecService.filterMaintainRecPage(request.getParameter("maintenanceName"), request.getParameter("deviceNumber"), request.getParameter("maintenancePersonnel"), status, startTime, endTime, Integer.valueOf(request.getParameter("rangeStart")), Integer.valueOf(request.getParameter("rangeEnd")))){
 			Map<String, Object> map = MapUtils.newHashMap();
 			String maintenanceName = isMaintainRec.getMaintainName();
 			String deviceNumber = isMaintainRec.getDeviceNo();

@@ -42,6 +42,7 @@
 		update is_repair_rec 
 		<trim prefix="set" suffixOverrides=",">
   			<if test="results!=null">results=#{results},</if>
+  			<if test="status!=null">status=#{status},</if>
 		</trim>
 		where faults_id = #{faultsId}
 	</update>

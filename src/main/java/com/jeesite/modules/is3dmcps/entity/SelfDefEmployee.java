@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2013-Now http://jeesite.com All rights reserved.
  */
-package com.jeesite.modules.sys.entity;
+package com.jeesite.modules.is3dmcps.entity;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -15,9 +15,9 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 /**
  * 员工表Entity
  * @author hy
- * @version 2019-09-25
+ * @version 2019-12-25
  */
-@Table(name="${_prefix}sys_employee", alias="a", columns={
+@Table(name="js_sys_employee", alias="a", columns={
 		@Column(name="emp_code", attrName="empCode", label="员工编码", isPK=true),
 		@Column(name="emp_name", attrName="empName", label="员工姓名", queryType=QueryType.LIKE),
 		@Column(name="emp_name_en", attrName="empNameEn", label="英文名", queryType=QueryType.LIKE),
@@ -29,7 +29,7 @@ import com.jeesite.common.mybatis.mapper.query.QueryType;
 		@Column(includeEntity=BaseEntity.class),
 	}, orderBy="a.update_date DESC"
 )
-public class Employee extends DataEntity<Employee> {
+public class SelfDefEmployee extends DataEntity<SelfDefEmployee> {
 	
 	private static final long serialVersionUID = 1L;
 	private String empCode;		// 员工编码
@@ -40,11 +40,11 @@ public class Employee extends DataEntity<Employee> {
 	private String companyCode;		// 公司编码
 	private String companyName;		// 公司名称
 	
-	public Employee() {
+	public SelfDefEmployee() {
 		this(null);
 	}
 
-	public Employee(String id){
+	public SelfDefEmployee(String id){
 		super(id);
 	}
 	

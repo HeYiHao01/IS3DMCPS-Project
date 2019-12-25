@@ -113,7 +113,7 @@ public class IsRepairRecService extends CrudService<IsRepairRecDao, IsRepairRec>
 		return this.dao.filterRepairLogPage(faultsName, operator, results, startTime, endTime, rangeStart, rangeEnd);
 	}
 	
-	public Object updateRepairRec(@Param("faultsId") String faultsId, @Param("results") String results){
-    	return this.dao.updateRepairRec(faultsId, results);
+	public int updateRepairRec(@Param("faultsId") String faultsId, @Param("results") String results, @Param("status") String status){
+    	return this.dao.updateRepairRec(faultsId, results, status);
     }
 }

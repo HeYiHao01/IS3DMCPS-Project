@@ -125,14 +125,14 @@ public class PageFaultRepairController extends BaseController{
     public Map<String,Object> postFault(HttpServletRequest request){        
         String deviceName=request.getParameter("deviceName");
         String persion=request.getParameter("person");
-        String faultResult=request.getParameter("faultResult");
-        String recommendedSolution=isKnowledgeService.getKnowledgeByTitle(request.getParameter("recommendedSolution").toString().trim()).getId();          
+        String faultResult=request.getParameter("faultResult");                 
         String state=request.getParameter("state");
         String content=request.getParameter("content");
         String remark = request.getParameter("remark");        
         Date date=new Date();
         Map<String,Object> map=new HashMap<>();
         if(state==null){
+        	String recommendedSolution=isKnowledgeService.getKnowledgeByTitle(request.getParameter("recommendedSolution").toString().trim()).getId();
         	for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
 	            IsFaults isFaults=new IsFaults(deviceName,isDevice.getId(),deviceName,null,date,persion,faultResult,recommendedSolution,remark);
 	            try{
@@ -146,22 +146,50 @@ public class PageFaultRepairController extends BaseController{
             return map;
         }else{
             if(state.equals("true")){
-                state="2";
+                state="2";	//维修完成
+                String deviceId = "";
+                for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+                	deviceId = isDevice.getId();
+    			IsFaults isFaults = isFaultsService.getFaultsStateDetails(deviceId);
+    			if (isFaults != null) {
+    				String faultID = isFaults.getId();
+    				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);
+    				try {
+    					isRepairRecService.save(isRepairRec);
+    				} catch (Exception exception) {
+    					map.put("result", exception.toString());
+    					return map;
+    				}
+    				//更新故障表和维修表
+    				isRepairRecService.updateRepairRec(faultID, "2");
+    				isFaultsService.updateIsFaults(deviceId, "3");
+    				map.put("result", "ok");
+    			}else {
+    				map.put("result", "未故障");
+    			}
             }else{
-                state="0";
-            }
-            for(IsFaults isFaults:isFaultsService.getFaultsByName(faultResult)){
-	            String faultID=isFaults.getId();	            
-	            IsRepairRec isRepairRec=new IsRepairRec(faultID,faultResult,content,state,persion,date);
-	            try{
-	                isRepairRecService.save(isRepairRec);
-	            }catch(Exception exception){
-	                map.put("result",exception.toString());
-	                return map;
-	            }
-	            map.put("result","ok");	            
-            }
-            return map;
+                state="0";	//维修中
+                String deviceId = "";
+                for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+                	deviceId = isDevice.getId();
+    			IsFaults isFaults = isFaultsService.getFaultsStateDetails(deviceId);
+    			if (isFaults != null) {
+    				String faultID = isFaults.getId();
+    				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);
+    				try {
+    					isRepairRecService.save(isRepairRec);
+    				} catch (Exception exception) {
+    					map.put("result", exception.toString());
+    					return map;
+    				}
+    				//更新故障表
+    				isFaultsService.updateIsFaults(deviceId, "2");
+    				map.put("result", "ok");
+    			}else {
+    				map.put("result", "未故障");
+    			}
+            }            
+			return map;
         }
     }
 
@@ -356,10 +384,10 @@ public class PageFaultRepairController extends BaseController{
     	String startTime = request.getParameter("startTime");
     	String endTime = request.getParameter("endTime");
     	if (startTime != null) {
-    		startTime = CompareDate.formatDate(request.getParameter("startTime"));
+    		startTime = CompareDate.formatDate(request.getParameter("startTime"),false);
 		}  
     	if (endTime != null) {
-    		endTime = CompareDate.formatDate(request.getParameter("endTime"));
+    		endTime = CompareDate.formatDate(request.getParameter("endTime"),true);
 		}
     	String rangeStart = request.getParameter("rangeStart");
     	String rangeEnd = request.getParameter("rangeEnd");  
@@ -371,12 +399,8 @@ public class PageFaultRepairController extends BaseController{
         		map.put("deviceNumber", isFaults.getDeviceId());
         		map.put("faultCode", isFaults.getFaultsCode());
         		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
-        		map.put("servicePersonnel", isFaults.getOperator());
-        		remark = isFaults.getRemarks();
-        		if (remark == null || remark.equals("")) {
-					remark = "";
-				}
-        		map.put("remark", remark);
+        		map.put("servicePersonnel", isFaults.getOperator());        		
+        		map.put("remark", isFaults.getRemarks());
         		switch (isFaults.getStatus()) {
         		case "0":
     				map.put("status","新故障");
@@ -528,10 +552,10 @@ public class PageFaultRepairController extends BaseController{
     	String startTime = request.getParameter("startTime");
     	String endTime = request.getParameter("endTime");
     	if (startTime != null) {
-    		startTime = CompareDate.formatDate(request.getParameter("startTime"));
+    		startTime = CompareDate.formatDate(request.getParameter("startTime"), false);
 		}  
     	if (endTime != null) {
-    		endTime = CompareDate.formatDate(request.getParameter("endTime"));
+    		endTime = CompareDate.formatDate(request.getParameter("endTime"), true);
 		}
     	String rangeStart = request.getParameter("rangeStart");
     	String rangeEnd = request.getParameter("rangeEnd");    	

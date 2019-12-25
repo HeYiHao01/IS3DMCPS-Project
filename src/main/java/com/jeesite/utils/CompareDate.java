@@ -115,13 +115,19 @@ public class CompareDate {
 		return df.format(date);
 	}
 	
-	public static String formatDate(String date) {
-		Date dt = new Date(date);
-		DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
-		Calendar c = Calendar.getInstance();  
-        c.setTime(dt);  
-        c.add(Calendar.DAY_OF_MONTH, 1); 
-        date = df.format(c.getTime());
+	public static String formatDate(String date, boolean flag) {
+		if (flag) {  //右闭区间
+			Date dt = new Date(date);
+			DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+			Calendar c = Calendar.getInstance();  
+	        c.setTime(dt);  
+	        c.add(Calendar.DAY_OF_MONTH, 1); 
+	        date = df.format(c.getTime());
+		}else {  //左闭区间
+			Date dt = new Date(date);
+			DateFormat df = new SimpleDateFormat("yyyy.MM.dd");
+			date = df.format(dt);
+		}
         return date;
 	}
 	
@@ -239,7 +245,7 @@ public class CompareDate {
 //		System.out.println(convertMD5(md5Str1));
 //		System.out.println(convertMD5(md5Str2));
 //		System.out.println(convertMD5(md5Str3));
-		//System.out.println(formatDate("2019/12/31"));
+		System.out.println(formatDate("2019/12/31", false));
 	}
 	
 	/**

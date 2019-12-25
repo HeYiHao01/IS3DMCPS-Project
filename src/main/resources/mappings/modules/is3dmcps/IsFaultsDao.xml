@@ -21,7 +21,7 @@
 		select * from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3')
 	</select>
 	<select id="getNeedRepair" resultType="IsFaults">
-		select * from is_faults where ID in (select faults_id from is_repair_rec where results='0' or results='4')
+		select * from is_faults where status = '0' or ID in (select faults_id from is_repair_rec where results='0' or results='4')
 	</select>
 	<select id="getAllFaultsCount" resultType="java.lang.Integer">
 		select count(*) from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3')
@@ -31,7 +31,7 @@
 	</select>
 	<select id="getFaultsByName" resultType="IsFaults" parameterType="String">
 		select * from is_faults where name = #{name}
-	</select>
+	</select>	
 	
 	<select id="faultsLogList" resultType="IsFaults">
 		select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status from is_faults,is_device where is_faults.device_id = is_device.id
@@ -42,7 +42,7 @@
 	
 	<select id="filterFaultsLogPage" resultType="IsFaults">
 		select alias.* from 
-		(select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status,ROWNUM as rowno from is_faults,is_device where is_faults.device_id = is_device.id and (is_faults.name = #{faultName} or #{faultName} is null) and (is_device.device_code_name = #{deviceName} or #{deviceName} is null) and (is_faults.operator = #{operator} or #{operator} is null) and (is_faults.status = #{status} or #{status} is null) and is_faults.faults_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd}) alias
+		(select is_faults.name,is_device.device_code_name as device_name,is_device.device_no as device_id,is_faults.faults_code,is_faults.faults_time,is_faults.operator,is_faults.status,is_faults.remarks,ROWNUM as rowno from is_faults,is_device where is_faults.device_id = is_device.id and (is_faults.name = #{faultName} or #{faultName} is null) and (is_device.device_code_name = #{deviceName} or #{deviceName} is null) and (is_faults.operator = #{operator} or #{operator} is null) and (is_faults.status = #{status} or #{status} is null) and is_faults.faults_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd}) alias
 		where alias.rowno &gt;= #{rangeStart}
 	</select>
 	
@@ -61,4 +61,12 @@
 	<select id="faultsCountMonthly" resultType="IsFaults">
 		select count(is_faults.device_id) as device_name from is_device,is_faults where is_device.id = is_faults.device_id and is_faults.device_id = #{deviceId} and to_char(is_faults.faults_time,'yyyy.mm') = #{month} group by is_faults.device_id
 	</select>
+	
+	<update id="updateIsFaults">
+		update is_faults 
+		<trim prefix="set" suffixOverrides=",">
+  			<if test="status!=null">status=#{status},</if>
+		</trim>
+		where device_id = #{deviceId}
+	</update>
 </mapper>

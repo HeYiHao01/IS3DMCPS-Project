@@ -37,4 +37,12 @@
 		(select faults_name,operator,repair_time,results,record,status,ROWNUM as rowno from is_repair_rec where (faults_name = #{faultsName} or #{faultsName} is null) and (operator = #{operator} or #{operator} is null) and (results = #{results} or #{results} is null) and repair_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd} order by repair_time) alias
 		where alias.rowno &gt;= #{rangeStart}
 	</select>
+	
+	<update id="updateRepairRec">
+		update is_repair_rec 
+		<trim prefix="set" suffixOverrides=",">
+  			<if test="results!=null">results=#{results},</if>
+		</trim>
+		where faults_id = #{faultsId}
+	</update>
 </mapper>

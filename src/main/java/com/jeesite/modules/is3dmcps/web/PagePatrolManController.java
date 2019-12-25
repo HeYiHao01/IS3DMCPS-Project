@@ -281,10 +281,10 @@ public class PagePatrolManController extends BaseController{
     	String startTime = request.getParameter("startTime");
     	String endTime = request.getParameter("endTime");
     	if (startTime != null) {
-    		startTime = CompareDate.formatDate(request.getParameter("startTime"));
+    		startTime = CompareDate.formatDate(request.getParameter("startTime"), false);
 		}  
     	if (endTime != null) {
-    		endTime = CompareDate.formatDate(request.getParameter("endTime"));
+    		endTime = CompareDate.formatDate(request.getParameter("endTime"), true);
 		}
     	//System.err.println(startTime+" "+endTime);    	
     	String rangeStart = request.getParameter("rangeStart");

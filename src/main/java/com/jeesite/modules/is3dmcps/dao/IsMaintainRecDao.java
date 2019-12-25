@@ -32,4 +32,5 @@ public interface IsMaintainRecDao extends CrudDao<IsMaintainRec> {
     public List<MaintainPersonInfo> getMaintainPersonFinish();
     
     public List<IsMaintainRec> filterMaintainRecPage(@Param("maintainName")String maintainName, @Param("deviceNo")String deviceNo, @Param("planPerson")String planPerson, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime, @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd);
+        
 }

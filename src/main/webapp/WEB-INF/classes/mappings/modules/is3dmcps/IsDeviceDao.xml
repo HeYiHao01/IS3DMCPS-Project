@@ -12,7 +12,7 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getAll" resultType="java.lang.Integer">
-		select count(*) from is_device
+		select count(distinct id) from is_device
 	</select>
 	<select id="getDeviceDetails" resultType="IsDevice">
 		select * from is_device
@@ -49,5 +49,12 @@
 		where is_device.device_code_id = is_device_code.id and is_device.device_status = '0'
 		GROUP by is_device.device_code_name, is_device_code.model) b
 		on a.codename = b.codename
+	</select>
+	
+	<select id="getDeviceRuningCount" resultType="java.lang.Integer">
+		select count(id) from is_device where status = '1'
+	</select>
+	<select id="getDeviceFaultsCount" resultType="java.lang.Integer">
+		select count(id) from is_device where status = '2'
 	</select>
 </mapper>

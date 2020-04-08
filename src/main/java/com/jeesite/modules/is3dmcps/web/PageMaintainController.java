@@ -18,7 +18,6 @@ import com.jeesite.modules.is3dmcps.service.IsDeviceService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainRecService;
 import com.jeesite.modules.is3dmcps.service.IsMaintainService;
 import com.jeesite.modules.is3dmcps.service.SelfDefEmployeeService;
-import com.jeesite.modules.sys.service.EmployeeService;
 import com.jeesite.utils.CompareDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,28 +89,42 @@ public class PageMaintainController extends BaseController{
     	String deviceName  = request.getParameter("deviceName");
         String maintainPersion=request.getParameter("maintainPerson");
         String state=request.getParameter("state");
-        if(state.equals("true")){
-        	state="1";
-		}else{
-        	state="0";
-		}        
         String remark=request.getParameter("remark");		
         Date date=new Date();
-		Map<String,Object> map=new HashMap<>();
-        try{
-        	String deviceCodeId = "";
-        	for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
-        		deviceCodeId = isDevice.getDeviceCodeId();        	
-			String maintainID=isMaintainService.getByCodeId(deviceCodeId).getId();
-			String maintainName = isMaintainService.getByCodeId(deviceCodeId).getName();
-			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,null,date,remark,maintainPersion,date,state);			
-            isMaintainRecService.save(isMaintainRec);
-        }catch(Exception exception){
-			map.put("result",exception.toString());
-			return map;
-		}
-		map.put("result","ok");
-        return map;
+        if(state.equals("true")){
+        	state="1";	//保养记录
+        	Map<String,Object> map=new HashMap<>();
+            try{
+            	String deviceCodeId = "";
+            	for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+            		deviceCodeId = isDevice.getDeviceCodeId();        	
+    			String maintainID=isMaintainService.getByCodeId(deviceCodeId).getId();    			
+    			//更新维保计划为维保记录
+    			isMaintainRecService.updateMaintainRec(maintainID, deviceName, remark, maintainPersion, date, state);
+            }catch(Exception exception){
+    			map.put("result",exception.toString());
+    			return map;
+    		}
+    		map.put("result","ok");
+            return map;
+		}else{
+        	state="0";	//保养计划
+        	Map<String,Object> map=new HashMap<>();
+            try{
+            	String deviceCodeId = "";
+            	for(IsDevice isDevice: isDeviceService.getDeviceByDeviceNo(deviceName))
+            		deviceCodeId = isDevice.getDeviceCodeId();        	
+    			String maintainID=isMaintainService.getByCodeId(deviceCodeId).getId();
+    			String maintainName = isMaintainService.getByCodeId(deviceCodeId).getName();
+    			IsMaintainRec isMaintainRec=new IsMaintainRec(maintainID,maintainName,deviceName,maintainPersion,date,remark,null,null,state);			
+                isMaintainRecService.save(isMaintainRec);
+            }catch(Exception exception){
+    			map.put("result",exception.toString());
+    			return map;
+    		}
+    		map.put("result","ok");
+            return map;
+		}                		
     }
 
 	/**
@@ -135,6 +148,29 @@ public class PageMaintainController extends BaseController{
 			map.put("finishCount",finishCount);
 			mapList.add(map);
 		}
+		return mapList;
+	}
+	
+	/**
+	 * 一个月内的维保情况统计
+	 * @return
+	 */
+	@RequestMapping(value = {"monthMaintain", ""})
+	public List<Map<String, Object>> monthMaintain() {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		int maintainPlanCount;
+		int finishCount;		
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");		
+		String date = sdf.format(today);
+		Map<String, Object> map = MapUtils.newHashMap();
+		System.out.println(date);		
+		finishCount = isMaintainRecService.getFinishCountMonth(date);
+		maintainPlanCount = isMaintainRecService.getMaintainPlanCountMonth(date) + finishCount;
+		System.out.println(date);
+		map.put("maintainPlanCount", maintainPlanCount);
+		map.put("finishCount", finishCount);
+		mapList.add(map);
 		return mapList;
 	}
 	
@@ -282,54 +318,46 @@ public class PageMaintainController extends BaseController{
 	 * [{"name":"xxx","deviceTotalNumber":100,"maintenanceDeviceNumber":45,"maintenanceFinishNumber":45,"score":"96"},{"name":"xxx","deviceTotalNumber":100,"maintenanceDeviceNumber":45,"maintenanceFinishNumber":45,"score":"96"}	 * @return
 	 */
 	@RequestMapping(value = "maintainDutyInfo")
-	public List<Map<String, Object>> maintainDutyInfo() {
-		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+	public List<Map<String, Object>> maintainDutyInfo() {	
 		List<Map<String, Object>> mapListAll = ListUtils.newArrayList();
-		List<Map<String, Object>> mapListPlan = ListUtils.newArrayList();
-		List<Map<String, Object>> mapListFinish = ListUtils.newArrayList();
 		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonAll()){
 			Map<String, Object> map = MapUtils.newHashMap();
 			String name = maintainPersonInfo.getMaintainPerson();
-			int deviceTotalNumber = maintainPersonInfo.getCountNum();
-			map.put("name", name);
+			int deviceTotalNumber = 0;
+			int maintenanceDeviceNumber = 0;
+			int maintenanceFinishNumber = 0;
+			map.put("name", name);						
+			MaintainPersonInfo maintainPersonInfoPlan = isMaintainRecService.getMaintainPersonPlanByName(name);			
+			if (maintainPersonInfoPlan != null) {
+				String namePlan = maintainPersonInfoPlan.getMaintainPerson();
+				maintenanceDeviceNumber = maintainPersonInfoPlan.getCountNum();
+				map.put("name", namePlan);
+				map.put("maintenanceDeviceNumber", maintenanceDeviceNumber);
+			}else {
+				String namePlan = name;
+				maintenanceDeviceNumber = 0;
+				map.put("name", namePlan);
+				map.put("maintenanceDeviceNumber", maintenanceDeviceNumber);
+			}			
+			MaintainPersonInfo maintainPersonInfoFinish = isMaintainRecService.getMaintainPersonFinishByName(name);
+			if (maintainPersonInfoFinish != null) {
+				String nameFinish = maintainPersonInfoFinish.getMaintainPerson();
+				maintenanceFinishNumber = maintainPersonInfoFinish.getCountNum();
+				map.put("name", nameFinish);
+				map.put("maintenanceFinishNumber", maintenanceFinishNumber);
+			}else {
+				String nameFinish = name;
+				maintenanceFinishNumber = 0;
+				map.put("name", nameFinish);
+				map.put("maintenanceFinishNumber", maintenanceFinishNumber);
+			}	
+			String jobNumber = selfDefEmployeeService.getEmployeeByName(name).getEmpCode();
+			deviceTotalNumber = maintenanceDeviceNumber + maintenanceFinishNumber;
+			map.put("jobNumber", jobNumber);
 			map.put("deviceTotalNumber", deviceTotalNumber);
 			mapListAll.add(map);
 		}
-		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonPlan()){
-			Map<String, Object> map = MapUtils.newHashMap();
-			String name = maintainPersonInfo.getMaintainPerson();
-			int maintenanceDeviceNumber = maintainPersonInfo.getCountNum();
-			map.put("name", name);
-			map.put("maintenanceDeviceNumber", maintenanceDeviceNumber);
-			mapListPlan.add(map);
-		}
-		for(MaintainPersonInfo maintainPersonInfo:isMaintainRecService.getMaintainPersonFinish()){
-			Map<String, Object> map = MapUtils.newHashMap();
-			String name = maintainPersonInfo.getMaintainPerson();
-			int maintenanceFinishNumber = maintainPersonInfo.getCountNum();
-			map.put("name", name);
-			map.put("maintenanceFinishNumber", maintenanceFinishNumber);
-			mapListFinish.add(map);
-		}
-		for(Map<String, Object> mapAll:mapListAll){
-			for(Map<String, Object> mapPlan:mapListPlan){
-				for(Map<String, Object> mapFinish:mapListFinish){
-					if (mapAll.get("name").equals(mapPlan.get("name")) &&
-							mapAll.get("name").equals(mapFinish.get("name")) &&
-							mapPlan.get("name").equals(mapFinish.get("name"))) {
-						Map<String, Object> map = MapUtils.newHashMap();
-						map.put("name", mapAll.get("name"));
-						map.put("jobNumber", selfDefEmployeeService.getEmployeeByName(String.valueOf(mapAll.get("name"))).getEmpCode());
-						map.put("deviceTotalNumber", mapAll.get("deviceTotalNumber"));
-						map.put("maintenanceDeviceNumber", mapPlan.get("maintenanceDeviceNumber"));
-						map.put("maintenanceFinishNumber", mapFinish.get("maintenanceFinishNumber"));
-						//map.put("score", (int)(Double.valueOf(String.valueOf(mapFinish.get("maintenanceFinishNumber")))/(Double.valueOf(String.valueOf(mapAll.get("deviceTotalNumber"))))*100));
-						mapList.add(map);
-					}
-				}
-			}
-		}
-		return mapList;
+		return mapListAll;
 	}
 	
 	/**
@@ -506,7 +534,6 @@ public class PageMaintainController extends BaseController{
 		}
 		return mapList;
 	}
-	
 	
 }
 		

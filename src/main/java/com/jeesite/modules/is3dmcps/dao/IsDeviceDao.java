@@ -20,7 +20,7 @@ import com.jeesite.modules.is3dmcps.entity.SpareParts;
 public interface IsDeviceDao extends CrudDao<IsDevice> {
     public int getAll();
     public List<IsDevice> getDeviceDetails();
-    public List<IsDevice> getDeviceById(String deviceId);
+    public IsDevice getDeviceById(String deviceId);
     public List<IsDevice> getDeviceByCodeId(String deviceCodeId);
     public Integer getPartCountByCodeId(String deviceCodeId);
     public List<IsDevice> getDeviceByCodeName(String deviceCodeName);
@@ -28,4 +28,7 @@ public interface IsDeviceDao extends CrudDao<IsDevice> {
     
     public List<Device> sparePartsList();
     public List<SpareParts> sparePartsCount();
+    
+    public int getDeviceRuningCount();
+    public int getDeviceFaultsCount();
 }

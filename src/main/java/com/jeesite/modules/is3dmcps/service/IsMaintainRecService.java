@@ -13,6 +13,7 @@ import com.jeesite.modules.is3dmcps.entity.IsMaintainRec;
 import com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo;
 import com.jeesite.modules.is3dmcps.dao.IsMaintainRecDao;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -135,5 +136,23 @@ public class IsMaintainRecService extends CrudService<IsMaintainRecDao, IsMainta
     public List<IsMaintainRec> filterMaintainRecPage(@Param("maintainName")String maintainName, @Param("deviceNo")String deviceNo, @Param("planPerson")String planPerson, @Param("status")String status, @Param("startTime")String startTime, @Param("endTime")String endTime, @Param("rangeStart")int rangeStart,  @Param("rangeEnd")int rangeEnd){
     	return this.dao.filterMaintainRecPage(maintainName, deviceNo, planPerson, status, startTime, endTime, rangeStart, rangeEnd);
     }
-        
+      
+    public MaintainPersonInfo getMaintainPersonPlanByName(@Param("planPerson")String planPerson){
+    	return this.dao.getMaintainPersonPlanByName(planPerson);
+    }
+    public MaintainPersonInfo getMaintainPersonFinishByName(@Param("maintainPerson")String maintainPerson){
+    	return this.dao.getMaintainPersonFinishByName(maintainPerson);
+    }
+    
+    public int updateMaintainRec(@Param("maintainId") String maintainId, @Param("deviceNo") String deviceNo,
+    		@Param("record") String record, @Param("maintainPerson") String maintainPerson, @Param("maintainTime") Date maintainTime, @Param("recStatus") String recStatus){
+    	return this.dao.updateMaintainRec(maintainId, deviceNo, record, maintainPerson, maintainTime, recStatus);
+    }
+    
+    public int getMaintainPlanCountMonth(String planDate){
+    	return this.dao.getMaintainPlanCountMonth(planDate);
+    }
+    public int getFinishCountMonth(String maintainTime){
+    	return this.dao.getFinishCountMonth(maintainTime);
+    }
 }

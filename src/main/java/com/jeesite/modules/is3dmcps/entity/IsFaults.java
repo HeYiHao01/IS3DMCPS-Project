@@ -162,5 +162,6 @@ public class IsFaults extends DataEntity<IsFaults> {
 		this.reason = reason;
 		this.knowledgeId = knowledgeId;
 		this.remarks = remark;
+		this.status = "0";
 	}
 }

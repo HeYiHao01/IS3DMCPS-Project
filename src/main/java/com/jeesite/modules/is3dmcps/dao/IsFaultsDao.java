@@ -38,4 +38,6 @@ public interface IsFaultsDao extends CrudDao<IsFaults> {
     public IsFaults faultsCountMonthly(@Param("deviceId") String deviceId, @Param("month") String month);
     
     public int updateIsFaults(@Param("deviceId") String deviceId, @Param("status") String status);
+    
+    public Integer getFaultsCountMonth(String faultsTime);
 }

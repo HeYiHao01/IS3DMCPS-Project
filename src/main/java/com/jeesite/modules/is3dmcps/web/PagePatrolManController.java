@@ -168,11 +168,10 @@ public class PagePatrolManController extends BaseController{
     public List<Map<String, Object>> needPatrol() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
 		for (IsPatrol isPatrol : isPatrolService.getNeedPatrol()) {
-			for (IsDevice isDevice : isDeviceService.getDeviceById(isPatrol.getDeviceId())) {
-				Map<String, Object> map = MapUtils.newHashMap();
-				map.put("deviceName", isDevice.getDeviceNo());
-				mapList.add(map);
-			}
+			IsDevice isDevice = isDeviceService.getDeviceById(isPatrol.getDeviceId());
+			Map<String, Object> map = MapUtils.newHashMap();
+			map.put("deviceName", isDevice.getDeviceNo());
+			mapList.add(map);			
 		}
     	return mapList;
     }

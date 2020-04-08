@@ -116,4 +116,8 @@ public class IsRepairRecService extends CrudService<IsRepairRecDao, IsRepairRec>
 	public int updateRepairRec(@Param("faultsId") String faultsId, @Param("results") String results, @Param("status") String status){
     	return this.dao.updateRepairRec(faultsId, results, status);
     }
+	
+	public Integer getRepairCountMonth(String repairTime){
+		return this.dao.getRepairCountMonth(repairTime);
+	}
 }

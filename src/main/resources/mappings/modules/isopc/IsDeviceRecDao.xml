@@ -12,6 +12,6 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getTimeById" parameterType="String" resultType="String">
-		select run_time from is_device_rec where device_id=#{device_id}
+		select run_time from is_device_rec where device_id=#{device_id} and ROWNUM = 1 order by END_TIME
 	</select>
 </mapper>

@@ -1,5 +1,10 @@
 eclipse.preferences.version=1
 encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
+encoding//src/main/resources/views/modules/is3dmcps=UTF-8
+encoding//src/main/resources/views/modules/is3dmcps/isDeviceStatusInfoForm.html=UTF-8
+encoding//src/main/resources/views/modules/is3dmcps/isDeviceStatusInfoList.html=UTF-8
+encoding//src/main/resources/views/modules/is3dmcps/isFaultsForm.html=UTF-8
+encoding//src/main/resources/views/modules/is3dmcps/isFaultsList.html=UTF-8
 encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8

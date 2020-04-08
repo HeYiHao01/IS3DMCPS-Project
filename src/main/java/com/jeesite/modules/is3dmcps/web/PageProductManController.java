@@ -68,19 +68,20 @@ public class PageProductManController extends BaseController{
      * Json:
      * {“deviceRuningCount”:210,”deviceFaultsCount”:4,”deviceRepairCount”:2}
      * 具体三个数量需计算出
+     * 删去维修数量
      */
     @RequestMapping(value = {"totalQuantity", ""})
     public Map<String, Object> totalQuantity() {
         Map<String, Object> map = MapUtils.newHashMap();
         int deviceRuningCount;
         int deviceFaultsCount;
-        int deviceRepairCount;
+        //int deviceRepairCount;
         deviceRuningCount=isDeviceService.getAll()-isFaultsService.getAllFaultsCount();
         deviceFaultsCount=isFaultsService.getAllFaultsCount();
-        deviceRepairCount=isMaintainRecService.need_maintain();
+        //deviceRepairCount=isMaintainRecService.need_maintain();
         map.put("deviceRuningCount",deviceRuningCount);
         map.put("deviceFaultsCount",deviceFaultsCount);
-        map.put("deviceRepairCount",deviceRepairCount);
+        //map.put("deviceRepairCount",deviceRepairCount);
         return map;
     }
 
@@ -88,99 +89,58 @@ public class PageProductManController extends BaseController{
      * 设备故障提醒；设备保养提醒；设备巡检提醒
      * @return
      * Json:
-     * [{“noticeType”:”Patrol”,”noticeTime”:”13:12”,”noticeDescribe”:”设备XX到达固定巡检时间”},
-     * {“noticeType”:”Maintain”,”noticeTime”:”14:12”,”noticeDescribe”:”设备XX需要更换零件”},
+     * [{“noticeType”:”Maintain”,”noticeTime”:”14:12”,”noticeDescribe”:”设备XX需要更换零件”},
      * {“noticeType”:”Fault”,”noticeTime”:”15:12”,”noticeDescribe”:”设备XX发现故障”}]
      * 这里的时间是消息内容应该是根据间隔时间和上次巡查的时间算出
+     * 
+     * 删去巡检提醒
+     * {"noticeDescribe":"巡检点Beconvey01到达固定巡检时间","noticeColor":"00B4EBFF","noticeTime":"2019-12-28 18:41:00","noticeTitle":"维保提醒"},
      */
     @RequestMapping(value = {"deviceAlert", ""})
     public List<Map<String, Object>> deviceAlert() {
         List<Map<String, Object>> mapList = ListUtils.newArrayList();
-        List<IsMaintainRec> maintains = isMaintainRecService.need_maintain_details();
-        List<IsPatrol> Patrols = isPatrolService.findList(new IsPatrol());
-        List<IsFaults> Faults = isFaultsService.getFaultsDetails();
-        List<IsPatrol> patrols=isPatrolService.getPatrol();
-        Date curTime=new Date();// new Date()为获取当前系统时间
-        if(Patrols != null && Patrols.size()>= 1){
-            Map<String, Object> map = MapUtils.newHashMap();
-            Date noticeTime;//应该巡检时间
+        List<IsMaintainRec> maintains = isMaintainRecService.need_maintain_details();        
+        List<IsFaults> Faults = isFaultsService.getFaultsDetails();        
+        //Date curTime=new Date();// new Date()为获取当前系统时间
+        int count = 0;
+        if(maintains != null && maintains.size()>= 1){            
+            String noticeTime;
             String noticeDescribe;
             String deviceName;
-            Date LastTime;//上次巡检时间
-            //设置日期格式
 
-            for(IsPatrol isPatrol:patrols){
-                LastTime=isPatrolRecService.getLastTime(isPatrol.getId());
-                System.out.println("lasttime"+LastTime);
-                deviceName=isPatrol.getName();
-                if(LastTime==null){
-                    Date useDate=curTime;
-                    noticeTime=CompareDate.getTargetDate(useDate,isPatrol.getInterval());
-                    System.out.println("noticeTime"+noticeTime);
-                }else{
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(LastTime);
-                    System.out.println("useDate"+LastTime);
-                    c.add(Calendar.DAY_OF_MONTH,isPatrol.getInterval());
-                    noticeTime=c.getTime();
-                    System.out.println("useDate"+noticeTime);
-                }
-
-                if(noticeTime.getTime()<=curTime.getTime()){
-                    noticeDescribe="巡检点"+deviceName+"到达固定巡检时间";
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    map.put("noticeTitle",NoticeItemTypeToTitle("Maintain"));
-                    map.put("noticeColor",NoticeItemTypeToColor("Maintain"));
-                    map.put("noticeTime",df.format(noticeTime));
-                    map.put("noticeDescribe",noticeDescribe);
-                    mapList.add(map);
-                }
+            for(IsMaintainRec isMaintainRec: maintains){                
+                deviceName=isMaintainRec.getDeviceNo();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                noticeTime=df.format(isMaintainRec.getPlanDate().getTime());
+                noticeDescribe = "设备" + deviceName + "需要维保";                
+                Map<String, Object> map = MapUtils.newHashMap();
+                map.put("priority", ++count);
+                map.put("noticeTitle",NoticeItemTypeToTitle("Maintain"));
+                map.put("noticeColor",NoticeItemTypeToColor("Maintain"));
+                map.put("noticeTime",noticeTime);
+                map.put("noticeDescribe",noticeDescribe);
+                mapList.add(map);
             }
-        }else{
+        }/*else{
             Map<String, Object> map = MapUtils.newHashMap();
+            map.put("priority", Integer.MAX_VALUE);
             map.put("noticeTitle",NoticeItemTypeToTitle("Maintain"));
             map.put("noticeColor",NoticeItemTypeToColor("Maintain"));
             map.put("noticeTime","");
             map.put("noticeDescribe","");
             mapList.add(map);
-        }
-        if( maintains!= null && maintains.size()>= 1){
-            Map<String, Object> map = MapUtils.newHashMap();
-            String noticeTime;
-            String noticeDescribe;
-            String deviceName;
-            for(IsMaintainRec isMaintainrec:maintains){
-                if(isMaintainrec.getPlanDate().getTime()<=curTime.getTime()){
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    noticeTime=df.format(isMaintainrec.getPlanDate());
-                    deviceName=isMaintainrec.getDeviceNo();
-                    noticeDescribe="设备"+deviceName+"需要更换零件";
-                    map.put("noticeTitle",NoticeItemTypeToTitle("Patrol"));
-                    map.put("noticeColor",NoticeItemTypeToColor("Patrol"));
-                    map.put("noticeTime",noticeTime);
-                    map.put("noticeDescribe",noticeDescribe);
-                    mapList.add(map);
-                }
-            }
-
-        }else{
-            Map<String, Object> map = MapUtils.newHashMap();
-            map.put("noticeTitle",NoticeItemTypeToTitle("Patrol"));
-            map.put("noticeColor",NoticeItemTypeToColor("Patrol"));
-            map.put("noticeTime","");
-            map.put("noticeDescribe","");
-            mapList.add(map);
-        }
-        if(Faults != null && Faults.size()>= 1){
-            Map<String, Object> map = MapUtils.newHashMap();
+        } */       
+        if(Faults != null && Faults.size()>= 1){            
             String noticeTime;
             String noticeDescribe;
             String deviceName;
             for( IsFaults faults:Faults){
+            	Map<String, Object> map = MapUtils.newHashMap();
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 noticeTime=df.format(faults.getFaultsTime().getTime());
-                deviceName=faults.getName();
+                deviceName=isDeviceService.getDeviceById(faults.getDeviceId()).getDeviceNo();
                 noticeDescribe="设备"+deviceName+"发现故障";
+                map.put("priority", ++count);
                 map.put("noticeTitle",NoticeItemTypeToTitle("Fault"));
                 map.put("noticeColor",NoticeItemTypeToColor("Fault"));
                 map.put("noticeTime",noticeTime);
@@ -188,14 +148,15 @@ public class PageProductManController extends BaseController{
                 mapList.add(map);
             }
 
-        }else{
+        }/*else{
             Map<String, Object> map = MapUtils.newHashMap();
+            map.put("priority", Integer.MAX_VALUE);
             map.put("noticeTitle",NoticeItemTypeToTitle("Fault"));
             map.put("noticeColor",NoticeItemTypeToColor("Fault"));
             map.put("noticeTime","");
             map.put("noticeDescribe","");
             mapList.add(map);
-        }
+        }*/
         return mapList;
     }
     /**
@@ -381,19 +342,21 @@ public class PageProductManController extends BaseController{
     	int length = wmsGdxdInService.getGdxdInLength();
     	for(WmsGdxdIn wmsGdxdIn:wmsGdxdInService.getByWoState("Doing", length)){
     		String batchNumber = wmsGdxdIn.getBatchNo();
-    		for(TwmsTransferlogg twmsTransferlogg:twmsTransferloggService.getByLotnum(batchNumber, count)){
-    			Map<String, Object> map = MapUtils.newHashMap();
+    		for(TwmsTransferlogg twmsTransferlogg:twmsTransferloggService.getByLotnum(batchNumber, count)){    			
     			VPLTNUM = twmsTransferlogg.getVpltnum();
     			taskNumber = String.valueOf(twmsTransferlogg.getLoggnum());
     			boxNo = twmsTransferlogg.getPltnum();
     			origin = CompareDate.formatCurrLoc(twmsTransferlogg.getSloc());
     			destination = CompareDate.formatCurrLoc(twmsTransferlogg.getDloc());
-    			map.put("VPLTNUM", VPLTNUM);
-    			map.put("taskNumber", taskNumber);
-    			map.put("boxNo", boxNo);
-    			map.put("origin", origin);
-    			map.put("destination", destination);
-    			mapList.add(map);
+    			if (origin.equals("OME01_5166") || origin.equals("OME01_5142")) {
+    				Map<String, Object> map = MapUtils.newHashMap();
+        			map.put("VPLTNUM", VPLTNUM);
+        			map.put("taskNumber", taskNumber);
+        			map.put("boxNo", boxNo);
+        			map.put("origin", origin);
+        			map.put("destination", destination);
+        			mapList.add(map);
+				}
     		}
     	}
     	return mapList;

@@ -15,7 +15,7 @@
 		select count(*) from is_maintain_rec where rec_status='0'
 	</select>
 	<select id="need_maintain_details" resultType="IsMaintainRec">
-		select * from is_maintain_rec where rec_status='0'
+		select * from is_maintain_rec where rec_status='0' order by plan_date desc
 	</select>
 	<select id="maintainList" resultType="IsMaintainRec">
 		select * from is_maintain_rec
@@ -24,17 +24,17 @@
 		select maintain_id,maintain_name from is_maintain,is_maintain_rec where is_maintain.id = is_maintain_rec.maintain_id and device_no = #{deviceNo} and rec_status = '0'
 	</select>
 	<select id="getMaintainPlanCount" resultType="java.lang.Integer" parameterType="String">
-		select count(rec_status) from is_maintain_rec where to_char(plan_date,'yyyy.mm.dd') = #{planDate}
+		select count(rec_status) from is_maintain_rec where rec_status='0' and to_char(plan_date,'yyyy.mm.dd') = #{planDate}
 	</select>
 	<select id="getFinishCount" resultType="java.lang.Integer" parameterType="String">
-		select count(rec_status) from is_maintain_rec where rec_status=1 and to_char(maintain_time,'yyyy.mm.dd') = #{maintainTime}
+		select count(rec_status) from is_maintain_rec where rec_status='1' and to_char(maintain_time,'yyyy.mm.dd') = #{maintainTime}
 	</select>
 	<select id="filterMaintainRec" resultType="IsMaintainRec">
 		select * from is_maintain_rec where (maintain_name = #{maintainName} or #{maintainName} is null) and (device_no = #{deviceNo} or #{deviceNo} is null) and (MAINTAIN_PERSON = #{planPerson} or #{planPerson} is null) and rec_status='0'
 	</select>
 	
 	<select id="getMaintainPersonAll" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
-		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec group by maintain_person
+		select plan_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec group by plan_person
 	</select>
 	<select id="getMaintainPersonPlan" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
 		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='0' group by maintain_person
@@ -47,5 +47,30 @@
 		select alias.* from
 		(select t.*,ROWNUM as rowno from is_maintain_rec t where (maintain_name = #{maintainName} or #{maintainName} is null) and (device_no = #{deviceNo} or #{deviceNo} is null) and (plan_person = #{planPerson} or #{planPerson} is null) and maintain_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd} and (status= #{status} or #{status} is null)) alias
 		where alias.rowno &gt;= #{rangeStart}
+	</select>
+	
+	<select id="getMaintainPersonPlanByName" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
+		select plan_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='0' and plan_person = #{planPerson} group by plan_person
+	</select>
+	<select id="getMaintainPersonFinishByName" resultType="com.jeesite.modules.is3dmcps.entity.MaintainPersonInfo">
+		select maintain_person as maintainPerson,count(rec_status) as countNum from is_maintain_rec where rec_status='1' and maintain_person = #{maintainPerson} group by maintain_person
+	</select>
+	
+	<update id="updateMaintainRec">
+		update is_maintain_rec 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="record">record=#{record},</if> 
+			<if test="maintainPerson!=null">maintain_person=#{maintainPerson},</if>
+			<if test="maintainTime!=null">maintain_time=#{maintainTime},</if> 
+  			<if test="recStatus!=null">rec_status=#{recStatus},</if>  			
+		</trim>
+		where maintain_id = #{maintainId} and device_no = #{deviceNo}
+	</update>
+	
+	<select id="getMaintainPlanCountMonth" resultType="java.lang.Integer" parameterType="String">
+		select count(rec_status) from is_maintain_rec where rec_status='0' and to_char(plan_date,'yyyy.mm') = #{planDate}
+	</select>
+	<select id="getFinishCountMonth" resultType="java.lang.Integer" parameterType="String">
+		select count(rec_status) from is_maintain_rec where rec_status='1' and to_char(maintain_time,'yyyy.mm') = #{maintainTime}
 	</select>
 </mapper>

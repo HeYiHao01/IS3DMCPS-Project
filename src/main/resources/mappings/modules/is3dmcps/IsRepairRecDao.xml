@@ -12,10 +12,10 @@
 		ORDER BY ${sqlMap.order.toSql()}
 	</select> -->
 	<select id="getRepairCount" resultType="java.lang.Integer" parameterType="String">
-		select count(results) from is_repair_rec where results='2' and to_char(repair_time,'yyyy.mm.dd') = #{repairTime}
+		select count(*) from is_repair_rec where (results='2' or results = '3') and to_char(repair_time,'yyyy.mm') = #{repairTime}
 	</select>
 	<select id="getRepairResult" resultType="java.lang.String" parameterType="String">
-		select results from is_repair_rec where faults_id=#{faultsId} and rownum=1 order by repair_time
+		select results from is_repair_rec where faults_id=#{faultsId} and rownum=1 order by repair_time desc
 	</select>
 	<select id="repairList" resultType="IsRepairRec">
 		select * from is_repair_rec
@@ -46,4 +46,8 @@
 		</trim>
 		where faults_id = #{faultsId}
 	</update>
+	
+	<select id="getRepairCountMonth" resultType="java.lang.Integer" parameterType="String">
+		select count(*) from is_repair_rec where (results='2' or results = '3') and to_char(repair_time,'yyyy.mm') = #{repairTime}
+	</select>
 </mapper>

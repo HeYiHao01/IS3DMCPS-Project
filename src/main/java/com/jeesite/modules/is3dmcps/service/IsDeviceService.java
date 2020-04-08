@@ -90,7 +90,7 @@ public class IsDeviceService extends CrudService<IsDeviceDao, IsDevice> {
 	/**
 	 * 根据ID获取device
 	 */
-	public List<IsDevice> getDeviceById(String deviceId) {
+	public IsDevice getDeviceById(String deviceId) {
 		return this.dao.getDeviceById(deviceId);
 	}
 	
@@ -129,4 +129,11 @@ public class IsDeviceService extends CrudService<IsDeviceDao, IsDevice> {
 	public List<SpareParts> sparePartsCount(){
 		return this.dao.sparePartsCount();
 	}
+	
+	public int getDeviceRuningCount(){
+		return this.dao.getDeviceRuningCount();
+	}
+    public int getDeviceFaultsCount(){
+    	return this.dao.getDeviceFaultsCount();
+    }
 }

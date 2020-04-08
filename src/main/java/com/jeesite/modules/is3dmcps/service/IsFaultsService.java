@@ -156,4 +156,8 @@ public class IsFaultsService extends CrudService<IsFaultsDao, IsFaults> {
     public Object updateIsFaults(@Param("deviceId") String deviceId, @Param("status") String status){
     	return this.dao.updateIsFaults(deviceId, status);
     }
+    
+    public Integer getFaultsCountMonth(String faultsTime){
+    	return this.dao.getFaultsCountMonth(faultsTime);
+    }
 }

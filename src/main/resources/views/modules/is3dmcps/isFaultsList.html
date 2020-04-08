@@ -79,14 +79,14 @@ $('#dataGrid').dataGrid({
 		{header:'${text('故障名称')}', name:'name', index:'a.name', width:150, align:"left", frozen:true, formatter: function(val, obj, row, act){
 			return '<a href="${ctx}/is3dmcps/isFaults/form?id='+row.id+'" class="btnList" data-title="${text('编辑设备故障')}">'+(val||row.id)+'</a>';
 		}},
-		{header:'${text('设备名称')}', name:'deviceName', index:'a.device_name', width:150, align:"left"},
-		{header:'${text('设备编号')}', name:'deviceNo', index:'a.device_no', width:150, align:"left"},
+		{header:'${text('设备名称')}', name:'deviceName', index:'a.device_name', width:150, align:"left"},		
 		{header:'${text('故障代码')}', name:'faultsCode', index:'a.faults_code', width:150, align:"left"},
 		{header:'${text('故障时间')}', name:'faultsTime', index:'a.faults_time', width:150, align:"center"},
 		{header:'${text('报修人')}', name:'operator', index:'a.operator', width:150, align:"center"},
 		{header:'${text('状态')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('is_faults_status')}, val, '${text('未知')}', true);
 		}},
+		{header:'${text('设备状态')}', name:'remarks', index:'a.remarks', width:150, align:"left"},
 		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('is3dmcps:isFaults:edit')){ %>

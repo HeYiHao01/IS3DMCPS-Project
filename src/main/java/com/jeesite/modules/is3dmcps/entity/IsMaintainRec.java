@@ -159,7 +159,7 @@ public class IsMaintainRec extends DataEntity<IsMaintainRec> {
 		this.deviceNo = deviceNo;
 		this.planPerson = planPerson;
 		this.planDate = planDate;
-		this.record = record;
+		this.remarks = record;
 		this.maintainPerson = maintainPerson;
 		this.maintainTime = maintainTime;
 		this.recStatus = recStatus;

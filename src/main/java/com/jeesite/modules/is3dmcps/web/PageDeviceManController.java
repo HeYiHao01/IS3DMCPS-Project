@@ -123,15 +123,15 @@ public class PageDeviceManController extends BaseController{
             deviceName=isDevice.getDeviceNo();
             deviceCategoryName=isDevice.getDeviceCodeName();
             String device_code_id=isDevice.getDeviceCodeId();
-            String assetsNo = "";
+            String assetsNo = isDevice.getAssetsNo();
             IsDeviceCode isDeviceCode=isDeviceCodeService.get(device_code_id);
             if(isDeviceCode!=null){
                 deviceTypeName=isDeviceCode.getModel();
             }else{
                 deviceTypeName="";
             }
-            if (isDevice.getAssetsNo() != null) {
-            	assetsNo = isDevice.getAssetsNo();
+            if (assetsNo == null) {
+            	assetsNo = "";
 			}
             /*runState=isDevice.getDeviceStatus();
             System.out.println(runState);

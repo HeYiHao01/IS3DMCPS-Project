@@ -10,11 +10,13 @@ import java.util.Map;
 
 import com.jeesite.common.collect.MapUtils;
 import com.jeesite.modules.is3dmcps.entity.IsDevice;
+import com.jeesite.modules.is3dmcps.entity.IsDeviceStatusInfo;
 import com.jeesite.modules.is3dmcps.entity.IsFaults;
 import com.jeesite.modules.is3dmcps.entity.IsFaultsInfo;
 import com.jeesite.modules.is3dmcps.entity.IsKnowledge;
 import com.jeesite.modules.is3dmcps.entity.IsRepairRec;
 import com.jeesite.modules.is3dmcps.service.IsDeviceService;
+import com.jeesite.modules.is3dmcps.service.IsDeviceStatusInfoService;
 import com.jeesite.modules.is3dmcps.service.IsFaultsInfoService;
 import com.jeesite.modules.is3dmcps.service.IsFaultsService;
 import com.jeesite.modules.is3dmcps.service.IsKnowledgeService;
@@ -50,6 +52,8 @@ public class PageFaultRepairController extends BaseController{
     IsKnowledgeService isKnowledgeService;
     @Autowired
     IsDeviceService isDeviceService;
+    @Autowired
+    IsDeviceStatusInfoService isDeviceStatusInfoService;
     /**
      * 故障及维修的提交
      * @return
@@ -134,7 +138,7 @@ public class PageFaultRepairController extends BaseController{
         if(state==null){
         	String recommendedSolution=isKnowledgeService.getKnowledgeByTitle(request.getParameter("recommendedSolution").toString().trim()).getId();
         	for(IsDevice isDevice:isDeviceService.getDeviceByDeviceNo(deviceName)){
-	            IsFaults isFaults=new IsFaults(deviceName,isDevice.getId(),deviceName,null,date,persion,faultResult,recommendedSolution,remark);
+	            IsFaults isFaults=new IsFaults(deviceName+"故障",isDevice.getId(),isDevice.getDeviceCodeName(),null,date,persion,faultResult,recommendedSolution,remark);
 	            try{
 	                isFaultsService.save(isFaults);
 	            }catch(Exception exception){
@@ -153,7 +157,7 @@ public class PageFaultRepairController extends BaseController{
     			IsFaults isFaults = isFaultsService.getFaultsStateDetails(deviceId);
     			if (isFaults != null) {
     				String faultID = isFaults.getId();
-    				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);
+    				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);    				
     				try {
     					isRepairRecService.save(isRepairRec);
     				} catch (Exception exception) {
@@ -176,6 +180,7 @@ public class PageFaultRepairController extends BaseController{
     			if (isFaults != null) {
     				String faultID = isFaults.getId();
     				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);
+    				isRepairRec.setStatus("3");
     				try {
     					isRepairRecService.save(isRepairRec);
     				} catch (Exception exception) {
@@ -219,17 +224,38 @@ public class PageFaultRepairController extends BaseController{
     }
     
     /**
+     * 一个月内故障情况
+     * @return
+     */
+    @RequestMapping(value = {"monthFault", ""})
+    public List<Map<String, Object>> monthFault() {
+        List<Map<String, Object>> mapList = ListUtils.newArrayList();        
+        //SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        int faultCount;
+        int repairedCount;
+        Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");		
+		String date = sdf.format(today);
+		Map<String, Object> map = MapUtils.newHashMap();		
+		repairedCount = isRepairRecService.getRepairCountMonth(date);
+		faultCount = isFaultsService.getFaultsCountMonth(date) + repairedCount;
+		map.put("faultCount", faultCount);
+		map.put("repairedCount", repairedCount);
+		mapList.add(map);        
+        return mapList;
+    }
+    
+    /**
      * 故障需要维修的设备
      */
     @RequestMapping(value = {"needRepair", ""})
     public List<Map<String, Object>> needRepair() {
     	List<Map<String, Object>> mapList = ListUtils.newArrayList();
     	for(IsFaults isFaults:isFaultsService.getNeedRepair()){
-    		for(IsDevice isDevice:isDeviceService.getDeviceById(isFaults.getDeviceId())){
-	    		Map<String, Object> map = MapUtils.newHashMap();
-	    		map.put("deviceName", isDevice.getDeviceNo());
-	    		mapList.add(map);
-    		}
+			IsDevice isDevice = isDeviceService.getDeviceById(isFaults.getDeviceId());
+			Map<String, Object> map = MapUtils.newHashMap();
+			map.put("deviceName", isDevice.getDeviceNo());
+			mapList.add(map);   		
     	}
     	return mapList;
     }
@@ -246,10 +272,9 @@ public class PageFaultRepairController extends BaseController{
 		for(IsFaults isFaults:isFaultsService.faultsList()){
 			Map<String, Object> map = MapUtils.newHashMap();
 			map.put("faultName", isFaults.getName());
-			for(IsDevice isDevice:isDeviceService.getDeviceById(isFaults.getDeviceId())){
-				map.put("deviceName", isDevice.getDeviceCodeName());
-				map.put("deviceNumber", isDevice.getDeviceNo());
-			}
+			IsDevice isDevice = isDeviceService.getDeviceById(isFaults.getDeviceId());
+			map.put("deviceName", isDevice.getDeviceCodeName());
+			map.put("deviceNumber", isDevice.getDeviceNo());		
 			map.put("faultCode", isFaults.getFaultsCode());
 			map.put("faultTime", String.valueOf(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(isFaults.getFaultsTime())));
 			map.put("repairsPersonnel", isFaults.getOperator());
@@ -361,7 +386,7 @@ public class PageFaultRepairController extends BaseController{
     	String faultName = request.getParameter("faultName");
     	String deviceName = request.getParameter("deviceName");
     	String servicePersonnel = request.getParameter("servicePersonnel");    	
-    	String status = request.getParameter("status") ;
+    	String status = request.getParameter("status");
     	if (status != null) {
     		switch (status) {
         	case "新故障":
@@ -399,8 +424,22 @@ public class PageFaultRepairController extends BaseController{
         		map.put("deviceNumber", isFaults.getDeviceId());
         		map.put("faultCode", isFaults.getFaultsCode());
         		map.put("faultTime", CompareDate.simplifyDate(isFaults.getFaultsTime()));
-        		map.put("servicePersonnel", isFaults.getOperator());        		
-        		map.put("remark", isFaults.getRemarks());
+        		map.put("servicePersonnel", isFaults.getOperator());          		
+        		remark = isFaults.getRemarks();
+        		StringBuilder result = null;
+        		if (remark != null && !remark.equals("") && remark.startsWith("{") 
+        				&& remark.endsWith("}")) {
+        			if (!remark.contains("\"")) {
+        				result = deviceStatusString(remark, isFaults.getDeviceName());
+					}else {
+						result = deviceStatusJson(remark, isFaults.getDeviceName());
+					}
+				}else if (remark != null) {
+					result = new StringBuilder(remark);
+				}else {
+					result = new StringBuilder("unknown");
+				}        		         		
+        		map.put("remark", result);
         		switch (isFaults.getStatus()) {
         		case "0":
     				map.put("status","新故障");
@@ -474,6 +513,9 @@ public class PageFaultRepairController extends BaseController{
     			case "2":
     				status.add("维修完成");
     				break;
+    			case "3":
+    				status.add("维修中");
+    				break;
     			default:
     				break;
     			}
@@ -524,7 +566,10 @@ public class PageFaultRepairController extends BaseController{
     			break;
     		case "维修完成":
     			status = "2";
-    			break;		
+    			break;
+    		case "维修中":
+				status = "3";
+				break;
     		default:
     			status = null;
     			break;
@@ -593,6 +638,9 @@ public class PageFaultRepairController extends BaseController{
     			case "2":
     				map.put("status","维修完成");
     				break;
+    			case "3":
+    				map.put("status","维修中");
+    				break;
     			default:
     				map.put("status","statusError");
     				break;
@@ -629,6 +677,65 @@ public class PageFaultRepairController extends BaseController{
     		mapList.add(map);
     	}
     	return mapList;
+	}
+    
+    /**
+     * 处理设备状态信息的工具方法
+     */
+    public StringBuilder deviceStatusString(String remark, String deviceName) {
+		//{CarPlt:2,Car_RunState:2,CmdCode:0,Err02:0,Err01:1,Err04:1,Target_X:0,
+    	//    Err03:1,Target_Y:0,Err05:0,MoveErr_Counts:0,Car_Angle:90,Bat_Current:120,
+		//    	TurnErr_Counts:0,Move_Mileage:0,Car_Row:11,JobState:0,Car_Layer:2,
+		//    	UpDown_Counts:0,Car_Column:31,Car_ID:1,Turn_Counts:0,Car_WorkState:1,
+		//    	Target_Distance:0,Car_Zone:0,Bat_Voltage:5400,BoxCode:0,UpDownErr_Counts:0,
+		//    	Err_Counts:0,Car_Mode:2,JobID:0,Car_Speed:0}
+    	StringBuilder result = new StringBuilder();
+    	result.append("{");
+    	String s = remark.replaceAll("\\{", "").replaceAll("\\}", "");    	    	
+    	String str[] = s.split(",");
+    	for(String dic : str){
+    		String key = dic.substring(0, dic.indexOf(":"));
+    		String val = dic.substring(dic.indexOf(":")+1);
+    		System.err.println(key+"---"+val);
+    		IsDeviceStatusInfo isDeviceStatusInfo = null;
+    		isDeviceStatusInfo = isDeviceStatusInfoService.getByEnDevice(key, deviceName);
+    		if (isDeviceStatusInfo != null) {
+    			key = isDeviceStatusInfo.getZhField();
+			} 
+    		result.append(key+":"+val+",");
+    	}
+    	result.deleteCharAt(result.length()-1).append("}");
+    	System.err.println(result);
+    	return result;
+	}
+    
+    public StringBuilder deviceStatusJson(String remark, String deviceName) {
+    	// 小车：{"location_X":0.0,"location_Z":0.0,"location_Y":0.0,"TargetLocalPosition_X":0.0,
+		//    	"TargetLocalPosition_Y":0.0,"Car_ID":6,"Car_Id":"6","Car_Row":11,"Car_Column":34,
+		//    	"Car_Layer":3,"Car_Angle":90,"CarPlt":2,"Car_RunState":2,"Car_WorkState":1,
+		//    	"Bat_Current":120,"Bat_Voltage":5400,"Target_X":0,"Target_Y":0,"Target_Distance":0.0,
+		//    	"Car_Speed":0.0,"BoxCode":0.0,"CmdCode":0,"JobState":0,"JobID":0,"Car_Mode":2,
+		//    	"Err01":0,"Err02":0,"Err03":0,"Err04":0,"Err05":0}
+    	// 注：key有双引号
+
+    	StringBuilder result = new StringBuilder();
+    	result.append("{");
+    	String s = remark.replaceAll("\\{", "").replaceAll("\\}", "").replaceAll("\"", "");    	    	
+    	String str[] = s.split(",");
+    	for(String dic : str){
+    		String key = dic.substring(0, dic.indexOf(":"));
+    		String val = dic.substring(dic.indexOf(":")+1);
+    		System.err.println(key+"---"+val);
+    		IsDeviceStatusInfo isDeviceStatusInfo = null;
+    		isDeviceStatusInfo = isDeviceStatusInfoService.getByEnDevice(key, deviceName);
+    		if (isDeviceStatusInfo != null) {
+    			key = isDeviceStatusInfo.getZhField();
+			} 
+    		result.append(key+":"+val+",");
+    	}
+    	result.deleteCharAt(result.length()-1).append("}");
+    	System.err.println(result);
+    	return result;
 	}
 }
 		

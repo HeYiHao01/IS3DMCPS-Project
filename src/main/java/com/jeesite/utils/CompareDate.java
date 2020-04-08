@@ -16,11 +16,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.jeesite.common.codec.Md5Utils;
 import com.jeesite.common.collect.ListUtils;
 import com.jeesite.common.collect.MapUtils;
+import com.jeesite.modules.is3dmcps.entity.IsDeviceStatusInfo;
+import com.jeesite.modules.is3dmcps.service.IsDeviceStatusInfoService;
+import com.jeesite.modules.is3dmcps.service.IsFaultsService;
 
-public class CompareDate {
+public class CompareDate {		
+	
     public static int compare_date(String DATE1, String DATE2) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         try {
@@ -245,7 +251,8 @@ public class CompareDate {
 //		System.out.println(convertMD5(md5Str1));
 //		System.out.println(convertMD5(md5Str2));
 //		System.out.println(convertMD5(md5Str3));
-		System.out.println(formatDate("2019/12/31", false));
+//		System.out.println(formatDate("2019/12/31", false));
+		
 	}
 	
 	/**
@@ -518,5 +525,5 @@ public class CompareDate {
 			}
 		}
 		return mapList;
-	}
+	}    
 }

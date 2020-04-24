@@ -27,7 +27,7 @@
 		select count(distinct device_id) from is_faults where ID not in (select faults_id from is_repair_rec where results='2' or results='3')
 	</select>
 	<select id="getFaultsStateDetails" resultType="IsFaults" parameterType="String">
-		select * from is_faults where device_id=#{deviceId} and rownum=1 order by faults_time desc
+		select * from (select * from is_faults where device_id=#{deviceId} order by faults_time desc) where rownum = 1
 	</select>
 	<select id="getFaultsByName" resultType="IsFaults" parameterType="String">
 		select * from is_faults where name = #{name}

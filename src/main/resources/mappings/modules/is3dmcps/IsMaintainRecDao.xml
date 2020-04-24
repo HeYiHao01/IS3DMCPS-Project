@@ -45,7 +45,7 @@
 	
 	<select id="filterMaintainRecPage" resultType="IsMaintainRec">
 		select alias.* from
-		(select t.*,ROWNUM as rowno from is_maintain_rec t where (maintain_name = #{maintainName} or #{maintainName} is null) and (device_no = #{deviceNo} or #{deviceNo} is null) and (plan_person = #{planPerson} or #{planPerson} is null) and maintain_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd} and (status= #{status} or #{status} is null)) alias
+		(select t.*,ROWNUM as rowno from is_maintain_rec t where (maintain_name = #{maintainName} or #{maintainName} is null) and (device_no = #{deviceNo} or #{deviceNo} is null) and (plan_person = #{planPerson} or #{planPerson} is null) and maintain_time BETWEEN TO_DATE(#{startTime},'yyyy.MM.dd') and TO_DATE(#{endTime},'yyyy.MM.dd') and ROWNUM &lt; #{rangeEnd} and (rec_status= #{status} or #{status} is null)) alias
 		where alias.rowno &gt;= #{rangeStart}
 	</select>
 	

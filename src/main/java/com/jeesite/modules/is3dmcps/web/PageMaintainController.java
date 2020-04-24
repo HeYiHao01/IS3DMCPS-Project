@@ -459,9 +459,9 @@ public class PageMaintainController extends BaseController{
 			maintenanceName.add(isMaintainRec.getMaintainName());
 			deviceNumber.add(isMaintainRec.getDeviceNo());
 			maintenancePersonnel.add(isMaintainRec.getPlanPerson());
-			if (isMaintainRec.getStatus().equals("0")) {
+			if (isMaintainRec.getRecStatus().equals("0")) {
 				status.add("维保计划");
-			}else if (isMaintainRec.getStatus().equals("1")) {
+			}else if (isMaintainRec.getRecStatus().equals("1")) {
 				status.add("维保记录");
 			}else {
 				status.add("Unknown");
@@ -510,7 +510,7 @@ public class PageMaintainController extends BaseController{
 			String plannedMaintenanceTime = CompareDate.simplifyDate(isMaintainRec.getPlanDate());
 			String maintenancePersonnel = isMaintainRec.getMaintainPerson();
 			String maintenanceTime = CompareDate.simplifyDate(isMaintainRec.getMaintainTime());
-			String status1 = isMaintainRec.getStatus().equals("0")?"保养计划":"保养记录";
+			String status1 = isMaintainRec.getRecStatus().equals("0")?"保养计划":"保养记录";
 			String remarks = isMaintainRec.getRemarks();
 			String record = isMaintainRec.getRecord();
 			map.put("maintenanceName", maintenanceName);

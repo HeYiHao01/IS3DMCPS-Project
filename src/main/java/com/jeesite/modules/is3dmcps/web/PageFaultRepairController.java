@@ -74,7 +74,11 @@ public class PageFaultRepairController extends BaseController{
     		}else {
     			String s = isRepairRecService.getRepairResult(isFaults.getId());
     			if (s == null || s.equals("")) {
-    				state = "None";
+    				if (isFaults.getStatus().equals("0")) {
+						state = "Fault";
+					}else {
+						state = "Normal";	
+					}
 				}else if (s.equals("2") || s.equals("3")) {
     				state = "Normal";				
     			}else if(s.equals("0") || s.equals("4")) {
@@ -93,12 +97,17 @@ public class PageFaultRepairController extends BaseController{
     			}
     			map.put("state",state);
                 map.put("infoJsonStr",info);
-    		}else if (state.equals("Fault")) {						
-    			for(IsKnowledge isKnowledge:isKnowledgeService.getKnowledgeById(isFaults.getKnowledgeId())){
-    				faultId = isFaults.getId();
-    				faultResult = isFaults.getReason();
-    				infoJsonStr.put("faultID", faultId);
-    				infoJsonStr.put("faultResult", faultResult);
+    		}else if (state.equals("Fault")) {	
+    			faultId = isFaults.getId();
+    			faultResult = isFaults.getReason();
+				infoJsonStr.put("faultID", faultId);
+				if (faultResult != null) {
+					infoJsonStr.put("faultResult", faultResult);
+				}else {
+					infoJsonStr.put("faultResult", "none");
+				}
+				
+    			for(IsKnowledge isKnowledge:isKnowledgeService.getKnowledgeById(isFaults.getKnowledgeId())){    				
     				infoJsonStr.put("solutionID", isKnowledge.getId());
     				infoJsonStr.put("recommendedSolution", isKnowledge.getTitle());
     				infoJsonStr.put("recommendedSolutionContent", isKnowledge.getContent());

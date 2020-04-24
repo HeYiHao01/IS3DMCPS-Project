@@ -15,7 +15,7 @@
 		select count(*) from is_repair_rec where (results='2' or results = '3') and to_char(repair_time,'yyyy.mm') = #{repairTime}
 	</select>
 	<select id="getRepairResult" resultType="java.lang.String" parameterType="String">
-		select results from is_repair_rec where faults_id=#{faultsId} and rownum=1 order by repair_time desc
+		select * from (select results from is_repair_rec where faults_id=#{faultsId} order by repair_time desc) where rownum=1
 	</select>
 	<select id="repairList" resultType="IsRepairRec">
 		select * from is_repair_rec

@@ -89,7 +89,7 @@ public class IsRepairRecController extends BaseController {
 		model.addAttribute("isRepairRec", isRepairRec);
 		//故障选择
 		IsFaults isFaults = new IsFaults();
-		isFaults.setStatus("0");
+		//isFaults.setStatus("0");
 		List<IsFaults> isFaultsList =isFaultsService.findList(isFaults);
 		model.addAttribute("isFaultsList", isFaultsList);
 		return "modules/is3dmcps/isRepairRecForm";
@@ -107,12 +107,12 @@ public class IsRepairRecController extends BaseController {
 		}
 		if("0".equals(isRepairRec.getResults())) {
 			IsFaults isFaults =isFaultsService.get(isRepairRec.getFaultsId());
-			isFaults.setStatus("1");
+			isFaults.setStatus("2");
 			isFaultsService.save(isFaults);
 		}
 		if("2".equals(isRepairRec.getResults())) {
 			IsFaults isFaults =isFaultsService.get(isRepairRec.getFaultsId());
-			isFaults.setStatus("2");
+			isFaults.setStatus("3");
 			isFaultsService.save(isFaults);
 			IsDevice isDevice =isDeviceService.get(isFaults.getDeviceId());
 			isDevice.setDeviceStatus("1");

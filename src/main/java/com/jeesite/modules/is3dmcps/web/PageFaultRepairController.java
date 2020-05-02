@@ -189,7 +189,7 @@ public class PageFaultRepairController extends BaseController{
     			if (isFaults != null) {
     				String faultID = isFaults.getId();
     				IsRepairRec isRepairRec = new IsRepairRec(faultID, faultResult, content, state, persion, date);
-    				isRepairRec.setStatus("3");
+    				isRepairRec.setStatus("3");  //状态值有矛盾，此处增加一个字典键值表"维修中"
     				try {
     					isRepairRecService.save(isRepairRec);
     				} catch (Exception exception) {

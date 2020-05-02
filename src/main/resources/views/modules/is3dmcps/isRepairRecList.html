@@ -16,33 +16,42 @@
 			<#form:form id="searchForm" model="${isRepairRec}" action="${ctx}/is3dmcps/isRepairRec/listData" method="post" class="form-inline hide"
 					data-page-no="${parameter.pageNo}" data-page-size="${parameter.pageSize}" data-order-by="${parameter.orderBy}">
 				<div class="form-group">
-					<label class="control-label">${text('故障名称')}：</label>
+					<label class="control-label">${text('故障ID')}：</label>
 					<div class="control-inline">
-						<#form:input path="faultsName" maxlength="64" class="form-control width-120"/>
+						<#form:input path="faultId" maxlength="64" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('维修结果')}：</label>
-					<div class="control-inline width-120">
-						<#form:select path="results" dictType="is_repair_results" blankOption="true" class="form-control"/>
+					<div class="control-inline">
+						<#form:input path="results" maxlength="200" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('维修人')}：</label>
 					<div class="control-inline width-120" >
 						<#form:treeselect id="operator" title="${text('用户选择')}"
-							path="" labelPath="operator" 
+							path="operator" labelPath="" 
 							url="${ctx}/sys/office/treeData?isLoadUser=true" allowClear="true"/>
 					</div>
 				</div>
 				<div class="form-group">
 					<label class="control-label">${text('维修时间')}：</label>
 					<div class="control-inline">
-						<#form:input path="repairTime_gte" readonly="true" maxlength="20" class="form-control Wdate-datetime"
-							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false,onpicked:function(){repairTime_lte.click()}});"/>
-						&nbsp;--&nbsp;
-						<#form:input path="repairTime_lte" readonly="true" maxlength="20" class="form-control Wdate-datetime"
+						<#form:input path="repairTime" readonly="true" maxlength="20" class="form-control Wdate-datetime"
 							dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('状态')}：</label>
+					<div class="control-inline width-120">
+						<#form:select path="status" dictType="sys_search_status" blankOption="true" class="form-control"/>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label">${text('故障名称')}：</label>
+					<div class="control-inline">
+						<#form:input path="faultsName" maxlength="60" class="form-control width-120"/>
 					</div>
 				</div>
 				<div class="form-group">
@@ -61,19 +70,22 @@
 $('#dataGrid').dataGrid({
 	searchForm: $("#searchForm"),
 	columnModel: [
-		{header:'${text('故障名称')}', name:'faultsName', index:'a.faults_name', width:150, align:"left", frozen:true, },
-		{header:'${text('维修结果')}', name:'results', index:'a.results', width:150, align:"center", formatter: function(val, obj, row, act){
+		{header:'${text('故障名称')}', name:'faultsName', index:'a.faults_name', width:150, align:"left"},
+		{header:'${text('维修结果')}', name:'results', index:'a.results', width:150, align:"left", formatter: function(val, obj, row, act){
 			return js.getDictLabel(${@DictUtils.getDictListJson('is_repair_results')}, val, '${text('未知')}', true);
 		}},
 		{header:'${text('维修人')}', name:'operator', index:'a.operator', width:150, align:"center"},
 		{header:'${text('维修时间')}', name:'repairTime', index:'a.repair_time', width:150, align:"center"},
+		{header:'${text('状态')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
+			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text('未知')}', true);
+		}},		
 		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
 			<% if(hasPermi('is3dmcps:isRepairRec:edit')){ %>
 				if(row.results=="1"){ 
 					actions.push('<a href="${ctx}/is3dmcps/isRepairRec/form?id='+row.id+'" class="btnList" title="${text('编辑维修记录')}"><i class="fa fa-pencil"></i></a>&nbsp;');
 				}
-				//				actions.push('<a href="${ctx}/is3dmcps/isRepairRec/delete?id='+row.id+'" class="btnList" title="${text('删除维修记录')}" data-confirm="${text('确认要删除该维修记录吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
+			//				actions.push('<a href="${ctx}/is3dmcps/isRepairRec/delete?id='+row.id+'" class="btnList" title="${text('删除维修记录')}" data-confirm="${text('确认要删除该维修记录吗？')}"><i class="fa fa-trash-o"></i></a>&nbsp;');
 			<% } %>
 			return actions.join('');
 		}}

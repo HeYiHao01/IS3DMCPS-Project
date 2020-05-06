@@ -117,6 +117,7 @@ public class IsRepairRecController extends BaseController {
 			IsDevice isDevice =isDeviceService.get(isFaults.getDeviceId());
 			isDevice.setDeviceStatus("1");
 			isDeviceService.save(isDevice);
+			isRepairRec.setStatus("2");
 		}
 		if("3".equals(isRepairRec.getResults())) {
 			IsFaults isFaults =isFaultsService.get(isRepairRec.getFaultsId());
@@ -125,6 +126,7 @@ public class IsRepairRecController extends BaseController {
 			IsDevice isDevice =isDeviceService.get(isFaults.getDeviceId());
 			isDevice.setDeviceStatus("0");
 			isDeviceService.save(isDevice);
+			isRepairRec.setStatus("2");
 		}
 		if("4".equals(isRepairRec.getResults())) {
 			IsFaults isFaults =isFaultsService.get(isRepairRec.getFaultsId());
@@ -143,6 +145,7 @@ public class IsRepairRecController extends BaseController {
 			isDeviceUse.setOperator(UserUtils.getUser().getUserName());
 			isDeviceUse.setOperateTime(new Date());
 			isDeviceUseService.save(isDeviceUse);
+			isRepairRec.setStatus("1");
 		}
 		isRepairRecService.save(isRepairRec);
 		return renderResult(Global.TRUE, text("保存维修记录成功！"));

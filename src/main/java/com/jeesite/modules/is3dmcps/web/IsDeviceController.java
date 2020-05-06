@@ -295,4 +295,57 @@ public class IsDeviceController extends BaseController {
 		}	
 		return mapList;
 	}	
+	
+	@RequiresPermissions("is3dmcps:isDevice:view")
+	@RequestMapping(value = "deviceNoTreeData")
+	@ResponseBody
+	public List<Map<String, Object>> deviceNoTreeData(String excludeCode, String isShowCode) {
+		List<Map<String, Object>> mapList = ListUtils.newArrayList();
+		IsDeviceCode isDeviceCode=new IsDeviceCode();
+		isDeviceCode.setType("0");
+		List<IsDeviceCode> isDeviceCodelist =isDeviceCodeService.findList(isDeviceCode);
+		for (int i=0; i<isDeviceCodelist.size(); i++){
+			IsDeviceCode c =isDeviceCodelist.get(i);
+			// 过滤非正常的数据
+			if (!IsDeviceCode.STATUS_NORMAL.equals(c.getStatus())){
+				continue;
+			}
+			// 过滤被排除的编码（包括所有子级）
+			if (StringUtils.isNotBlank(excludeCode)){
+				if (c.getId().equals(excludeCode)){
+					continue;
+				}
+			}
+			IsDevice isDevice =new IsDevice();
+			isDevice.setDeviceCodeId(c.getId());
+			List<IsDevice> list = isDeviceService.findList(isDevice);
+			if(list.size()==0) {
+				continue;
+			}
+			for (int j=0; j<list.size(); j++){
+				IsDevice e = list.get(j);
+				// 过滤非正常的数据
+				if ("9".equals(e.getStatus())){
+					continue;
+				}
+				// 过滤被排除的编码（包括所有子级）
+				if (StringUtils.isNotBlank(excludeCode)){
+					if (e.getId().equals(excludeCode)){
+						continue;
+					}
+				}
+				Map<String, Object> map = MapUtils.newHashMap();
+				map.put("id", e.getId());
+				map.put("pId", e.getDeviceCodeId());
+				map.put("name", e.getDeviceNo());
+				mapList.add(map);
+			}
+			Map<String, Object> map = MapUtils.newHashMap();
+			map.put("id", c.getId());
+			map.put("pId", c.getParentCode());
+			map.put("name", c.getName());
+			mapList.add(map);			
+		}	
+		return mapList;
+	}		
 }

@@ -29,9 +29,12 @@ canSelectRoot="false"  canSelectParent="false" />
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('设备编号')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('设备编号')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input  path="deviceNo"  maxlength="10"  class="form-control" />
+									<#form:treeselect id="deviceNum" title="${text('设备选择')}"
+										path="" labelPath="deviceNo"
+										url="${ctx}/is3dmcps/isDevice/deviceNoTreeData" allowClear="true" 
+									canSelectRoot="false"  canSelectParent="false" />
 							</div>
 						</div>
 					</div>
@@ -40,21 +43,21 @@ canSelectRoot="false"  canSelectParent="false" />
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('计划人员')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('计划人员')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:treeselect id="planPerson" title="${text('用户选择')}"
 									path="" labelPath="planPerson"
 									url="${ctx}/sys/office/treeData?isLoadUser=true"
-									class="" allowClear="true"/>
+									class="required" allowClear="true"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('计划保养日期')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('计划保养日期')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="planDate" readonly="true" maxlength="20" class="form-control Wdate"
+								<#form:input path="planDate" readonly="true" maxlength="20" class="form-control required Wdate"
 									dataFormat="date" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',isShowClear:false});"/>
 							</div>
 						</div>
@@ -139,7 +142,7 @@ function maintainIdChanged(){
 	 $.ajax({ 
 		 type : "post", 
 		 async : false, 
-		 url : "${ctx}/is3dmcps/issMaintainRec/getDeviceNo", 
+		 url : "${ctx}/is3dmcps/isMaintainRec/getDeviceNo", 
 		 data : { 'maintainId' : v }, 
 		 dataType : "json", 
 		 success : function(msg) { 

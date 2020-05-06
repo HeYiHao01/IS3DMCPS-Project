@@ -40,7 +40,7 @@
 								<span class="required ">*</span> ${text('设备名称')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-10">
 <#form:treeselect id="device" title="${text('设备选择')}"
-	path="deviceId" labelPath="deviceName" 
+	path="deviceId" labelPath="deviceName" class="required" 
 	url="${ctx}/is3dmcps/isDevice/treeData" allowClear="true" 
 canSelectRoot="false"  canSelectParent="false" />
 							</div>
@@ -51,21 +51,21 @@ canSelectRoot="false"  canSelectParent="false" />
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('报修人')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('报修人')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
 								<#form:treeselect id="operator" title="${text('用户选择')}"
 									path="" labelPath="operator"
 									url="${ctx}/sys/office/treeData?isLoadUser=true"
-									class="" allowClear="true"/>
+									class="required" allowClear="true"/>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('故障时间')}：<i class="fa icon-question hide"></i></label>
+								<span class="required ">*</span> ${text('故障时间')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input path="faultsTime" readonly="true" maxlength="20" class="form-control Wdate"
+								<#form:input path="faultsTime" readonly="true" maxlength="20" class="form-control required Wdate"
 									dataFormat="datetime" onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm',isShowClear:false});"/>
 							</div>
 						</div>

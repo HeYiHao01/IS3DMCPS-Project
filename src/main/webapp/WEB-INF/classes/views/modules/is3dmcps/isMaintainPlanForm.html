@@ -29,9 +29,12 @@ canSelectRoot="false"  canSelectParent="false" />
 					<div class="col-xs-6">
 						<div class="form-group">
 							<label class="control-label col-sm-4" title="">
-								<span class="required hide">*</span> ${text('设备编号')}：<i class="fa icon-question hide"></i></label>
+								<span class="required">*</span> ${text('设备编号')}：<i class="fa icon-question hide"></i></label>
 							<div class="col-sm-8">
-								<#form:input  path="deviceNo"  maxlength="10"  class="form-control" />
+									<#form:treeselect id="deviceNum" title="${text('设备选择')}"
+										path="" labelPath="deviceNo"
+										url="${ctx}/is3dmcps/isDevice/deviceNoTreeData" allowClear="true" 
+									canSelectRoot="false"  canSelectParent="false" />
 							</div>
 						</div>
 					</div>

@@ -77,7 +77,7 @@ $('#dataGrid').dataGrid({
 		{header:'${text('维修人')}', name:'operator', index:'a.operator', width:150, align:"center"},
 		{header:'${text('维修时间')}', name:'repairTime', index:'a.repair_time', width:150, align:"center"},
 		{header:'${text('状态')}', name:'status', index:'a.status', width:150, align:"center", formatter: function(val, obj, row, act){
-			return js.getDictLabel(${@DictUtils.getDictListJson('sys_search_status')}, val, '${text('未知')}', true);
+			return js.getDictLabel(${@DictUtils.getDictListJson('is_repair_status')}, val, '${text('未知')}', true);
 		}},		
 		{header:'${text('操作')}', name:'actions', width:120, sortable:false, title:false, formatter: function(val, obj, row, act){
 			var actions = [];
